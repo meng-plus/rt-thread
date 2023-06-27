@@ -109,7 +109,23 @@
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
 #define RT_SERIAL_RB_BUFSZ 64
+#define RT_USING_CAN
+#define RT_CAN_USING_HDR
+#define RT_USING_HWTIMER
+#define RT_USING_I2C
+#define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_RTC
+#define RT_USING_SPI
+#define RT_USING_QSPI
+#define RT_USING_WDT
+#define RT_USING_SENSOR
+#define RT_USING_SENSOR_V2
+#define RT_USING_SENSOR_CMD
+#define RT_USING_TOUCH
+#define RT_USING_LCD
+#define RT_USING_INPUT_CAPTURE
+#define RT_INPUT_CAPTURE_RB_SIZE 100
 #define RT_USING_KTIME
 
 /* Using USB */
@@ -129,6 +145,7 @@
 /* POSIX (Portable Operating System Interface) layer */
 
 #define RT_USING_POSIX_DELAY
+#define RT_USING_POSIX_CLOCK
 
 /* Interprocess Communication (IPC) */
 
@@ -141,6 +158,19 @@
 
 /* Utilities */
 
+#define RT_USING_ULOG
+#define ULOG_OUTPUT_LVL_D
+#define ULOG_OUTPUT_LVL 7
+#define ULOG_ASSERT_ENABLE
+#define ULOG_LINE_BUF_SIZE 128
+
+/* log format */
+
+#define ULOG_USING_COLOR
+#define ULOG_OUTPUT_TIME
+#define ULOG_OUTPUT_LEVEL
+#define ULOG_OUTPUT_TAG
+#define ULOG_BACKEND_USING_CONSOLE
 
 /* RT-Thread Utestcases */
 
@@ -187,6 +217,8 @@
 
 /* enhanced kernel services */
 
+#define PKG_USING_RT_VSNPRINTF_FULL
+#define PKG_USING_RT_VSNPRINTF_FULL_LATEST_VERSION
 
 /* acceleration: Assembly language or algorithmic acceleration packages */
 
@@ -271,6 +303,8 @@
 
 /* Onboard Peripheral Drivers */
 
+#define BSP_USING_SDRAM
+#define BSP_USING_LED
 
 /* Offboard Peripheral Drivers */
 
