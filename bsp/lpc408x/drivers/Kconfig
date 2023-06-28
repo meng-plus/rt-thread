@@ -19,15 +19,145 @@ menu "Hardware Drivers Config"
 
         menu "UART Drivers"
             config BSP_USING_UART0
-                bool "Enable UART0 P0.2/P0.3(T/R)"
+                bool "Enable UART0"
                 select RT_USING_SERIAL
                 default y
+                if BSP_USING_UART0
+                    choice
+                        prompt "Select the Tx"
+                        default BSP_USING_UART0_TX_SEL0
 
-            config BSP_USING_UART2
-                bool "Enable UART2 P2.8/P0.11(T/R)"
+                        config BSP_USING_UART0_TX_SEL0
+                        bool "P0.0"
+                        config BSP_USING_UART0_TX_SEL1
+                        bool "P0.1"
+                    endchoice
+                    choice
+                        prompt "Select the Rx"
+                        default BSP_USING_UART0_RX_SEL0
+
+                        config BSP_USING_UART0_RX_SEL0
+                        bool "P0.1"
+                        config BSP_USING_UART0_RX_SEL1
+                        bool "P0.3"
+                    endchoice
+                endif
+
+            config BSP_USING_UART1
+                bool "Enable UART1"
                 select RT_USING_SERIAL
                 default n
+                if BSP_USING_UART1
+                    choice
+                        prompt "Select the Tx"
+                        default BSP_USING_UART1_TX_SEL0
 
+                        config BSP_USING_UART1_TX_SEL0
+                        bool "P0.15"
+                        config BSP_USING_UART1_TX_SEL1
+                        bool "P2.0"
+                        config BSP_USING_UART1_TX_SEL2
+                        bool "P3.16"
+                    endchoice
+                    choice
+                        prompt "Select the Rx"
+                        default BSP_USING_UART1_RX_SEL0
+
+                        config BSP_USING_UART1_RX_SEL0
+                        bool "P0.16"
+                        config BSP_USING_UART1_RX_SEL1
+                        bool "P2.1"
+                        config BSP_USING_UART1_RX_SEL2
+                        bool "P3.17"
+                    endchoice
+                endif
+
+            config BSP_USING_UART2
+                bool "Enable UART2"
+                select RT_USING_SERIAL
+                default n
+                if BSP_USING_UART2
+                    choice
+                        prompt "Select the Tx"
+                        default BSP_USING_UART2_TX_SEL0
+
+                        config BSP_USING_UART2_TX_SEL0
+                        bool "P4.22"
+                        config BSP_USING_UART2_TX_SEL1
+                        bool "P0.10"
+                        config BSP_USING_UART2_TX_SEL2
+                        bool "P2.8"
+                    endchoice
+                    choice
+                        prompt "Select the Rx"
+                        default BSP_USING_UART2_RX_SEL0
+
+                        config BSP_USING_UART2_RX_SEL0
+                        bool "P4.23"
+                        config BSP_USING_UART2_RX_SEL1
+                        bool "P0.11"
+                        config BSP_USING_UART2_RX_SEL2
+                        bool "P2.9"
+                    endchoice
+                endif
+            config BSP_USING_UART3
+                bool "Enable UART3"
+                select RT_USING_SERIAL
+                default n
+                if BSP_USING_UART3
+                    choice
+                        prompt "Select the Tx"
+                        default BSP_USING_UART3_TX_SEL0
+
+                        config BSP_USING_UART3_TX_SEL0
+                        bool "P0.25"
+                        config BSP_USING_UART3_TX_SEL1
+                        bool "P0.0"
+                        config BSP_USING_UART3_TX_SEL2
+                        bool "P0.2"
+                        config BSP_USING_UART3_TX_SEL3
+                        bool "P4.28"
+                    endchoice
+                    choice
+                        prompt "Select the Rx"
+                        default BSP_USING_UART3_RX_SEL0
+
+                        config BSP_USING_UART3_RX_SEL0
+                        bool "P0.26"
+                        config BSP_USING_UART3_RX_SEL1
+                        bool "P0.1"
+                        config BSP_USING_UART3_RX_SEL2
+                        bool "P0.3"
+                        config BSP_USING_UART3_RX_SEL3
+                        bool "P4.29"
+                    endchoice
+                endif
+            config BSP_USING_UART4
+                bool "Enable UART4"
+                select RT_USING_SERIAL
+                default n
+                if BSP_USING_UART4
+                    choice
+                        prompt "Select the Tx"
+                        default BSP_USING_UART4_TX_SEL0
+
+                        config BSP_USING_UART4_TX_SEL0
+                        bool "P5.4"
+                        config BSP_USING_UART4_TX_SEL1
+                        bool "P1.29"
+                        config BSP_USING_UART4_TX_SEL2
+                        bool "P0.22"
+                    endchoice
+                    choice
+                        prompt "Select the Rx"
+                        default BSP_USING_UART4_RX_SEL0
+
+                        config BSP_USING_UART4_RX_SEL0
+                        bool "P2.9"
+                        config BSP_USING_UART4_RX_SEL1
+                        bool "P5.3"
+                    endchoice
+                endif
         endmenu
 
     endmenu
@@ -43,8 +173,69 @@ menu "Hardware Drivers Config"
             default n
     endmenu
 
-    menu "Offboard Peripheral Drivers"
+menu "Board extended module Drivers"
+    choice
+        prompt "UART0 RS485_OE"
+        default BSP_USING_UART0_RS485_OE_NONE
+        depends on BSP_USING_UART0
 
-    endmenu
+        config BSP_USING_UART0_RS485_OE_NONE
+        bool "not select"
+        config BSP_USING_UART0_RS485_OE_SEL0
+        bool "P0.14"
+        config BSP_USING_UART0_RS485_OE_SEL1
+        bool "P5.4"
+    endchoice
+    choice
+        prompt "UART1 RS485_OE"
+        default BSP_USING_UART1_RS485_OE_NONE
+        depends on BSP_USING_UART1
+
+        config BSP_USING_UART1_RS485_OE_NONE
+        bool "not select"
+        config BSP_USING_UART1_RS485_OE_SEL0
+        bool "P0.6"
+        config BSP_USING_UART1_RS485_OE_SEL1
+        bool "P0.22"
+        config BSP_USING_UART1_RS485_OE_SEL2
+        bool "P2.7"
+        config BSP_USING_UART1_RS485_OE_SEL3
+        bool "P3.30"
+    endchoice
+    choice
+        prompt "UART2 RS485_OE"
+        default BSP_USING_UART2_RS485_OE_NONE
+        depends on BSP_USING_UART2
+
+        config BSP_USING_UART2_RS485_OE_NONE
+        bool "not select"
+        config BSP_USING_UART2_RS485_OE_SEL0
+        bool "P1.19"
+        config BSP_USING_UART2_RS485_OE_SEL1
+        bool "P2.4"
+    endchoice
+    choice
+        prompt "UART3 RS485_OE"
+        default BSP_USING_UART3_RS485_OE_NONE
+        depends on  BSP_USING_UART3
+
+        config BSP_USING_UART3_RS485_OE_NONE
+        bool "not select"
+        config BSP_USING_UART3_RS485_OE_SEL0
+        bool "P1.30"
+    endchoice
+    choice
+        prompt "UART4 RS485_OE"
+        default BSP_USING_UART4_RS485_OE_NONE
+        depends on BSP_USING_UART4
+
+        config BSP_USING_UART4_RS485_OE_NONE
+        bool "not select"
+        config BSP_USING_UART4_RS485_OE_SEL0
+        bool "P0.21"
+        config BSP_USING_UART4_RS485_OE_SEL1
+        bool "P2.11"
+    endchoice
+endmenu
 
 endmenu

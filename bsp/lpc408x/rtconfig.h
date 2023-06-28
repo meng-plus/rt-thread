@@ -117,6 +117,7 @@
 #define RT_USING_PIN
 #define RT_USING_RTC
 #define RT_USING_SPI
+#define RT_USING_SPI_BITOPS
 #define RT_USING_QSPI
 #define RT_USING_WDT
 #define RT_USING_SENSOR
@@ -296,17 +297,34 @@
 
 /* On-chip Peripheral Drivers */
 
+#define BSP_USING_HWTIMER0
 
 /* UART Drivers */
 
 #define BSP_USING_UART0
+#define BSP_USING_UART0_TX_SEL0
+#define BSP_USING_UART0_RX_SEL0
+#define BSP_USING_UART2
+#define BSP_USING_UART2_TX_SEL0
+#define BSP_USING_UART2_RX_SEL0
+#define BSP_USING_UART3
+#define BSP_USING_UART3_TX_SEL0
+#define BSP_USING_UART3_RX_SEL0
+#define BSP_USING_UART4
+#define BSP_USING_UART4_TX_SEL0
+#define BSP_USING_UART4_RX_SEL0
 
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_SDRAM
 #define BSP_USING_LED
 
-/* Offboard Peripheral Drivers */
+/* Board extended module Drivers */
 
+#define BSP_USING_RS485
+#define BSP_USING_UART0_RS485_OE_SEL0
+#define BSP_USING_UART2_RS485_OE_SEL0
+#define BSP_USING_UART3_RS485_OE_SEL0
+#define BSP_USING_UART4_RS485_OE_SEL0
 
 #endif
