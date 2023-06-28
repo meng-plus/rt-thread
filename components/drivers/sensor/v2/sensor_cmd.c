@@ -505,7 +505,7 @@ static void sensor_polling(int argc, char **argv)
         num = atoi(argv[2]);
 
     sensor = (rt_sensor_t)dev;
-    delay  = sensor->info.acquire_min > 100 ? sensor->info.acquire_min : 100;
+    delay  = sensor->info.acquire_min > 100 ? (rt_int32_t)sensor->info.acquire_min : 100;
 
     result = rt_device_open(dev, RT_DEVICE_FLAG_RDONLY);
     if (result != RT_EOK)
@@ -603,7 +603,7 @@ static void sensor(int argc, char **argv)
         }
 
         sensor = (rt_sensor_t)dev;
-        delay  = sensor->info.acquire_min > 100 ? sensor->info.acquire_min : 100;
+        delay  = sensor->info.acquire_min > 100 ? (rt_int32_t)sensor->info.acquire_min : 100;
 
         for (i = 0; i < num; i++)
         {

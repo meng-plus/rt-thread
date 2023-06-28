@@ -2965,6 +2965,12 @@
             <name>$PROJ_DIR$\..\..\components\drivers\rtc\rtc.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\sensor\v1\sensor.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\sensor\v1\sensor_cmd.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\sensor\v2\sensor_cmd.c</name>
         </file>
         <file>
@@ -3182,6 +3188,12 @@
         <name>POSIX</name>
         <file>
             <name>$PROJ_DIR$\..\..\components\libc\posix\delay\delay.c</name>
+        </file>
+    </group>
+    <group>
+        <name>rt_kprintf</name>
+        <file>
+            <name>$PROJ_DIR$\packages\rt_vsnprintf_full-latest\rt_vsnprintf.c</name>
         </file>
     </group>
     <group>

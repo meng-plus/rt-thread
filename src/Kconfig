@@ -102,7 +102,7 @@ config RT_TICK_PER_SECOND
     range 10 1000
     default 1000
     help
-        System's tick frequency, Hz.
+        "System's tick frequency, Hz."
 
 config RT_USING_OVERFLOW_CHECK
     bool "Using stack overflow checking"
