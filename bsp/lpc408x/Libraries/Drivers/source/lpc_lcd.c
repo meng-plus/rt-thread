@@ -477,7 +477,7 @@ void LCD_SetImage(LCD_PANEL panel, const uint8_t *pPain)
  **********************************************************************/
 void LCD_PutPixel (LCD_PANEL panel, uint32_t X_Left, uint32_t Y_Up, LcdPixel_t color)
 {
-    uint32_t k;
+    uint32_t k = 0;
     uint32_t * pWordData = NULL;
     uint8_t*   pByteData = NULL;
     uint32_t  bitOffset;

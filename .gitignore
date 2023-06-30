@@ -52,5 +52,8 @@ CMakeLists.txt
 cmake-build-debug
 *.mk
 
-
+#user add for IAR
 BrowseInfo/
+*.log
+Backup*
+bsp/lpc408x/rt-thread/
