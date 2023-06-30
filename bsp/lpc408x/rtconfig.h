@@ -121,7 +121,7 @@
 #define RT_USING_QSPI
 #define RT_USING_WDT
 #define RT_USING_SENSOR
-#define RT_USING_SENSOR_V2
+#define RT_USING_SENSOR_V1
 #define RT_USING_SENSOR_CMD
 #define RT_USING_TOUCH
 #define RT_USING_LCD
@@ -321,7 +321,6 @@
 
 /* Board extended module Drivers */
 
-#define BSP_USING_RS485
 #define BSP_USING_UART0_RS485_OE_SEL0
 #define BSP_USING_UART2_RS485_OE_SEL0
 #define BSP_USING_UART3_RS485_OE_SEL0
