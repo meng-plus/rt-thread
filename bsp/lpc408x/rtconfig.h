@@ -317,10 +317,10 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_SDRAM
-#define BSP_USING_LED
 
 /* Board extended module Drivers */
 
+#define BSP_USING_BOARD_315101Z2V2
 #define BSP_USING_UART0_RS485_OE_SEL0
 #define BSP_USING_UART2_RS485_OE_SEL0
 #define BSP_USING_UART3_RS485_OE_SEL0
