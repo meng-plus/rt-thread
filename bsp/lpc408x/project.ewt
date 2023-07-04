@@ -2971,13 +2971,10 @@
             <name>$PROJ_DIR$\..\..\components\drivers\sensor\v1\sensor_cmd.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\sensor\v2\sensor_cmd.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\sensor\v2\sensor_v2.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\serial\serial.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi-bit-ops.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
@@ -3004,7 +3001,10 @@
             <name>$PROJ_DIR$\drivers\board.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\drivers\drv_led.c</name>
+            <name>$PROJ_DIR$\drivers\drv_hwtimer.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\drv_pin.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_sdram.c</name>
@@ -3121,6 +3121,9 @@
             <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_eeprom.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_emac.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_emc.c</name>
         </file>
         <file>
@@ -3143,6 +3146,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_lcd.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_mci.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_mcpwm.c</name>

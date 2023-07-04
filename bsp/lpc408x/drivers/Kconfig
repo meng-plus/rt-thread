@@ -1,7 +1,6 @@
 menu "Hardware Drivers Config"
 
     menu "On-chip Peripheral Drivers"
-
         config BSP_USING_EMAC
             bool "EMAC driver"
             select RT_USING_LWIP
@@ -175,67 +174,78 @@ menu "Hardware Drivers Config"
 
 menu "Board extended module Drivers"
     choice
-        prompt "UART0 RS485_OE"
-        default BSP_USING_UART0_RS485_OE_NONE
-        depends on BSP_USING_UART0
+        prompt "Board select "
+        default BSP_USING_BOARD_9903Z1V2
 
-        config BSP_USING_UART0_RS485_OE_NONE
-        bool "not select"
-        config BSP_USING_UART0_RS485_OE_SEL0
-        bool "P0.14"
-        config BSP_USING_UART0_RS485_OE_SEL1
-        bool "P5.4"
+        config BSP_USING_BOARD_9903Z1V2
+        bool "9903Z1V2"
+        config BSP_USING_BOARD_315101Z2V2
+        bool "315101Z2V2"
     endchoice
-    choice
-        prompt "UART1 RS485_OE"
-        default BSP_USING_UART1_RS485_OE_NONE
-        depends on BSP_USING_UART1
+    if BSP_USING_BOARD_315101Z2V2
+        choice
+            prompt "UART0 RS485_OE"
+            default BSP_USING_UART0_RS485_OE_NONE
+            depends on BSP_USING_UART0
 
-        config BSP_USING_UART1_RS485_OE_NONE
-        bool "not select"
-        config BSP_USING_UART1_RS485_OE_SEL0
-        bool "P0.6"
-        config BSP_USING_UART1_RS485_OE_SEL1
-        bool "P0.22"
-        config BSP_USING_UART1_RS485_OE_SEL2
-        bool "P2.7"
-        config BSP_USING_UART1_RS485_OE_SEL3
-        bool "P3.30"
-    endchoice
-    choice
-        prompt "UART2 RS485_OE"
-        default BSP_USING_UART2_RS485_OE_NONE
-        depends on BSP_USING_UART2
+            config BSP_USING_UART0_RS485_OE_NONE
+            bool "not select"
+            config BSP_USING_UART0_RS485_OE_SEL0
+            bool "P0.14"
+            config BSP_USING_UART0_RS485_OE_SEL1
+            bool "P5.4"
+        endchoice
+        choice
+            prompt "UART1 RS485_OE"
+            default BSP_USING_UART1_RS485_OE_NONE
+            depends on BSP_USING_UART1
 
-        config BSP_USING_UART2_RS485_OE_NONE
-        bool "not select"
-        config BSP_USING_UART2_RS485_OE_SEL0
-        bool "P1.19"
-        config BSP_USING_UART2_RS485_OE_SEL1
-        bool "P2.4"
-    endchoice
-    choice
-        prompt "UART3 RS485_OE"
-        default BSP_USING_UART3_RS485_OE_NONE
-        depends on  BSP_USING_UART3
+            config BSP_USING_UART1_RS485_OE_NONE
+            bool "not select"
+            config BSP_USING_UART1_RS485_OE_SEL0
+            bool "P0.6"
+            config BSP_USING_UART1_RS485_OE_SEL1
+            bool "P0.22"
+            config BSP_USING_UART1_RS485_OE_SEL2
+            bool "P2.7"
+            config BSP_USING_UART1_RS485_OE_SEL3
+            bool "P3.30"
+        endchoice
+        choice
+            prompt "UART2 RS485_OE"
+            default BSP_USING_UART2_RS485_OE_NONE
+            depends on BSP_USING_UART2
 
-        config BSP_USING_UART3_RS485_OE_NONE
-        bool "not select"
-        config BSP_USING_UART3_RS485_OE_SEL0
-        bool "P1.30"
-    endchoice
-    choice
-        prompt "UART4 RS485_OE"
-        default BSP_USING_UART4_RS485_OE_NONE
-        depends on BSP_USING_UART4
+            config BSP_USING_UART2_RS485_OE_NONE
+            bool "not select"
+            config BSP_USING_UART2_RS485_OE_SEL0
+            bool "P1.19"
+            config BSP_USING_UART2_RS485_OE_SEL1
+            bool "P2.4"
+        endchoice
+        choice
+            prompt "UART3 RS485_OE"
+            default BSP_USING_UART3_RS485_OE_NONE
+            depends on  BSP_USING_UART3
 
-        config BSP_USING_UART4_RS485_OE_NONE
-        bool "not select"
-        config BSP_USING_UART4_RS485_OE_SEL0
-        bool "P0.21"
-        config BSP_USING_UART4_RS485_OE_SEL1
-        bool "P2.11"
-    endchoice
+            config BSP_USING_UART3_RS485_OE_NONE
+            bool "not select"
+            config BSP_USING_UART3_RS485_OE_SEL0
+            bool "P1.30"
+        endchoice
+        choice
+            prompt "UART4 RS485_OE"
+            default BSP_USING_UART4_RS485_OE_NONE
+            depends on BSP_USING_UART4
+
+            config BSP_USING_UART4_RS485_OE_NONE
+            bool "not select"
+            config BSP_USING_UART4_RS485_OE_SEL0
+            bool "P0.21"
+            config BSP_USING_UART4_RS485_OE_SEL1
+            bool "P2.11"
+        endchoice
+    endif
 endmenu
 
 endmenu

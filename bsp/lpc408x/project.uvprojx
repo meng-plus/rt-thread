@@ -333,7 +333,7 @@
               <MiscControls>--library_interface=armcc --library_type=standardlib --diag_suppress=66,1296,186</MiscControls>
               <Define>__STDC_LIMIT_MACROS, CORE_M4, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, __RTTHREAD__, RT_USING_ARMLIBC</Define>
               <Undefine />
-              <IncludePath>applications;..\..\components\dfs\filesystems\devfs;..\..\components\libc\compilers\common\extension;..\..\components\drivers\include;..\..\libcpu\arm\cortex-m4;..\..\components\finsh;..\..\components\drivers\include;..\..\components\libc\compilers\common\extension\fcntl\octal;..\..\components\libc\posix\io\stdio;..\..\components\dfs\filesystems\elmfat;Libraries\CMSIS\Include;Libraries\Drivers\include;..\..\components\dfs\include;drivers;..\..\include;..\..\components\drivers\include;..\..\libcpu\arm\common;.;..\..\components\libc\posix\ipc;Libraries\Device\NXP\LPC407x_8x_177x_8x\Include;..\..\components\libc\posix\io\poll;..\..\components\libc\compilers\common\include;..\..\components\libc\posix\delay</IncludePath>
+              <IncludePath>..\..\components\dfs\dfs_v1\filesystems\devfs;..\..\components\drivers\include;..\..\components\libc\posix\ipc;..\..\components\dfs\dfs_v1\include;..\..\components\libc\posix\io\poll;..\..\components\drivers\include;..\..\components\libc\compilers\common\extension\fcntl\octal;..\..\components\drivers\include;..\..\include;..\..\components\drivers\include;..\..\components\drivers\include;Libraries\CMSIS\Include;..\..\components\drivers\include;..\..\components\drivers\include;.;..\..\libcpu\arm\cortex-m4;..\..\components\drivers\include;..\..\components\finsh;..\..\components\libc\posix\delay;..\..\components\drivers\spi;..\..\components\drivers\include;..\..\components\utilities\ulog;drivers;..\..\components\dfs\dfs_v1\filesystems\elmfat;..\..\components\drivers\include;applications;..\..\components\libc\posix\io\stdio;Libraries\Drivers\LPCLib_V1\include;..\..\libcpu\arm\common;..\..\components\drivers\touch;Libraries\Device\NXP\LPC407x_8x_177x_8x\Include;..\..\components\drivers\include;..\..\components\libc\compilers\common\include;..\..\components\libc\compilers\common\extension</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -485,6 +485,48 @@
           <GroupName>DeviceDrivers</GroupName>
           <Files>
             <File>
+              <FileName>can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\can\can.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\core\device.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>hwtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\hwtimer\hwtimer.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>i2c-bit-ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\i2c\i2c-bit-ops.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>i2c_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\i2c\i2c_core.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>i2c_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\i2c\i2c_dev.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>completion.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\ipc\completion.c</FilePath>
@@ -541,14 +583,91 @@
           </Files>
           <Files>
             <File>
+              <FileName>rt_inputcapture.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\misc\rt_inputcapture.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\rtc\rtc.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\sensor\v1\sensor.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>sensor_cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\sensor\v1\sensor_cmd.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\serial\serial.c</FilePath>
             </File>
           </Files>
+          <Files>
+            <File>
+              <FileName>qspi_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\qspi_core.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>spi-bit-ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi-bit-ops.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>spi_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_core.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>spi_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_dev.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\touch\touch.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\watchdog\watchdog.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Drivers</GroupName>
+          <Files>
+            <File>
+              <FileName>drv_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\drv_led.c</FilePath>
+            </File>
+          </Files>
           <Files>
             <File>
               <FileName>drv_uart.c</FileName>
@@ -558,9 +677,30 @@
           </Files>
           <Files>
             <File>
+              <FileName>drv_sdram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\drv_sdram.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>drv_pin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\drv_pin.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>board.c</FileName>
               <FileType>1</FileType>
               <FilePath>drivers\board.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>drv_hwtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\drv_hwtimer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -570,56 +710,56 @@
             <File>
               <FileName>devfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\filesystems\devfs\devfs.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\filesystems\devfs\devfs.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>dfs_elm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\filesystems\elmfat\dfs_elm.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\filesystems\elmfat\dfs_elm.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\filesystems\elmfat\ff.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\filesystems\elmfat\ff.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\filesystems\elmfat\ffunicode.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\filesystems\elmfat\ffunicode.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>dfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\src\dfs.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\src\dfs.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>dfs_file.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\src\dfs_file.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\src\dfs_file.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>dfs_fs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\src\dfs_fs.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\src\dfs_fs.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>dfs_posix.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\dfs\src\dfs_posix.c</FilePath>
+              <FilePath>..\..\components\dfs\dfs_v1\src\dfs_posix.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -675,13 +815,6 @@
               <FileName>components.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\components.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>device.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\device.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -775,182 +908,182 @@
             <File>
               <FileName>lpc_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_adc.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_adc.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_bod.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_bod.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_bod.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_can.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_can.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_clkpwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_clkpwr.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_clkpwr.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_crc.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_crc.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_dac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_dac.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_dac.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_eeprom.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_eeprom.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_eeprom.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_emc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_emc.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_emc.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_exti.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_exti.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_gpdma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_gpdma.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_gpdma.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_gpio.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_gpio.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_i2c.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_i2c.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_i2s.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_i2s.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_i2s.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_iap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_iap.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_iap.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_lcd.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_lcd.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_mcpwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_mcpwm.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_mcpwm.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_nvic.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_nvic.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_nvic.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_pinsel.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_pinsel.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_pinsel.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_pwm.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_pwm.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_qei.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_qei.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_qei.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_rtc.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_rtc.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_ssp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_ssp.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_ssp.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_systick.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_systick.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_systick.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_timer.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_timer.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_uart.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_uart.c</FilePath>
             </File>
           </Files>
           <Files>
             <File>
               <FileName>lpc_wwdt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>Libraries\Drivers\source\lpc_wwdt.c</FilePath>
+              <FilePath>Libraries\Drivers\LPCLib_V1\source\lpc_wwdt.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -961,6 +1094,33 @@
               <FileName>delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\libc\posix\delay\delay.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rt_kprintf</GroupName>
+          <Files>
+            <File>
+              <FileName>rt_vsnprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\rt_vsnprintf_full-latest\rt_vsnprintf.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Utilities</GroupName>
+          <Files>
+            <File>
+              <FileName>ulog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\ulog\ulog.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>console_be.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\ulog\backend\console_be.c</FilePath>
             </File>
           </Files>
         </Group>
