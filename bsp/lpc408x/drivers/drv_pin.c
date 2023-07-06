@@ -18,6 +18,7 @@ typedef struct pin_ctrl
 {
     uint8_t port;
     uint8_t pin;
+    char *name;
 } pin_ctrl_t;
 typedef struct drv_pin
 {
@@ -48,42 +49,52 @@ const drv_pin_t drv_pin_opt = {.ops = {
                                    .pin_get = _pin_get,
                                },
                                .ctrl = {
-                                   [LED_0] = {4, 26},      /*!< P4.26 */
-                                   [LED_1] = {4, 27},      /*!< P4.27 */
-                                   [LED_2] = {4, 29},      /*!< P4.29 */
-                                   [LED_3] = {4, 30},      /*!< P4.30 */
-                                   [RS485_DIR1] = {5, 2},  /*!< P5.2 UART2 */
-                                   [RS485_DIR2] = {0, 29}, /*!< P0.29 UART3 */
-                                   [RS485_DIR3] = {0, 7},  /*!< P0.7 UART4 */
-
+                                   [PIN_LED_0] = {4, 26, "P4.26"}, /*!< P4.26 */
+                                   [PIN_LED_1] = {4, 27, "P4.27"}, /*!< P4.27 */
+                                   [PIN_LED_2] = {4, 29, "P4.29"}, /*!< P4.29 */
+                                   [PIN_LED_3] = {4, 30, "P4.30"}, /*!< P4.30 */
                                }};
 int rt_hw_pin_init()
 {
-    GPIO_Init();
     rt_device_pin_register(DEV_PIN_NAME, &drv_pin_opt.ops, NULL);
-    _pin_mode(NULL,0,PIN_MODE_OUTPUT_OD);
-    _pin_write(NULL,0,0);
+    rt_pin_mode(PIN_LED_0, PIN_MODE_OUTPUT_OD);
+    rt_pin_write(PIN_LED_0, 0);
     return 0;
 }
-INIT_DEVICE_EXPORT(rt_hw_pin_init);
+INIT_BOARD_EXPORT(rt_hw_pin_init);
 
 void _pin_mode(struct rt_device *device, rt_base_t pin, rt_uint8_t mode)
 {
     RT_ASSERT(pin < PIN_NUM);
     const pin_ctrl_t *pin_ctrl_ptr = &drv_pin_opt.ctrl[pin];
-    PINSEL_ConfigPin(pin_ctrl_ptr->port, pin_ctrl_ptr->pin, 0);
-
-    uint8_t dir = (mode == PIN_MODE_OUTPUT || PIN_MODE_OUTPUT_OD) ? 1 : 0;
-    GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, dir);
-
-    const PinSel_BasicMode mode2BasicMode[] = {PINSEL_BASICMODE_PLAINOUT, PINSEL_BASICMODE_PLAINOUT, PINSEL_BASICMODE_PULLUP, PINSEL_BASICMODE_PULLDOWN, PINSEL_BASICMODE_REPEATER};
-    PINSEL_SetPinMode(pin_ctrl_ptr->port, pin_ctrl_ptr->pin, mode2BasicMode[mode]);
+    PINSEL_ConfigPin(pin_ctrl_ptr->port, pin_ctrl_ptr->pin, 0); // 0: Select GPIO (Default)
+    switch (mode)
+    {
+    case PIN_MODE_OUTPUT:
+        GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, 1);
+        break;
+    case PIN_MODE_INPUT:
+        GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, 0);
+        break;
+    case PIN_MODE_INPUT_PULLUP:
+        GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, 0);
+        PINSEL_SetPinMode(pin_ctrl_ptr->port, pin_ctrl_ptr->pin, PINSEL_BASICMODE_PULLUP);
+        break;
+    case PIN_MODE_INPUT_PULLDOWN:
+        GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, 0);
+        PINSEL_SetPinMode(pin_ctrl_ptr->port, pin_ctrl_ptr->pin, PINSEL_BASICMODE_PULLDOWN);
+        break;
+    case PIN_MODE_OUTPUT_OD:
+        GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, 1);
+        PINSEL_SetOpenDrainMode(pin_ctrl_ptr->port,pin_ctrl_ptr->pin, ENABLE);
+        break;
+    }
 }
 void _pin_write(struct rt_device *device, rt_base_t pin, rt_uint8_t value)
 {
     RT_ASSERT(pin < PIN_NUM);
     const pin_ctrl_t *pin_ctrl_ptr = &drv_pin_opt.ctrl[pin];
-    if (value)
+    if (!value)
         GPIO_SetValue(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin);
     else
         GPIO_ClearValue(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin);
@@ -108,16 +119,15 @@ rt_err_t _pin_irq_enable(struct rt_device *device, rt_base_t pin, rt_uint8_t ena
 }
 rt_base_t _pin_get(const char *name)
 {
-    const char *PinName[] = {"P4.26", "P4.27", "P4.29", "P4.30", "P5.2", "P0.29", "P0.7"};
     for (size_t i = 0; i < PIN_NUM; i++)
     {
-        if (0 == rt_strcmp(name, PinName[i]))
+        if (0 == rt_strcmp(name, drv_pin_opt.ctrl[i].name))
         {
-            return _pin_read(NULL, i);
+            return i;
         }
     }
 
-    return 0;
+    return -1;
 }
 
 #ifdef RT_USING_FINSH
@@ -128,11 +138,9 @@ void ls_pin(rt_uint32_t led_num, rt_uint32_t value)
     {
         if (i <= LED_END)
             rt_kprintf(" LED:P%d.%d \r\n", drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
-        if (i <= RS485_END)
-            rt_kprintf(" RS485:P%d.%d \r\n", drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
         else
             rt_kprintf(" PIN:P%d.%d \r\n", drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
     }
 }
-FINSH_FUNCTION_EXPORT(ls_pin, list pin)
+MSH_CMD_EXPORT(ls_pin, list pin)
 #endif

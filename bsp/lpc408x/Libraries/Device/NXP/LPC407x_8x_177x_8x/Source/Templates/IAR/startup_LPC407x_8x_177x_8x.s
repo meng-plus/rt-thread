@@ -104,18 +104,18 @@ __vector_table_0x1c
         DCD     DMA_IRQHandler            ; 42: General Purpose DMA
         DCD     I2S_IRQHandler            ; 43: I2S
         DCD     ENET_IRQHandler           ; 44: Ethernet
-        DCD		MCI_IRQHandler		  	  ; 45: MCI Card
+        DCD     MCI_IRQHandler		  ; 45: MCI Card
         DCD     MCPWM_IRQHandler          ; 46: Motor Control PWM
         DCD     QEI_IRQHandler            ; 47: Quadrature Encoder Interface
         DCD     PLL1_IRQHandler           ; 48: PLL1 Lock (USB PLL)
-        DCD		  USBActivity_IRQHandler  ; 49: USB Activity Interrupt
-        DCD		  CANActivity_IRQHandler  ; 50: CAN Activity Interrupt
-        DCD		  UART4_IRQHandler        ; 51: UART4
-        DCD		  SSP2_IRQHandler		  ; 52: SSP2
-        DCD		  LCD_IRQHandler		  ; 53: LCD
-        DCD		  GPIO_IRQHandler		  ; 54: GPIO
-        DCD		  PWM0_IRQHandler		  ; 55: PWM0
-        DCD		  EEPROM_IRQHandler	  	  ; 56: EEPROM
+        DCD     USBActivity_IRQHandler    ; 49: USB Activity Interrupt
+        DCD     CANActivity_IRQHandler    ; 50: CAN Activity Interrupt
+        DCD     UART4_IRQHandler          ; 51: UART4
+        DCD     SSP2_IRQHandler		  ; 52: SSP2
+        DCD     LCD_IRQHandler		  ; 53: LCD
+        DCD     GPIO_IRQHandler		  ; 54: GPIO
+        DCD     PWM0_IRQHandler		  ; 55: PWM0
+        DCD     EEPROM_IRQHandler	  ; 56: EEPROM
 
 
 __Vectors_End
@@ -397,7 +397,7 @@ CRP1    0x12345678 - Write to RAM command can not access RAM below 0x10000200.
                    - Read Memory command: disabled.
                    - Copy RAM to Flash command: cannot write to Sector 0.
                    - "Go" command: disabled.
-                   - Erase sector(s) command: can erase any individual sector except 
+                   - Erase sector(s) command: can erase any individual sector except
                    	 sector 0 only, or can erase all sectors at once.
                    - Compare command: disabled
 CRP2    0x87654321 - Write to RAM command: disabled.
