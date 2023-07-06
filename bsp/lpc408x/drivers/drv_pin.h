@@ -26,15 +26,11 @@ extern "C"
  */
 typedef enum __DRV_PIN
 {
-    LED_0 = 0, /*!< P4.26 */
-    LED_1,     /*!< P4.27 */
-    LED_2,     /*!< P4.29 */
-    LED_3,     /*!< P4.30 */
-    LED_END = LED_3,
-    RS485_DIR1, /*!< P5.2 UART2 */
-    RS485_DIR2, /*!< P0.29 UART3 */
-    RS485_DIR3, /*!< P0.7 UART4 */
-    RS485_END,
+    PIN_LED_0 = 0, /*!< P4.26 */
+    PIN_LED_1,     /*!< P4.27 */
+    PIN_LED_2,     /*!< P4.29 */
+    PIN_LED_3,     /*!< P4.30 */
+    LED_END = PIN_LED_3,
     PIN_NUM, /*!< PIN¼ÆÊý */
 } DRV_PIN_E;
 /* Exported constants --------------------------------------------------------*/

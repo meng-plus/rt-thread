@@ -6,6 +6,7 @@ CPPPATH = [cwd]
 # add the general drivers.
 src = Split("""
 board.c
+drv_interrupt.c
 drv_pin.c
 """)
 
