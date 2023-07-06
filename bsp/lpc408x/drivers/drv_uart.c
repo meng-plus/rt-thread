@@ -34,8 +34,6 @@ typedef struct lpc_uart
     uint8_t nRxDMAReq;   /* RX DMA Request Number			*/
     uint8_t nTxDMAChnnl; /* TX DMA Chnnl		*/
     uint8_t nRxDMAChnnl; /* RX DMA Chnnl		*/
-    uint8_t dma_conn_tx;
-    uint8_t dma_conn_rx;
     uint8_t rs485 : 1;
     drv_uart_pin_t tx;
     drv_uart_pin_t rx;
@@ -69,12 +67,10 @@ const static drv_uart_ops_t lpc_uart_ops = {
             .uart_id = UART_0,
             .UART_IRQn = UART0_IRQn,
             .nPriority = 2,
-            .nTxDMAReq = 10,
-            .nRxDMAReq = 11,
+            .nTxDMAReq = GPDMA_CONN_UART0_Tx,
+            .nRxDMAReq = GPDMA_CONN_UART0_Rx,
             .nTxDMAChnnl = 0,
             .nRxDMAChnnl = 1,
-            .dma_conn_tx = GPDMA_CONN_UART0_Tx,
-            .dma_conn_rx = GPDMA_CONN_UART0_Rx,
             .rs485 = 0,
 
             .tx = {0, 2, 1},
@@ -86,12 +82,10 @@ const static drv_uart_ops_t lpc_uart_ops = {
             .uart_id = UART_1,
             .UART_IRQn = UART1_IRQn,
             .nPriority = 2,
-            .nTxDMAReq = 12,
-            .nRxDMAReq = 13,
+            .nTxDMAReq = GPDMA_CONN_UART1_Tx,
+            .nRxDMAReq = GPDMA_CONN_UART1_Rx,
             .nTxDMAChnnl = 2,
             .nRxDMAChnnl = 3,
-            .dma_conn_tx = GPDMA_CONN_UART1_Tx,
-            .dma_conn_rx = GPDMA_CONN_UART1_Rx,
             .rs485 = 0,
 
             .tx = {0, 15, 1},
@@ -103,12 +97,10 @@ const static drv_uart_ops_t lpc_uart_ops = {
             .uart_id = UART_2,
             .UART_IRQn = UART2_IRQn,
             .nPriority = 1,
-            .nTxDMAReq = 14,
-            .nRxDMAReq = 15,
+            .nTxDMAReq = GPDMA_CONN_UART2_Tx,
+            .nRxDMAReq = GPDMA_CONN_UART2_Rx,
             .nTxDMAChnnl = 4,
             .nRxDMAChnnl = 5,
-            .dma_conn_tx = GPDMA_CONN_UART2_Tx,
-            .dma_conn_rx = GPDMA_CONN_UART2_Rx,
             .rs485 = 1,
 
             .tx = {4, 22, 2},
@@ -120,12 +112,10 @@ const static drv_uart_ops_t lpc_uart_ops = {
             .uart_id = UART_3,
             .UART_IRQn = UART3_IRQn,
             .nPriority = 2,
-            .nTxDMAReq = 10,
-            .nRxDMAReq = 11,
+            .nTxDMAReq = GPDMA_CONN_UART3_Tx,
+            .nRxDMAReq = GPDMA_CONN_UART3_Rx,
             .nTxDMAChnnl = 0,
             .nRxDMAChnnl = 0,
-            .dma_conn_tx = GPDMA_CONN_UART3_Tx,
-            .dma_conn_rx = GPDMA_CONN_UART3_Rx,
             .rs485 = 1,
 
             .tx = {0, 25, 3},
@@ -137,12 +127,10 @@ const static drv_uart_ops_t lpc_uart_ops = {
             .uart_id = UART_4,
             .UART_IRQn = UART4_IRQn,
             .nPriority = 2,
-            .nTxDMAReq = 12,
-            .nRxDMAReq = 13,
+            .nTxDMAReq = GPDMA_CONN_UART4_Tx,
+            .nRxDMAReq = GPDMA_CONN_UART4_Rx,
             .nTxDMAChnnl = 0,
             .nRxDMAChnnl = 1,
-            .dma_conn_tx = GPDMA_CONN_UART4_Tx,
-            .dma_conn_rx = GPDMA_CONN_UART4_Rx,
             .rs485 = 1,
             .tx = {5, 4, 4},
             .rx = {5, 3, 4},
@@ -322,7 +310,7 @@ rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_siz
         GPDMAChannelConfig.SrcMemAddr = (uint32_t)buf;
         //  GPDMAChannelConfig.DstMemAddr;// needn't config it
         GPDMAChannelConfig.TransferType = GPDMA_TRANSFERTYPE_M2P;
-        GPDMAChannelConfig.DstConn = uart->dma_conn_tx;
+        GPDMAChannelConfig.DstConn = uart->nTxDMAReq;
         GPDMAChannelConfig.DMALLI = 0;
         GPDMA_Setup(&GPDMAChannelConfig);
         GPDMA_ChannelCmd(uart->nTxDMAChnnl, ENABLE);
@@ -336,7 +324,7 @@ rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_siz
         // GPDMAChannelConfig.SrcMemAddr = (uint32)&pUART->RBR;
         GPDMAChannelConfig.DstMemAddr = (uint32_t)buf; // need  config it
         GPDMAChannelConfig.TransferType = GPDMA_TRANSFERTYPE_P2M;
-        GPDMAChannelConfig.SrcConn = uart->dma_conn_rx;
+        GPDMAChannelConfig.SrcConn = uart->nRxDMAReq;
         GPDMAChannelConfig.DMALLI = 0;
         GPDMA_Setup(&GPDMAChannelConfig);
 

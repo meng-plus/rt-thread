@@ -11,9 +11,13 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
+#define LOG_TAG              __FILE__
+#define LOG_LVL              LOG_LVL_DBG
+#include "ulog.h"
 int main(void)
 {
-    rt_kprintf("Hello RT-Thread!\n");
+    LOG_I("Hello RT-Thread!");
+    LOG_D("Let's start developing\n");
 
     return RT_EOK;
 }

@@ -359,12 +359,11 @@
                     <state>$PROJ_DIR$\..\..\components\drivers\include</state>
                     <state>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\ipc</state>
-                    <state>$PROJ_DIR$\..\..\components\drivers\touch</state>
+                    <state>$PROJ_DIR$\drivers</state>
                     <state>$PROJ_DIR$\..\..\components\utilities\ulog</state>
                     <state>$PROJ_DIR$\.</state>
                     <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs</state>
                     <state>$PROJ_DIR$\..\..\libcpu\arm\cortex-m4</state>
-                    <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\elmfat</state>
                     <state>$PROJ_DIR$\Libraries\CMSIS\Include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\compilers\common\include</state>
                     <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
@@ -376,7 +375,6 @@
                     <state>$PROJ_DIR$\Libraries\Drivers\include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\io\poll</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\io\stdio</state>
-                    <state>$PROJ_DIR$\drivers</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1458,12 +1456,11 @@
                     <state>$PROJ_DIR$\..\..\components\drivers\include</state>
                     <state>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\ipc</state>
-                    <state>$PROJ_DIR$\..\..\components\drivers\touch</state>
+                    <state>$PROJ_DIR$\drivers</state>
                     <state>$PROJ_DIR$\..\..\components\utilities\ulog</state>
                     <state>$PROJ_DIR$\.</state>
                     <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs</state>
                     <state>$PROJ_DIR$\..\..\libcpu\arm\cortex-m4</state>
-                    <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\elmfat</state>
                     <state>$PROJ_DIR$\Libraries\CMSIS\Include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\compilers\common\include</state>
                     <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
@@ -1475,7 +1472,6 @@
                     <state>$PROJ_DIR$\Libraries\Drivers\include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\io\poll</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\io\stdio</state>
-                    <state>$PROJ_DIR$\drivers</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2274,9 +2270,6 @@
     <group>
         <name>DeviceDrivers</name>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\can\can.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\completion.c</name>
         </file>
         <file>
@@ -2313,9 +2306,6 @@
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\ringbuffer.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\misc\rt_inputcapture.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\rtc\rtc.c</name>
         </file>
         <file>
@@ -2328,22 +2318,13 @@
             <name>$PROJ_DIR$\..\..\components\drivers\serial\serial.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi-bit-ops.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_dev.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\touch\touch.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\waitqueue.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\watchdog\watchdog.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\workqueue.c</name>
@@ -2364,7 +2345,13 @@
             <name>$PROJ_DIR$\drivers\drv_pin.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\drivers\drv_rtc.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\drivers\drv_sdram.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\drv_soft_i2c.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_uart.c</name>
@@ -2379,9 +2366,6 @@
             <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\src\dfs.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\elmfat\dfs_elm.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\src\dfs_file.c</name>
         </file>
         <file>
@@ -2389,12 +2373,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\src\dfs_posix.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\elmfat\ff.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\elmfat\ffunicode.c</name>
         </file>
     </group>
     <group>
@@ -2436,7 +2414,7 @@
             <name>$PROJ_DIR$\..\..\src\kservice.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\src\memheap.c</name>
+            <name>$PROJ_DIR$\..\..\src\mem.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\src\mempool.c</name>
@@ -2551,12 +2529,6 @@
         <name>POSIX</name>
         <file>
             <name>$PROJ_DIR$\..\..\components\libc\posix\delay\delay.c</name>
-        </file>
-    </group>
-    <group>
-        <name>rt_kprintf</name>
-        <file>
-            <name>$PROJ_DIR$\packages\rt_vsnprintf_full-latest\rt_vsnprintf.c</name>
         </file>
     </group>
     <group>

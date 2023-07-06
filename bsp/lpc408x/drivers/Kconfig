@@ -15,6 +15,20 @@ menu "Hardware Drivers Config"
             bool "Using ADC"
             select RT_USING_ADC
             default n
+        config BSP_USING_I2C
+            bool "Using I2C"
+            select RT_USING_I2C
+            default n
+            if BSP_USING_I2C
+            config BSP_USING_I2C0
+                bool "Using I2C0"
+                select RT_USING_I2C_BITOPS
+                default n
+                config BSP_USING_I2C1
+                bool "Using I2C1"
+                select RT_USING_I2C_BITOPS
+                default n
+            endif
 
         menu "UART Drivers"
             config BSP_USING_UART0

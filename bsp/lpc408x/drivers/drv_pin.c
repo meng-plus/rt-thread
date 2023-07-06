@@ -18,7 +18,6 @@ typedef struct pin_ctrl
 {
     uint8_t port;
     uint8_t pin;
-    char *name;
 } pin_ctrl_t;
 typedef struct drv_pin
 {
@@ -49,16 +48,25 @@ const drv_pin_t drv_pin_opt = {.ops = {
                                    .pin_get = _pin_get,
                                },
                                .ctrl = {
-                                   [PIN_LED_0] = {4, 26, "P4.26"}, /*!< P4.26 */
-                                   [PIN_LED_1] = {4, 27, "P4.27"}, /*!< P4.27 */
-                                   [PIN_LED_2] = {4, 29, "P4.29"}, /*!< P4.29 */
-                                   [PIN_LED_3] = {4, 30, "P4.30"}, /*!< P4.30 */
+                                   [PIN_LED_0] = {4, 26}, /*!< P4.26 */
+                                   [PIN_LED_1] = {4, 27}, /*!< P4.27 */
+                                   [PIN_LED_2] = {4, 29}, /*!< P4.29 */
+                                   [PIN_LED_3] = {4, 30}, /*!< P4.30 */
+                                   [PIN_SCL_0] = {0, 28}, /*!< P0.28 */
+                                   [PIN_SDA_0] = {0, 27}, /*!< P0.27 */
+                                   [PIN_SCL_1] = {4, 21}, /*!< P4.21 */
+                                   [PIN_SDA_1] = {1, 15}, /*!< P1.15 */
                                }};
 int rt_hw_pin_init()
 {
     rt_device_pin_register(DEV_PIN_NAME, &drv_pin_opt.ops, NULL);
-    rt_pin_mode(PIN_LED_0, PIN_MODE_OUTPUT_OD);
-    rt_pin_write(PIN_LED_0, 0);
+    for (size_t i = PIN_LED_0; i <= PIN_LED_END; i++)
+    {
+        rt_pin_write(i, PIN_LOW);
+        rt_pin_mode(i, PIN_MODE_OUTPUT_OD);
+    }
+
+    rt_pin_write(PIN_LED_0, PIN_HIGH);
     return 0;
 }
 INIT_BOARD_EXPORT(rt_hw_pin_init);
@@ -86,7 +94,7 @@ void _pin_mode(struct rt_device *device, rt_base_t pin, rt_uint8_t mode)
         break;
     case PIN_MODE_OUTPUT_OD:
         GPIO_SetDir(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin, 1);
-        PINSEL_SetOpenDrainMode(pin_ctrl_ptr->port,pin_ctrl_ptr->pin, ENABLE);
+        PINSEL_SetOpenDrainMode(pin_ctrl_ptr->port, pin_ctrl_ptr->pin, ENABLE);
         break;
     }
 }
@@ -119,15 +127,35 @@ rt_err_t _pin_irq_enable(struct rt_device *device, rt_base_t pin, rt_uint8_t ena
 }
 rt_base_t _pin_get(const char *name)
 {
-    for (size_t i = 0; i < PIN_NUM; i++)
+
+    int i, name_len;
+    name_len = rt_strlen(name);
+
+    if ((name_len < 4) || (name_len >= 6))
     {
-        if (0 == rt_strcmp(name, drv_pin_opt.ctrl[i].name))
+        return -RT_EINVAL;
+    }
+    if ((name[0] != 'P') || (name[2] != '.'))
+    {
+        return -RT_EINVAL;
+    }
+    uint8_t port = name[1] - '0';
+    uint8_t pin = 0;
+    for (i = 3; i < name_len; i++)
+    {
+        pin *= 10;
+        pin += name[i] - '0';
+    }
+    for (i = 0; i < PIN_NUM; i++)
+    {
+        if ((port == drv_pin_opt.ctrl[i].port) &&
+            (pin == drv_pin_opt.ctrl[i].pin))
         {
             return i;
         }
     }
 
-    return -1;
+    return -RT_EINVAL;
 }
 
 #ifdef RT_USING_FINSH
@@ -136,10 +164,10 @@ void ls_pin(rt_uint32_t led_num, rt_uint32_t value)
 {
     for (size_t i = 0; i < PIN_NUM; i++)
     {
-        if (i <= LED_END)
-            rt_kprintf(" LED:P%d.%d \r\n", drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
+        if (i <= PIN_LED_END)
+            rt_kprintf("%d LED:P%d.%d \r\n",i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
         else
-            rt_kprintf(" PIN:P%d.%d \r\n", drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
+            rt_kprintf("%d PIN:P%d.%d \r\n",i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
     }
 }
 MSH_CMD_EXPORT(ls_pin, list pin)

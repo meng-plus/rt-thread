@@ -17,12 +17,14 @@
 #define RT_USING_IDLE_HOOK
 #define RT_IDLE_HOOK_LIST_SIZE 4
 #define IDLE_THREAD_STACK_SIZE 256
+#define RT_USING_TIMER_SOFT
+#define RT_TIMER_THREAD_PRIO 4
+#define RT_TIMER_THREAD_STACK_SIZE 512
 
 /* kservice optimization */
 
-#define RT_USING_DEBUG
-#define RT_DEBUGING_COLOR
-#define RT_DEBUGING_CONTEXT
+#define RT_KSERVICE_USING_STDLIB
+#define RT_DEBUG
 
 /* Inter-Thread communication */
 
@@ -35,10 +37,8 @@
 /* Memory Management */
 
 #define RT_USING_MEMPOOL
-#define RT_USING_MEMHEAP
-#define RT_MEMHEAP_FAST_MODE
-#define RT_USING_MEMHEAP_AS_HEAP
-#define RT_USING_MEMHEAP_AUTO_BINDING
+#define RT_USING_SMALL_MEM
+#define RT_USING_SMALL_MEM_AS_HEAP
 #define RT_USING_HEAP
 
 /* Kernel Device Object */
@@ -82,23 +82,8 @@
 #define DFS_USING_WORKDIR
 #define DFS_FD_MAX 16
 #define RT_USING_DFS_V1
-#define DFS_FILESYSTEMS_MAX 2
-#define DFS_FILESYSTEM_TYPES_MAX 2
-#define RT_USING_DFS_ELMFAT
-
-/* elm-chan's FatFs, Generic FAT Filesystem Module */
-
-#define RT_DFS_ELM_CODE_PAGE 936
-#define RT_DFS_ELM_WORD_ACCESS
-#define RT_DFS_ELM_USE_LFN_0
-#define RT_DFS_ELM_USE_LFN 0
-#define RT_DFS_ELM_LFN_UNICODE_0
-#define RT_DFS_ELM_LFN_UNICODE 0
-#define RT_DFS_ELM_MAX_LFN 255
-#define RT_DFS_ELM_DRIVES 2
-#define RT_DFS_ELM_MAX_SECTOR_SIZE 4096
-#define RT_DFS_ELM_REENTRANT
-#define RT_DFS_ELM_MUTEX_TIMEOUT 3000
+#define DFS_FILESYSTEMS_MAX 4
+#define DFS_FILESYSTEM_TYPES_MAX 4
 #define RT_USING_DFS_DEVFS
 
 /* Device Drivers */
@@ -109,25 +94,17 @@
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
 #define RT_SERIAL_RB_BUFSZ 64
-#define RT_USING_CAN
-#define RT_CAN_USING_HDR
 #define RT_USING_HWTIMER
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
 #define RT_USING_RTC
 #define RT_USING_SPI
-#define RT_USING_SPI_BITOPS
 #define RT_USING_QSPI
-#define RT_USING_WDT
 #define RT_USING_SENSOR
 #define RT_USING_SENSOR_V1
 #define RT_USING_SENSOR_CMD
-#define RT_USING_TOUCH
 #define RT_USING_LCD
-#define RT_USING_INPUT_CAPTURE
-#define RT_INPUT_CAPTURE_RB_SIZE 100
-#define RT_USING_KTIME
 
 /* Using USB */
 
@@ -218,8 +195,6 @@
 
 /* enhanced kernel services */
 
-#define PKG_USING_RT_VSNPRINTF_FULL
-#define PKG_USING_RT_VSNPRINTF_FULL_LATEST_VERSION
 
 /* acceleration: Assembly language or algorithmic acceleration packages */
 
@@ -298,6 +273,9 @@
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_HWTIMER0
+#define BSP_USING_I2C
+#define BSP_USING_I2C0
+#define BSP_USING_I2C1
 
 /* UART Drivers */
 
