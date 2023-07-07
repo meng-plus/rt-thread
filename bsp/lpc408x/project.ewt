@@ -2977,6 +2977,9 @@
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\waitqueue.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\watchdog\watchdog.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\workqueue.c</name>
         </file>
     </group>
@@ -3041,6 +3044,15 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\finsh\shell.c</name>
+        </file>
+    </group>
+    <group>
+        <name>FM31XX</name>
+        <file>
+            <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
         </file>
     </group>
     <group>
@@ -3179,6 +3191,21 @@
         <name>POSIX</name>
         <file>
             <name>$PROJ_DIR$\..\..\components\libc\posix\delay\delay.c</name>
+        </file>
+    </group>
+    <group>
+        <name>rs485</name>
+        <file>
+            <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
         </file>
     </group>
     <group>

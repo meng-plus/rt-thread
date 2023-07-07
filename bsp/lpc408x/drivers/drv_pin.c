@@ -62,11 +62,11 @@ int rt_hw_pin_init()
     rt_device_pin_register(DEV_PIN_NAME, &drv_pin_opt.ops, NULL);
     for (size_t i = PIN_LED_0; i <= PIN_LED_END; i++)
     {
-        rt_pin_write(i, PIN_LOW);
+        rt_pin_write(i, PIN_HIGH);
         rt_pin_mode(i, PIN_MODE_OUTPUT_OD);
     }
 
-    rt_pin_write(PIN_LED_0, PIN_HIGH);
+    rt_pin_write(PIN_LED_0, PIN_LOW);
     return 0;
 }
 INIT_BOARD_EXPORT(rt_hw_pin_init);
@@ -102,7 +102,7 @@ void _pin_write(struct rt_device *device, rt_base_t pin, rt_uint8_t value)
 {
     RT_ASSERT(pin < PIN_NUM);
     const pin_ctrl_t *pin_ctrl_ptr = &drv_pin_opt.ctrl[pin];
-    if (!value)
+    if (value)
         GPIO_SetValue(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin);
     else
         GPIO_ClearValue(pin_ctrl_ptr->port, 0x01 << pin_ctrl_ptr->pin);
@@ -111,7 +111,7 @@ rt_int8_t _pin_read(struct rt_device *device, rt_base_t pin)
 {
     RT_ASSERT(pin < PIN_NUM);
     const pin_ctrl_t *pin_ctrl_ptr = &drv_pin_opt.ctrl[pin];
-    return GPIO_ReadValue(pin_ctrl_ptr->port) == (0x01 << pin_ctrl_ptr->pin);
+    return 0 != (GPIO_ReadValue(pin_ctrl_ptr->port) & (0x01 << pin_ctrl_ptr->pin));
 }
 rt_err_t _pin_attach_irq(struct rt_device *device, rt_base_t pin, rt_uint8_t mode, void (*hdr)(void *args), void *args)
 {
@@ -165,9 +165,9 @@ void ls_pin(rt_uint32_t led_num, rt_uint32_t value)
     for (size_t i = 0; i < PIN_NUM; i++)
     {
         if (i <= PIN_LED_END)
-            rt_kprintf("%d LED:P%d.%d \r\n",i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
+            rt_kprintf("%d LED:P%d.%d \r\n", i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
         else
-            rt_kprintf("%d PIN:P%d.%d \r\n",i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
+            rt_kprintf("%d PIN:P%d.%d \r\n", i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
     }
 }
 MSH_CMD_EXPORT(ls_pin, list pin)
