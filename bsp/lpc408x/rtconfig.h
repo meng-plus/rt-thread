@@ -97,10 +97,12 @@
 #define RT_USING_HWTIMER
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
+#define RT_I2C_BITOPS_DEBUG
 #define RT_USING_PIN
 #define RT_USING_RTC
 #define RT_USING_SPI
 #define RT_USING_QSPI
+#define RT_USING_WDT
 #define RT_USING_SENSOR
 #define RT_USING_SENSOR_V1
 #define RT_USING_SENSOR_CMD
@@ -215,6 +217,8 @@
 
 /* Kendryte SDK */
 
+#define PKG_USING_RS485
+#define PKG_USING_RS485_LATEST_VERSION
 
 /* AI packages */
 
@@ -288,6 +292,8 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_SDRAM
+#define BSP_USING_FM31XX
+#define BSP_USING_ADXL345
 
 /* Board extended module Drivers */
 

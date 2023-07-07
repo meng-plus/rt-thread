@@ -1,0 +1,18 @@
+from building import *
+
+cwd = GetCurrentDir()
+path = [cwd+'/inc']
+
+# add the general drivers.
+src = Split("""
+port/fm31xx_port.c
+""")
+
+src  += Glob('src/*.c')
+
+if  GetDepend('BSP_USING_FM31XX_SHELL'):
+  src += ['sample/fm31xx_shell.c']
+
+group = DefineGroup('FM31XX', src, depend = ['BSP_USING_FM31XX'], CPPPATH = path)
+
+Return('group')

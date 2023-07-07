@@ -65,9 +65,18 @@ menu "Hardware Drivers Config"
             bool "Enable sdram"
             default n
 
-        config BSP_USING_LED
-            bool "Enable LED"
+        config BSP_USING_FM31XX
+            bool "Enable Fm31xx(wdg e2prom RTC)"
             default n
+            if BSP_USING_FM31XX
+            config BSP_USING_FM31XX_SHELL
+                bool "shell cmd it "
+                default n
+            endif
+        config BSP_USING_ADXL345
+            bool "Enable ADXL345"
+            default n
+
     endmenu
 
 menu "Board extended module Drivers"
