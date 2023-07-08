@@ -12,9 +12,10 @@
 
 #include "drv_soft_i2c.h"
 #include <rtdevice.h>
-   
-#define LOG_TAG              __FILE__
-#define LOG_LVL              LOG_LVL_DBG
+#include "board.h"
+
+#define LOG_TAG __FILE__
+#define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
 #ifdef RT_USING_I2C
 #ifdef BSP_USING_I2C
@@ -205,8 +206,8 @@ int rt_hw_i2c_init(void)
         i2c_obj[i].ops.data = (void *)&lpc_soft_i2c_cfg[i];
         i2c_obj[i].i2c2_bus.priv = &i2c_obj[i].ops;
         lpc_i2c_gpio_init(&i2c_obj[i]);
-        rt_err_t rt_i2c_bit_add_bus(struct rt_i2c_bus_device *bus,
-                            const char               *bus_name);
+        rt_err_t rt_i2c_bit_add_bus(struct rt_i2c_bus_device * bus,
+                                    const char *bus_name);
         result = rt_i2c_bit_add_bus(&i2c_obj[i].i2c2_bus, lpc_soft_i2c_cfg[i].name);
         RT_ASSERT(result == RT_EOK);
 

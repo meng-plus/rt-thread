@@ -29,34 +29,31 @@ menu "Hardware Drivers Config"
                 select RT_USING_I2C_BITOPS
                 default n
             endif
+        config BSP_USING_UART
+            bool "Enable UART"
+            select RT_USING_SERIAL
+            default n
+            if BSP_USING_UART
+                config BSP_USING_UART0
+                    bool "Enable UART0"
+                    default y
 
-        menu "UART Drivers"
-            config BSP_USING_UART0
-                bool "Enable UART0"
-                select RT_USING_SERIAL
-                default y
+                config BSP_USING_UART1
+                    bool "Enable UART1"
+                    default n
 
-            config BSP_USING_UART1
-                bool "Enable UART1"
-                select RT_USING_SERIAL
-                default n
+                config BSP_USING_UART2
+                    bool "Enable UART2"
+                    default n
 
-            config BSP_USING_UART2
-                bool "Enable UART2"
-                select RT_USING_SERIAL
-                default n
+                config BSP_USING_UART3
+                    bool "Enable UART3"
+                    default n
 
-            config BSP_USING_UART3
-                bool "Enable UART3"
-                select RT_USING_SERIAL
-                default n
-
-            config BSP_USING_UART4
-                bool "Enable UART4"
-                select RT_USING_SERIAL
-                default n
-        endmenu
-
+                config BSP_USING_UART4
+                    bool "Enable UART4"
+                    default n
+           endif
     endmenu
 
     menu "Onboard Peripheral Drivers"
@@ -67,12 +64,20 @@ menu "Hardware Drivers Config"
 
         config BSP_USING_FM31XX
             bool "Enable Fm31xx(wdg e2prom RTC)"
+            select RT_USING_RTC
             default n
+
             if BSP_USING_FM31XX
             config BSP_USING_FM31XX_SHELL
-                bool "shell cmd it "
+                bool "Enabel shell"
+                default n
+
+            config BSP_USING_WDT
+                bool "Enabel watchdog"
+                select RT_USING_WDT
                 default n
             endif
+
         config BSP_USING_ADXL345
             bool "Enable ADXL345"
             default n

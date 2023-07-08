@@ -2355,6 +2355,9 @@
       <name>$PROJ_DIR$\drivers\drv_pin.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\drivers\drv_watchdog.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\drivers\drv_interrupt.c</name>
     </file>
     <file>
@@ -2406,10 +2409,10 @@
   <group>
     <name>FM31XX</name>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
     </file>
   </group>
   <group>
@@ -2553,13 +2556,13 @@
   <group>
     <name>rs485</name>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
