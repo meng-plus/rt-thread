@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include <rtthread.h>
+#include <rtdevice.h>
 #include "board.h"
 #include "drv_pin.h"
 #include "lpc_gpio.h"
@@ -170,5 +170,5 @@ void ls_pin(rt_uint32_t led_num, rt_uint32_t value)
             rt_kprintf("%d PIN:P%d.%d \r\n", i, drv_pin_opt.ctrl[i].port, drv_pin_opt.ctrl[i].pin);
     }
 }
-MSH_CMD_EXPORT(ls_pin, list pin)
+MSH_CMD_EXPORT_ALIAS(ls_pin, pin_ls, list pin)
 #endif

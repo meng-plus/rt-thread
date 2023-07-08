@@ -1,5 +1,5 @@
 /**
- * @file drv_soft_i2c.h
+ * @file drv_watchdog.h
  * @author mengplus (chengmeng_2@outlook.com)
  * @brief
  * @version 0.1
@@ -8,20 +8,17 @@
  * @copyright Copyright (c) 2023
  *
  */
+#ifndef __WATCHDOG_H__
+#define __WATCHDOG_H__
 
-#ifndef __DRV_SOFT_I2C_H__
-#define __DRV_SOFT_I2C_H__
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-
-
-    int rt_hw_i2c_init(void);
+    void rt_hw_wdt_init();
 #ifdef __cplusplus
 }
 #endif
 
-
-#endif /* __DRV_SOFT_I2C_H__ */
+#endif /* __WATCHDOG_H__ */

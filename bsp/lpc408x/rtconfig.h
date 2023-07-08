@@ -97,7 +97,6 @@
 #define RT_USING_HWTIMER
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
-#define RT_I2C_BITOPS_DEBUG
 #define RT_USING_PIN
 #define RT_USING_RTC
 #define RT_USING_SPI
@@ -280,9 +279,7 @@
 #define BSP_USING_I2C
 #define BSP_USING_I2C0
 #define BSP_USING_I2C1
-
-/* UART Drivers */
-
+#define BSP_USING_UART
 #define BSP_USING_UART0
 #define BSP_USING_UART1
 #define BSP_USING_UART2
@@ -293,6 +290,7 @@
 
 #define BSP_USING_SDRAM
 #define BSP_USING_FM31XX
+#define BSP_USING_WDT
 #define BSP_USING_ADXL345
 
 /* Board extended module Drivers */

@@ -30,12 +30,17 @@ int Fm31xxReadReg(uint8_t reg, uint8_t *pdt, uint8_t len);
 ***********************************************************************************/
 int Fm31xxInit(void)
 {
-    fm31xx_hw_i2c_init();
-    RTCEnable(1);
+    static uint8_t init_ok = 0;
+    if (init_ok == 0)
+    {
+        init_ok = 1;
+        fm31xx_hw_i2c_init();
+        RTCEnable(1);
+    }
+
     return 0;
 }
 INIT_DEVICE_EXPORT(Fm31xxInit);
-
 
 /**********************************************************************************
 ** 函数名称:
@@ -88,8 +93,7 @@ int WDogStart(uint16_t m)
     int res = 0;
 
     // 复位看门狗
-    ch = 0x0a;
-    res |= Fm31xxWriteReg(0x09, &ch, 1);
+    WDogFeed();
 
     // 启动看门狗
     m /= 100;
@@ -109,8 +113,7 @@ int WDogStart(uint16_t m)
     */
 
     // 再次复位看门狗
-    ch = 0x0a;
-    res |= Fm31xxWriteReg(0x09, &ch, 1);
+    WDogFeed();
 
     return res;
 }
