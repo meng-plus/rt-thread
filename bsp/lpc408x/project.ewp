@@ -370,6 +370,7 @@
           <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension\fcntl\octal</state>
+          <state>$PROJ_DIR$\drivers\ADXL345\inc</state>
           <state>$PROJ_DIR$\..\..\components\finsh</state>
           <state>$PROJ_DIR$\packages\rs485-latest\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension</state>
@@ -1471,6 +1472,7 @@
           <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension\fcntl\octal</state>
+          <state>$PROJ_DIR$\drivers\ADXL345\inc</state>
           <state>$PROJ_DIR$\..\..\components\finsh</state>
           <state>$PROJ_DIR$\packages\rs485-latest\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension</state>
@@ -2203,6 +2205,15 @@
     </settings>
   </configuration>
   <group>
+    <name>ADXL345</name>
+    <file>
+      <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\ADXL345\port\adxl345_port.c</name>
+    </file>
+  </group>
+  <group>
     <name>Applications</name>
     <file>
       <name>$PROJ_DIR$\applications\main.c</name>
@@ -2409,10 +2420,10 @@
   <group>
     <name>FM31XX</name>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
     </file>
   </group>
   <group>
@@ -2556,10 +2567,10 @@
   <group>
     <name>rs485</name>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
@@ -2571,10 +2582,10 @@
   <group>
     <name>Utilities</name>
     <file>
-      <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
+      <name>$PROJ_DIR$\..\..\components\utilities\ulog\backend\console_be.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\components\utilities\ulog\backend\console_be.c</name>
+      <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
     </file>
   </group>
 </project>
