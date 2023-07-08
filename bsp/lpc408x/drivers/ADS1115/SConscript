@@ -1,0 +1,18 @@
+from building import *
+
+cwd = GetCurrentDir()
+path = [cwd+'/inc']
+
+# add the general drivers.
+src = Split("""
+port/ads1115_port.c
+""")
+
+src  += Glob('src/*.c')
+
+if  GetDepend('BSP_USING_ADS1115_SHELL'):
+  src += ['sample/ads1115_shell.c']
+
+group = DefineGroup('ADS1115', src, depend = ['BSP_USING_ADS1115'], CPPPATH = path)
+
+Return('group')

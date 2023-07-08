@@ -355,6 +355,7 @@
           <name>CCIncludePath2</name>
           <state />
           <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\include</state>
+          <state>$PROJ_DIR$\drivers\ADS1115\inc</state>
           <state>$PROJ_DIR$\..\..\include</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
           <state>$PROJ_DIR$\..\..\components\drivers\include</state>
@@ -1457,6 +1458,7 @@
           <name>CCIncludePath2</name>
           <state />
           <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\include</state>
+          <state>$PROJ_DIR$\drivers\ADS1115\inc</state>
           <state>$PROJ_DIR$\..\..\include</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
           <state>$PROJ_DIR$\..\..\components\drivers\include</state>
@@ -2205,6 +2207,15 @@
     </settings>
   </configuration>
   <group>
+    <name>ADS1115</name>
+    <file>
+      <name>$PROJ_DIR$\drivers\ADS1115\src\ads1115.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\ADS1115\port\ads1115_port.c</name>
+    </file>
+  </group>
+  <group>
     <name>ADXL345</name>
     <file>
       <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
@@ -2420,10 +2431,10 @@
   <group>
     <name>FM31XX</name>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
     </file>
   </group>
   <group>
@@ -2573,19 +2584,19 @@
       <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
     </file>
   </group>
   <group>
     <name>Utilities</name>
     <file>
-      <name>$PROJ_DIR$\..\..\components\utilities\ulog\backend\console_be.c</name>
+      <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
+      <name>$PROJ_DIR$\..\..\components\utilities\ulog\backend\console_be.c</name>
     </file>
   </group>
 </project>

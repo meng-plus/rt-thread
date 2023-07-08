@@ -86,6 +86,14 @@ menu "Hardware Drivers Config"
                 bool "Enabel shell"
                 default n
             endif
+         config BSP_USING_ADS1115
+            bool "Enable ADS1115"
+            default n
+            if BSP_USING_ADS1115
+               config BSP_USING_ADS1115_SHELL
+                bool "Enabel shell"
+                default n
+            endif
     endmenu
 
 menu "Board extended module Drivers"

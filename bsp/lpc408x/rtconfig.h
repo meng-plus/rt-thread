@@ -292,6 +292,7 @@
 #define BSP_USING_FM31XX
 #define BSP_USING_WDT
 #define BSP_USING_ADXL345
+#define BSP_USING_ADS1115
 
 /* Board extended module Drivers */
 
