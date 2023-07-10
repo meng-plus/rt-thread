@@ -26,7 +26,7 @@ static rt_err_t fm31xx_read_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_
     }
     struct rt_i2c_msg msg[2];
     msg[0].addr = dev_id;
-    msg[0].flags = RT_I2C_WR;
+    msg[0].flags = RT_I2C_WR | RT_I2C_NO_STOP;
     msg[0].len = addr_len;
     msg[0].buf = (rt_uint8_t *)&addr;
     if (addr_len == 2)
@@ -59,7 +59,7 @@ static rt_err_t fm31xx_write_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr
     }
     struct rt_i2c_msg msg[2];
     msg[0].addr = dev_id;
-    msg[0].flags = RT_I2C_WR;
+    msg[0].flags = RT_I2C_WR | RT_I2C_NO_STOP;
     msg[0].len = addr_len;
     msg[0].buf = (rt_uint8_t *)&addr;
     if (addr_len == 2)
@@ -70,7 +70,7 @@ static rt_err_t fm31xx_write_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr
     }
 
     msg[1].addr = dev_id;
-    msg[1].flags = RT_I2C_WR;
+    msg[1].flags = RT_I2C_WR | RT_I2C_NO_START;
     msg[1].len = data_size;
     msg[1].buf = data;
     if (rt_i2c_transfer(Fm31XX_handle, msg, 2) == 2)
@@ -103,31 +103,7 @@ int E2PromRead(uint16_t addr, void *p, uint16_t len)
 }
 int Fm31xxWriteReg(uint8_t reg, uint8_t *pdt, uint8_t len)
 {
-    uint8_t dev_id = FM31XX_ADDR_REG;
-    uint8_t buff[16];
-    uint16_t addr = reg;
-    if (Fm31XX_handle == RT_NULL)
-    {
-        return -RT_ERROR;
-    }
-    struct rt_i2c_msg msg[1];
-    msg[0].addr = dev_id;
-    msg[0].flags = RT_I2C_WR;
-    msg[0].len = len + 1;
-    msg[0].buf = (rt_uint8_t *)buff;
-    buff[0] = addr;
-    rt_memcpy(buff + 1, pdt, len);
-
-    if (rt_i2c_transfer(Fm31XX_handle, msg, 1) == 1)
-    {
-        return RT_EOK;
-    }
-    else
-    {
-        LOG_E("i2c bus write failed!\r\n");
-        return -RT_ERROR;
-    }
-    // return fm31xx_write_reg(FM31XX_ADDR_REG, reg, 1, pdt, len);
+    return fm31xx_write_reg(FM31XX_ADDR_REG, reg, 1, pdt, len);
 }
 
 /**********************************************************************************

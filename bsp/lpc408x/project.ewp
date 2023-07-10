@@ -360,22 +360,25 @@
           <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
           <state>$PROJ_DIR$\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Include</state>
+          <state>$PROJ_DIR$\drivers\Fal\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\ipc</state>
           <state>$PROJ_DIR$\drivers</state>
           <state>$PROJ_DIR$\..\..\components\utilities\ulog</state>
           <state>$PROJ_DIR$\.</state>
           <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\cortex-m4</state>
+          <state>$PROJ_DIR$\..\..\components\drivers\spi\sfud\inc</state>
+          <state>$PROJ_DIR$\..\..\components\fal\inc</state>
           <state>$PROJ_DIR$\Libraries\CMSIS\Include</state>
+          <state>$PROJ_DIR$\..\..\components\libc\posix\delay</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\include</state>
           <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension\fcntl\octal</state>
-          <state>$PROJ_DIR$\drivers\ADXL345\inc</state>
           <state>$PROJ_DIR$\..\..\components\finsh</state>
           <state>$PROJ_DIR$\packages\rs485-latest\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension</state>
-          <state>$PROJ_DIR$\..\..\components\libc\posix\delay</state>
+          <state>$PROJ_DIR$\drivers\ADXL345\inc</state>
           <state>$PROJ_DIR$\Libraries\Drivers\include</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\io\poll</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\io\stdio</state>
@@ -1463,22 +1466,25 @@
           <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
           <state>$PROJ_DIR$\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Include</state>
+          <state>$PROJ_DIR$\drivers\Fal\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\ipc</state>
           <state>$PROJ_DIR$\drivers</state>
           <state>$PROJ_DIR$\..\..\components\utilities\ulog</state>
           <state>$PROJ_DIR$\.</state>
           <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\cortex-m4</state>
+          <state>$PROJ_DIR$\..\..\components\drivers\spi\sfud\inc</state>
+          <state>$PROJ_DIR$\..\..\components\fal\inc</state>
           <state>$PROJ_DIR$\Libraries\CMSIS\Include</state>
+          <state>$PROJ_DIR$\..\..\components\libc\posix\delay</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\include</state>
           <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension\fcntl\octal</state>
-          <state>$PROJ_DIR$\drivers\ADXL345\inc</state>
           <state>$PROJ_DIR$\..\..\components\finsh</state>
           <state>$PROJ_DIR$\packages\rs485-latest\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension</state>
-          <state>$PROJ_DIR$\..\..\components\libc\posix\delay</state>
+          <state>$PROJ_DIR$\drivers\ADXL345\inc</state>
           <state>$PROJ_DIR$\Libraries\Drivers\include</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\io\poll</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\io\stdio</state>
@@ -2353,10 +2359,19 @@
       <name>$PROJ_DIR$\..\..\components\drivers\spi\qspi_core.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud_sfdp.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_dev.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_flash_sfud.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\components\drivers\watchdog\watchdog.c</name>
@@ -2390,6 +2405,36 @@
     </file>
     <file>
       <name>$PROJ_DIR$\drivers\drv_hwtimer.c</name>
+    </file>
+  </group>
+  <group>
+    <name>Fal</name>
+    <file>
+      <name>$PROJ_DIR$\drivers\Fal\fal_flash_eeprom_onchip_port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\Fal\fal_flash_eeprom_onrtc_port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\Fal\fal_port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\Fal\sample\fal_sample.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\fal\samples\porting\fal_flash_sfud_port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\fal\src\fal.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\fal\src\fal_flash.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\fal\src\fal_partition.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\components\fal\src\fal_rtt.c</name>
     </file>
   </group>
   <group>
@@ -2431,10 +2476,10 @@
   <group>
     <name>FM31XX</name>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
     </file>
   </group>
   <group>
@@ -2578,25 +2623,25 @@
   <group>
     <name>rs485</name>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_master.c</name>
     </file>
   </group>
   <group>
     <name>Utilities</name>
     <file>
-      <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
+      <name>$PROJ_DIR$\..\..\components\utilities\ulog\backend\console_be.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\components\utilities\ulog\backend\console_be.c</name>
+      <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
     </file>
   </group>
 </project>

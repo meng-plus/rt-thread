@@ -85,6 +85,12 @@
 #define DFS_FILESYSTEMS_MAX 4
 #define DFS_FILESYSTEM_TYPES_MAX 4
 #define RT_USING_DFS_DEVFS
+#define RT_USING_FAL
+#define FAL_DEBUG_CONFIG
+#define FAL_DEBUG 1
+#define FAL_PART_HAS_TABLE_CFG
+#define FAL_USING_SFUD_PORT
+#define FAL_USING_NOR_FLASH_DEV_NAME "norflash0"
 
 /* Device Drivers */
 
@@ -101,6 +107,11 @@
 #define RT_USING_RTC
 #define RT_USING_SPI
 #define RT_USING_QSPI
+#define RT_USING_SFUD
+#define RT_SFUD_USING_SFDP
+#define RT_SFUD_USING_FLASH_INFO_TABLE
+#define RT_SFUD_USING_QSPI
+#define RT_SFUD_SPI_MAX_HZ 50000000
 #define RT_USING_WDT
 #define RT_USING_SENSOR
 #define RT_USING_SENSOR_V1
@@ -276,6 +287,8 @@
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_HWTIMER0
+#define BSP_USING_EEPROM_ONCHIP
+#define BSP_USING_FAL_SAMPLE
 #define BSP_USING_I2C
 #define BSP_USING_I2C0
 #define BSP_USING_I2C1

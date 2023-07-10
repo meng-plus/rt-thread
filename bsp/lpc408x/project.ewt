@@ -2846,6 +2846,24 @@
         </settings>
     </configuration>
     <group>
+        <name>ADS1115</name>
+        <file>
+            <name>$PROJ_DIR$\drivers\ADS1115\src\ads1115.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\ADS1115\port\ads1115_port.c</name>
+        </file>
+    </group>
+    <group>
+        <name>ADXL345</name>
+        <file>
+            <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\ADXL345\port\adxl345_port.c</name>
+        </file>
+    </group>
+    <group>
         <name>Applications</name>
         <file>
             <name>$PROJ_DIR$\applications\main.c</name>
@@ -2968,10 +2986,19 @@
             <name>$PROJ_DIR$\..\..\components\drivers\serial\serial.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud_sfdp.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_dev.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_flash_sfud.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\waitqueue.c</name>
@@ -3008,6 +3035,30 @@
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_uart.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\drv_watchdog.c</name>
+        </file>
+    </group>
+    <group>
+        <name>Fal</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\fal\src\fal.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\fal\src\fal_flash.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\fal\fal_flash_eeprom_onchip_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\fal\samples\porting\fal_flash_sfud_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\fal\src\fal_partition.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\fal\src\fal_rtt.c</name>
         </file>
     </group>
     <group>
