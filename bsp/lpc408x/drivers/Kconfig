@@ -10,7 +10,17 @@ menu "Hardware Drivers Config"
             bool "Using timer0"
             select RT_USING_HWTIMER
             default n
-
+        config BSP_USING_EEPROM_ONCHIP
+            bool "Enable On-chip EEPROM"
+            default n
+            if BSP_USING_EEPROM_ONCHIP
+                config BSP_USING_FAL_SAMPLE
+                    bool "Enable FAL for test"
+                    default n
+            endif
+        config BSP_USING_FLASH_ONCHIP
+            bool "Enable On-chip Flash"
+            default n
         config BSP_USING_ADC
             bool "Using ADC"
             select RT_USING_ADC
@@ -29,6 +39,12 @@ menu "Hardware Drivers Config"
                 select RT_USING_I2C_BITOPS
                 default n
             endif
+        config BSP_USING_QSPI
+            bool "Enable QSPI S25FL032"
+            select RT_USING_QSPI
+            select RT_USING_SPI
+            default n
+
         config BSP_USING_UART
             bool "Enable UART"
             select RT_USING_SERIAL
@@ -86,8 +102,16 @@ menu "Hardware Drivers Config"
                 bool "Enabel shell"
                 default n
             endif
-         config BSP_USING_ADS1115
+        config BSP_USING_ADS1115
             bool "Enable ADS1115"
+            default n
+            if BSP_USING_ADS1115
+               config BSP_USING_ADS1115_SHELL
+                bool "Enabel shell"
+                default n
+            endif
+        config BSP_USING_ONCHIP_EEPROM
+            bool "Enable On-chip"
             default n
             if BSP_USING_ADS1115
                config BSP_USING_ADS1115_SHELL
