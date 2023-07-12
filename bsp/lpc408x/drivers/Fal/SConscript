@@ -21,7 +21,8 @@ if  GetDepend('BSP_USING_EEPROM_ONCHIP'):
 
 if  GetDepend('BSP_USING_FLASH_ONCHIP'):
     src += ['fal_flash_lpc4088_port.c']
-
+if  GetDepend('BSP_USING_SPFI'):
+    src += ['fal_flash_extFlash_lpc4088_port.c']
 
 
 group = DefineGroup('Fal', src, depend = ['RT_USING_FAL'], CPPPATH = path)

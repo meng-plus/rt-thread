@@ -89,8 +89,6 @@
 #define FAL_DEBUG_CONFIG
 #define FAL_DEBUG 1
 #define FAL_PART_HAS_TABLE_CFG
-#define FAL_USING_SFUD_PORT
-#define FAL_USING_NOR_FLASH_DEV_NAME "norflash0"
 
 /* Device Drivers */
 
@@ -112,6 +110,7 @@
 #define RT_SFUD_USING_FLASH_INFO_TABLE
 #define RT_SFUD_USING_QSPI
 #define RT_SFUD_SPI_MAX_HZ 50000000
+#define RT_DEBUG_SFUD
 #define RT_USING_WDT
 #define RT_USING_SENSOR
 #define RT_USING_SENSOR_V1
@@ -286,9 +285,8 @@
 
 /* On-chip Peripheral Drivers */
 
-#define BSP_USING_HWTIMER0
 #define BSP_USING_EEPROM_ONCHIP
-#define BSP_USING_FAL_SAMPLE
+#define BSP_USING_FLASH_ONCHIP
 #define BSP_USING_I2C
 #define BSP_USING_I2C0
 #define BSP_USING_I2C1
@@ -302,10 +300,10 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_SDRAM
+#define BSP_USING_SPFI
 #define BSP_USING_FM31XX
 #define BSP_USING_WDT
 #define BSP_USING_ADXL345
-#define BSP_USING_ADS1115
 
 /* Board extended module Drivers */
 

@@ -20,20 +20,19 @@ static int init(void)
 }
 static int read(long offset, uint8_t *buf, size_t size)
 {
-    RT_ASSERT(offset + size <= eeprom_onRTC_flash.len);
-    return E2PromRead(offset, buf, size);
+    uint32_t addr = eeprom_onRTC_flash.addr + offset;
+    return E2PromRead(addr, buf, size);
 }
 
 static int write(long offset, const uint8_t *buf, size_t size)
 {
-    RT_ASSERT(offset + size <= eeprom_onRTC_flash.len);
-    return E2PromWrite(offset, (void *)buf, size);
-
+    uint32_t addr = eeprom_onRTC_flash.addr + offset;
+    return E2PromWrite(addr, (void *)buf, size);
 }
 
 static int erase(long offset, size_t size)
 {
-    RT_ASSERT(offset + size <= eeprom_onRTC_flash.len);
+
     for (long page_address = offset; page_address < size; page_address += 64)
     {
         // EEPROM_Erase(page_address / 64);

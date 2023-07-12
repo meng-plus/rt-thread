@@ -21,10 +21,10 @@ static int init(void)
 static int read(long offset, uint8_t *buf, size_t size)
 {
     size_t i;
-    uint32_t addr = offset;
+    uint32_t addr = lpc4088_onchip_flash.addr + offset;
     for (i = 0; i < size; i++, addr++, buf++)
     {
-        *buf = *(uint8_t *)addr;
+        *buf = *(volatile uint8_t *)addr;
     }
     return size;
 }
@@ -38,13 +38,14 @@ static int read(long offset, uint8_t *buf, size_t size)
  */
 static int write(long offset, const uint8_t *buf, size_t size)
 {
-    uint32_t addr = offset;
+    uint32_t addr = lpc4088_onchip_flash.addr + offset;
     return -CopyRAM2Flash((uint8_t *)addr, (uint8_t *)buf, IAP_WRITE_256);
 }
 
 static int erase(long offset, size_t size)
 {
-    return -EraseSector(GetSecNum(offset), GetSecNum(offset + size));
+    uint32_t addr = lpc4088_onchip_flash.addr + offset;
+    return -EraseSector(GetSecNum(addr), GetSecNum(addr + size));
 }
 
 const struct fal_flash_dev lpc4088_onchip_flash =

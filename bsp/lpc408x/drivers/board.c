@@ -51,7 +51,6 @@ void rt_hw_board_init()
     NVIC_SetPriority(PendSV_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
     GPDMA_Init();
     GPIO_Init();
-    RTC_Init(LPC_RTC);
 #ifdef RT_USING_HEAP
 
 #if defined(BSP_USING_SDRAM) && defined(RT_USING_MEMHEAP_AS_HEAP)

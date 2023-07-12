@@ -255,13 +255,7 @@ static int lpc_putc(struct rt_serial_device *serial, char c)
 {
     struct lpc_uart *uart;
     uart = (struct lpc_uart *)serial->parent.user_data;
-    rt_uart_rs485_dir(uart->uart_id, 1);
     UART_Send(uart->uart_id, (uint8_t *)&c, 1, BLOCKING);
-    rt_uart_rs485_dir(uart->uart_id, 0);
-    //    while (!(uart->UART->LSR & 0x20))
-    //        ;
-    //    uart->UART->THR = c;
-
     return 1;
 }
 
@@ -301,7 +295,6 @@ rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_siz
     uart = (struct lpc_uart *)serial->parent.user_data;
     if (RT_SERIAL_DMA_TX == direction)
     {
-        rt_uart_rs485_dir(uart->uart_id, 1);
         // TODO: need  fix it
         GPDMA_Channel_CFG_Type GPDMAChannelConfig;
         GPDMAChannelConfig.ChannelNum = uart->nTxDMAChnnl;
@@ -331,15 +324,6 @@ rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_siz
         GPDMA_ChannelCmd(uart->nRxDMAChnnl, ENABLE);
     }
     return 0;
-}
-void rt_uart_rs485_dir(UART_ID_Type SERIAL_ID, uint8_t dir)
-{
-    uint8_t id = (uint8_t)SERIAL_ID;
-    RT_ASSERT(id < SERIAL_NUM);
-    // if (dir)
-    //     GPIO_SetValue(lpc_uart_ops.lpc_uart[id].oe.port, 0x01 << lpc_uart_ops.lpc_uart[id].oe.pin);
-    // else
-    //     GPIO_ClearValue(lpc_uart_ops.lpc_uart[id].oe.port, 0x01 << lpc_uart_ops.lpc_uart[id].oe.pin);
 }
 void uart_isr(rt_serial_t *serial_ptr)
 {
@@ -423,10 +407,9 @@ static rt_err_t rx_indicate(rt_device_t dev, rt_size_t size)
 }
 static rt_err_t tx_complete(rt_device_t dev, void *buffer)
 { // ·¢ËÍ»Øµ÷
-    struct lpc_uart *uart;
+    //struct lpc_uart *uart;
 
-    uart = (struct lpc_uart *)dev->user_data;
-    rt_uart_rs485_dir(uart->uart_id, 0);
+    //uart = (struct lpc_uart *)dev->user_data;
     return 0;
 }
 

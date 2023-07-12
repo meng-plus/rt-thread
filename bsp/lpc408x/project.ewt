@@ -2846,15 +2846,6 @@
         </settings>
     </configuration>
     <group>
-        <name>ADS1115</name>
-        <file>
-            <name>$PROJ_DIR$\drivers\ADS1115\src\ads1115.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\drivers\ADS1115\port\ads1115_port.c</name>
-        </file>
-    </group>
-    <group>
         <name>ADXL345</name>
         <file>
             <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
@@ -3016,9 +3007,6 @@
             <name>$PROJ_DIR$\drivers\board.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\drivers\drv_hwtimer.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\drivers\drv_interrupt.c</name>
         </file>
         <file>
@@ -3049,16 +3037,28 @@
             <name>$PROJ_DIR$\..\..\components\fal\src\fal_flash.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\drivers\fal\fal_flash_eeprom_onchip_port.c</name>
+            <name>$PROJ_DIR$\drivers\Fal\fal_flash_eeprom_onchip_port.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\fal\samples\porting\fal_flash_sfud_port.c</name>
+            <name>$PROJ_DIR$\drivers\Fal\fal_flash_eeprom_onrtc_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\Fal\fal_flash_extFlash_lpc4088_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\Fal\fal_flash_lpc4088_port.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\fal\src\fal_partition.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\drivers\Fal\fal_port.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\fal\src\fal_rtt.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\Fal\sample\fal_sample.c</name>
         </file>
     </group>
     <group>
