@@ -10,136 +10,162 @@
 
 #include <rtthread.h>
 
-#ifdef BSP_USING_SDRAM
 #include "drv_sdram.h"
 
 #include <lpc_emc.h>
-#include <lpc_timer.h>
+/*=============================================
+==
+===============================================*/
+#define SYS_FREQ 120000000
 
-static void  sdram_gpio_config(void)
-{
-    LPC_IOCON->P3_0 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D0 @ P3.0 */
-    LPC_IOCON->P3_1 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D1 @ P3.1 */
-    LPC_IOCON->P3_2 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D2 @ P3.2 */
-    LPC_IOCON->P3_3 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D3 @ P3.3 */
-
-    LPC_IOCON->P3_4 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D4 @ P3.4 */
-    LPC_IOCON->P3_5 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D5 @ P3.5 */
-    LPC_IOCON->P3_6 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D6 @ P3.6 */
-    LPC_IOCON->P3_7 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D7 @ P3.7 */
-
-    LPC_IOCON->P3_8 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D8 @ P3.8 */
-    LPC_IOCON->P3_9 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D9 @ P3.9 */
-    LPC_IOCON->P3_10 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D10 @ P3.10 */
-    LPC_IOCON->P3_11 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D11 @ P3.11 */
-
-    LPC_IOCON->P3_12 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D12 @ P3.12 */
-    LPC_IOCON->P3_13 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D13 @ P3.13 */
-    LPC_IOCON->P3_14 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D14 @ P3.14 */
-    LPC_IOCON->P3_15 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* D15 @ P3.15 */
-
-
-    LPC_IOCON->P4_0 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A0 @ P4.0 */
-    LPC_IOCON->P4_1 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A1 @ P4.1 */
-    LPC_IOCON->P4_2 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A2 @ P4.2 */
-    LPC_IOCON->P4_3 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A3 @ P4.3 */
-
-    LPC_IOCON->P4_4 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A4 @ P4.4 */
-    LPC_IOCON->P4_5 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A5 @ P4.5 */
-    LPC_IOCON->P4_6 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A6 @ P4.6 */
-    LPC_IOCON->P4_7 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A7 @ P4.7 */
-
-    LPC_IOCON->P4_8 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A8 @ P4.8 */
-    LPC_IOCON->P4_9 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A9 @ P4.9 */
-    LPC_IOCON->P4_10 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A10 @ P4.10 */
-    LPC_IOCON->P4_11 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A11 @ P4.11 */
-
-    LPC_IOCON->P4_12 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A12 @ P4.12 */
-    LPC_IOCON->P4_13 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A13 @ P4.13 */
-    LPC_IOCON->P4_14 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* A14 @ P4.14 */
-
-    LPC_IOCON->P4_25 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* WEN @ P4.25 */
-
-    LPC_IOCON->P2_16 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* CASN @ P2.16 */
-    LPC_IOCON->P2_17 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* RASN @ P2.17 */
-    LPC_IOCON->P2_18 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* CLK[0] @ P2.18 */
-    LPC_IOCON->P2_19 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* CLK[1] @ P2.19 */
-
-    LPC_IOCON->P2_20 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* DYCSN[0] @ P2.20 */
-    LPC_IOCON->P2_24 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* CKE[0] @ P2.24 */
-
-    LPC_IOCON->P2_28 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* DQM[0] @ P2.28 */
-    LPC_IOCON->P2_29 = (1 << 0 | 0 << 3 | 0 << 5 | 1 << 9); /* DQM[1] @ P2.29 */
-}
-
-void rt_hw_sdram_init(void)
-{
-    volatile uint32_t i;
-    volatile uint32_t dwtemp;
-    uint16_t wtemp = wtemp;
-    TIM_TIMERCFG_Type TIM_ConfigStruct;
-
-    TIM_ConfigStruct.PrescaleOption = TIM_PRESCALE_USVAL;
-    TIM_ConfigStruct.PrescaleValue  = 1;
-
-    /* Set configuration for Tim_config and Tim_MatchConfig */
-    TIM_Init(LPC_TIM0, TIM_TIMER_MODE, &TIM_ConfigStruct);
-
-    LPC_SC->PCONP      |= 0x00000800;
-    LPC_SC->EMCDLYCTL   = 0x00001010;
-    LPC_EMC->Control = 0x00000001;
-    LPC_EMC->Config  = 0x00000000;
-
-    sdram_gpio_config();
-
-    LPC_EMC->DynamicRP         = EMC_NS2CLK(20);        /* 20ns  */
-    LPC_EMC->DynamicRAS        =  15;                   /* EMC_NS2CLK(42, nsPerClk),42ns to 100K ns  */
-    LPC_EMC->DynamicSREX       = 1 - 1;                 /* tSRE, 1clk */
-    LPC_EMC->DynamicAPR        = 2 - 1;                 /* Not found!!! Estimated as 2clk */
-    LPC_EMC->DynamicDAL        = EMC_NS2CLK(20) + 2;    /* tDAL = tRP + tDPL = 20ns + 2clk  */
-    LPC_EMC->DynamicWR         = 2 - 1;                 /* 2CLK */
-    LPC_EMC->DynamicRC         = EMC_NS2CLK(63);        /* H57V2562GTR-75C tRC=63ns(min)*/
-    LPC_EMC->DynamicRFC        = EMC_NS2CLK(63);        /* H57V2562GTR-75C tRFC=tRC */
-    LPC_EMC->DynamicXSR        = 0x0000000F;            /* exit self-refresh to active */
-    LPC_EMC->DynamicRRD        = EMC_NS2CLK(63);        /* 3clk, tRRD=15ns(min) */
-    LPC_EMC->DynamicMRD        = 2 - 1;                 /* 2clk, tMRD=2clk(min) */
-
-    LPC_EMC->DynamicReadConfig = 0x00000001;            /* Command delayed strategy, using EMCCLKDELAY */
-    /* H57V2562GTR-75C: tCL=3CLK, tRCD=20ns(min), 3 CLK=24ns */
-    LPC_EMC->DynamicRasCas0    = 0x303;
-
-    /* For Manley lpc1778 SDRAM: H57V2562GTR-75C, 256Mb, 16Mx16, 4 banks, row=13, column=9 */
-#ifdef SDRAM_CONFIG_16BIT
-    LPC_EMC->DynamicConfig0    = 0x680;                 /* 256Mb, 16Mx16, 4 banks, row=13, column=9, RBC */
-#elif defined SDRAM_CONFIG_32BIT
-    LPC_EMC->DynamicConfig0 = 0x4680;                   /* 256Mb, 16Mx16, 4 banks, row=13, column=9, RBC */
-#endif
-    TIM_Waitms(100);
-
-    LPC_EMC->DynamicControl    = 0x00000183;            /* Issue NOP command */
-    TIM_Waitms(200);                                    /* wait 200ms */
-
-    LPC_EMC->DynamicControl    = 0x00000103;            /* Issue PALL command */
-
-    LPC_EMC->DynamicRefresh    = 0x00000002;            /* ( n * 16 ) -> 32 clock cycles */
-    for (i = 0; i < 0x80; i++);                         /* wait 128 AHB clock cycles */
-
-    LPC_EMC->DynamicRefresh    = EMC_SDRAM_REFRESH(64);
-
-    LPC_EMC->DynamicControl    = 0x00000083;            /* Issue MODE command */
-
-#ifdef SDRAM_CONFIG_16BIT
-    wtemp = *((volatile uint16_t *)(EXT_SDRAM_BEGIN | (0x33 << 12)));   /* 8 burst, 3 CAS latency */
-#elif defined SDRAM_CONFIG_32BIT
-    dwtemp = *((volatile uint32_t *)(SDRAM_BASE | (0x32 << 13)));       /* 4 burst, 3 CAS latency */
+#if SYS_FREQ == (120000000)
+#define SDRAM_PERIOD 8.3 // 120MHz
+#elif SYS_FREQ == (96000000)
+#define SDRAM_PERIOD 10.4 // 96MHz
+#elif SYS_FREQ == (72000000)
+#define SDRAM_PERIOD 13.8 // 72MHz
+#elif SYS_FREQ == (57000000)
+#define SDRAM_PERIOD 17.4 // 57.6MHz
+#elif SYS_FREQ == (48000000)
+#define SDRAM_PERIOD 20.8 // 48MHz
+#elif SYS_FREQ == (36000000)
+#define SDRAM_PERIOD 27.8 // 36MHz
+#elif SYS_FREQ == (24000000)
+#define SDRAM_PERIOD 41.7 // 24MHz
+#elif SYS_FREQ == (12000000)
+#define SDRAM_PERIOD 83.3 // 24MHz
+#else
+#error Frequency not defined
 #endif
 
-    LPC_EMC->DynamicControl    = 0x00000000;                            /* Issue NORMAL command */
+#define P2C(Period) (((Period < SDRAM_PERIOD) ? 0 : (uint32_t)((float)Period / SDRAM_PERIOD)) + 1)
 
-    LPC_EMC->DynamicConfig0 |= 0x80000;                                 /* enable buffer */
-    TIM_Waitms(1);
+#define SDRAM_REFRESH 7813 //
+#define SDRAM_TRP 20       //
+#define SDRAM_TRAS 45
+#define SDRAM_TAPR 1
+#define SDRAM_TDAL 2 //
+#define SDRAM_TWR 2
+#define SDRAM_TRC 65 //
+#define SDRAM_TRFC 65
+#define SDRAM_TXSR 67
+#define SDRAM_TRRD 15
+#define SDRAM_TMRD 3
 
-    TIM_DeInit(LPC_TIM0);
+/*=============================================
+==
+===============================================*/
+extern uint32_t SDRAM_BASE_ADDR;
+void BSP_SDRAMInit(void) ;
+int rt_hw_sdram_init(void)
+{
+    BSP_SDRAMInit();
 }
+INIT_BOARD_EXPORT(rt_hw_sdram_init);
+void BSP_SDRAMInit(void)
+{
+    /* Enable EMC clock*/
+    LPC_SC->PCONP |= (1 << 11);
+    /*The EMC uses the same clock as the CPU*/
+    LPC_SC->EMCCLKSEL = 0;
+    /*Assign pins to SDRAM controller*/
+    LPC_IOCON->P2_16 = 0x21; // EMC_CAS
+    LPC_IOCON->P2_17 = 0x21; // EMC_RAS
+    LPC_IOCON->P2_18 = 0x21; // EMC_CLK[0]
+    LPC_IOCON->P2_20 = 0x21; // EMC_DYCS0
+    LPC_IOCON->P2_24 = 0x21; // EMC_CKE0
+    LPC_IOCON->P2_28 = 0x21; // EMC_DQM0
+    LPC_IOCON->P2_29 = 0x21; // EMC_DQM1
+    LPC_IOCON->P2_30 = 0x21; // EMC_DQM2
+    LPC_IOCON->P2_31 = 0x21; // EMC_DQM3
+    LPC_IOCON->P3_0 = 0x21;  // D0
+    LPC_IOCON->P3_1 = 0x21;  // D1
+    LPC_IOCON->P3_2 = 0x21;  // D2
+    LPC_IOCON->P3_3 = 0x21;  // D3
+    LPC_IOCON->P3_4 = 0x21;  // D4
+    LPC_IOCON->P3_5 = 0x21;  // D5
+    LPC_IOCON->P3_6 = 0x21;  // D6
+    LPC_IOCON->P3_7 = 0x21;  // D7
+    LPC_IOCON->P3_8 = 0x21;  // D8
+    LPC_IOCON->P3_9 = 0x21;  // D9
+    LPC_IOCON->P3_10 = 0x21; // D10
+    LPC_IOCON->P3_11 = 0x21; // D11
+    LPC_IOCON->P3_12 = 0x21; // D12
+    LPC_IOCON->P3_13 = 0x21; // D13
+    LPC_IOCON->P3_14 = 0x21; // D14
+    LPC_IOCON->P3_15 = 0x21; // D15
+    LPC_IOCON->P3_16 = 0x21; // D16
+    LPC_IOCON->P3_17 = 0x21; // D17
+    LPC_IOCON->P3_18 = 0x21; // D18
+    LPC_IOCON->P3_19 = 0x21; // D19
+    LPC_IOCON->P3_20 = 0x21; // D20
+    LPC_IOCON->P3_21 = 0x21; // D21
+    LPC_IOCON->P3_22 = 0x21; // D22
+    LPC_IOCON->P3_23 = 0x21; // D23
+    LPC_IOCON->P3_24 = 0x21; // D24
+    LPC_IOCON->P3_25 = 0x21; // D25
+    LPC_IOCON->P3_26 = 0x21; // D26
+    LPC_IOCON->P3_27 = 0x21; // D27
+    LPC_IOCON->P3_28 = 0x21; // D28
+    LPC_IOCON->P3_29 = 0x21; // D29
+    LPC_IOCON->P3_30 = 0x21; // D30
+    LPC_IOCON->P3_31 = 0x21; // D31
 
-#endif /* BSP_USING_SDRAM */
+    LPC_IOCON->P4_0 = 0x21;  // A0
+    LPC_IOCON->P4_1 = 0x21;  // A1
+    LPC_IOCON->P4_2 = 0x21;  // A2
+    LPC_IOCON->P4_3 = 0x21;  // A3
+    LPC_IOCON->P4_4 = 0x21;  // A4
+    LPC_IOCON->P4_5 = 0x21;  // A5
+    LPC_IOCON->P4_6 = 0x21;  // A6
+    LPC_IOCON->P4_7 = 0x21;  // A7
+    LPC_IOCON->P4_8 = 0x21;  // A8
+    LPC_IOCON->P4_9 = 0x21;  // A9
+    LPC_IOCON->P4_10 = 0x21; // A10
+    LPC_IOCON->P4_11 = 0x21; // A11
+    LPC_IOCON->P4_12 = 0x21; // A12
+    LPC_IOCON->P4_13 = 0x21; // A13
+    LPC_IOCON->P4_14 = 0x21; // A14
+    LPC_IOCON->P4_25 = 0x21; // EMC_WE
+    /*Init SDRAM controller*/
+    LPC_SC->EMCDLYCTL = (0xF << 0) |  /* CMDDLY */
+                        (0x15 << 8) | /* FBCLKDLY */
+                        (0x0 << 16);  /* CLKOUT0DLY */
+
+    LPC_EMC->Control = 1; /* enable EMC */
+    LPC_EMC->DynamicReadConfig = 1;
+    LPC_EMC->DynamicRasCas0 = 0x303;
+    LPC_EMC->DynamicRP = P2C(SDRAM_TRP);
+    LPC_EMC->DynamicRAS = P2C(SDRAM_TRAS);
+    LPC_EMC->DynamicSREX = P2C(SDRAM_TXSR);
+    LPC_EMC->DynamicAPR = SDRAM_TAPR;
+    LPC_EMC->DynamicDAL = SDRAM_TDAL + P2C(SDRAM_TRP);
+    LPC_EMC->DynamicWR = SDRAM_TWR;
+    LPC_EMC->DynamicRC = P2C(SDRAM_TRC);
+    LPC_EMC->DynamicRFC = P2C(SDRAM_TRFC);
+    LPC_EMC->DynamicXSR = P2C(SDRAM_TXSR);
+    LPC_EMC->DynamicRRD = P2C(SDRAM_TRRD);
+    LPC_EMC->DynamicMRD = SDRAM_TMRD;
+    LPC_EMC->DynamicConfig0 = 0x0004680; // 13 row, 9 - col, SDRAM
+    // JEDEC General SDRAM Initialization Sequence
+    // DELAY to allow power and clocks to stabilize ~100 us
+    // NOP
+    LPC_EMC->DynamicControl = 0x0183;
+    for (volatile uint32_t i = 200 * 30; i; i--)
+        ;
+    // PALL
+    LPC_EMC->DynamicControl = 0x0103;
+    LPC_EMC->DynamicRefresh = 1;
+    for (volatile uint32_t i = 256; i; --i)
+        ; // > 128 clk
+    LPC_EMC->DynamicRefresh = P2C(SDRAM_REFRESH) >> 4;
+    // COMM
+    LPC_EMC->DynamicControl = 0x0083;
+    // Burst 4, Sequential, CAS-3
+    volatile unsigned long Dummy = *(volatile unsigned short *)((uint32_t)&SDRAM_BASE_ADDR + (0x32UL << (13)));
+    // NORM
+    LPC_EMC->DynamicControl = 0x0000;
+    LPC_EMC->DynamicConfig0 = 0x00084680;
+    for (volatile uint32_t i = 100000; i; i--)
+        ;
+}

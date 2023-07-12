@@ -358,21 +358,20 @@
           <state>$PROJ_DIR$\..\..\include</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
           <state>$PROJ_DIR$\..\..\components\drivers\include</state>
+          <state>$PROJ_DIR$\.</state>
           <state>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Include</state>
           <state>$PROJ_DIR$\drivers\Fal\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\ipc</state>
           <state>$PROJ_DIR$\drivers</state>
           <state>$PROJ_DIR$\..\..\components\utilities\ulog</state>
-          <state>$PROJ_DIR$\.</state>
+          <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\tmpfs</state>
           <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\cortex-m4</state>
-          <state>$PROJ_DIR$\..\..\components\drivers\spi\sfud\inc</state>
           <state>$PROJ_DIR$\Libraries\Drivers\spifi</state>
           <state>$PROJ_DIR$\..\..\components\fal\inc</state>
           <state>$PROJ_DIR$\Libraries\CMSIS\Include</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\delay</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\include</state>
-          <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension\fcntl\octal</state>
           <state>$PROJ_DIR$\..\..\components\finsh</state>
@@ -1464,21 +1463,20 @@
           <state>$PROJ_DIR$\..\..\include</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
           <state>$PROJ_DIR$\..\..\components\drivers\include</state>
+          <state>$PROJ_DIR$\.</state>
           <state>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Include</state>
           <state>$PROJ_DIR$\drivers\Fal\inc</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\ipc</state>
           <state>$PROJ_DIR$\drivers</state>
           <state>$PROJ_DIR$\..\..\components\utilities\ulog</state>
-          <state>$PROJ_DIR$\.</state>
+          <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\tmpfs</state>
           <state>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs</state>
           <state>$PROJ_DIR$\..\..\libcpu\arm\cortex-m4</state>
-          <state>$PROJ_DIR$\..\..\components\drivers\spi\sfud\inc</state>
           <state>$PROJ_DIR$\Libraries\Drivers\spifi</state>
           <state>$PROJ_DIR$\..\..\components\fal\inc</state>
           <state>$PROJ_DIR$\Libraries\CMSIS\Include</state>
           <state>$PROJ_DIR$\..\..\components\libc\posix\delay</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\include</state>
-          <state>$PROJ_DIR$\..\..\components\drivers\spi</state>
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\components\libc\compilers\common\extension\fcntl\octal</state>
           <state>$PROJ_DIR$\..\..\components\finsh</state>
@@ -2215,10 +2213,10 @@
   <group>
     <name>ADXL345</name>
     <file>
-      <name>$PROJ_DIR$\drivers\ADXL345\port\adxl345_port.c</name>
+      <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
+      <name>$PROJ_DIR$\drivers\ADXL345\port\adxl345_port.c</name>
     </file>
   </group>
   <group>
@@ -2347,24 +2345,6 @@
       <name>$PROJ_DIR$\..\..\components\drivers\serial\serial.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\components\drivers\spi\qspi_core.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud_sfdp.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_dev.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_flash_sfud.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\components\drivers\watchdog\watchdog.c</name>
     </file>
   </group>
@@ -2431,6 +2411,9 @@
       <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\devfs\devfs.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\tmpfs\dfs_tmpfs.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\src\dfs.c</name>
     </file>
     <file>
@@ -2464,10 +2447,10 @@
   <group>
     <name>FM31XX</name>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\drivers\FM31XX\port\fm31xx_port.c</name>
+      <name>$PROJ_DIR$\drivers\FM31XX\src\fm31XX.c</name>
     </file>
   </group>
   <group>
@@ -2492,6 +2475,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\src\mem.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\memheap.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\src\mempool.c</name>
@@ -2617,10 +2603,10 @@
   <group>
     <name>rs485</name>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_test.c</name>
+      <name>$PROJ_DIR$\packages\rs485-latest\src\rs485.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\packages\rs485-latest\src\rs485_sample_slave.c</name>
