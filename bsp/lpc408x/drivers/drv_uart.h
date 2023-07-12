@@ -12,7 +12,7 @@
 #define DRV_UART_H__
 
 #include <stdint.h>
-#include "lpc_uart.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -29,13 +29,7 @@ extern "C"
     } DRV_SERIAL_NAME_E;
 
     int rt_hw_uart_init(void);
-    /**
-     * @brief 控制485设备方向
-     *
-     * @param serial 设备号
-     * @param dir 通信方向手动控制
-     */
-    void rt_uart_rs485_dir(UART_ID_Type SERIAL_ID, uint8_t dir);
+
 #ifdef __cplusplus
 }
 #endif

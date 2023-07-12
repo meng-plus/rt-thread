@@ -1,11 +1,6 @@
 menu "Hardware Drivers Config"
 
     menu "On-chip Peripheral Drivers"
-        config BSP_USING_EMAC
-            bool "EMAC driver"
-            select RT_USING_LWIP
-            default n
-
         config BSP_USING_HWTIMER0
             bool "Using timer0"
             select RT_USING_HWTIMER
@@ -39,11 +34,6 @@ menu "Hardware Drivers Config"
                 select RT_USING_I2C_BITOPS
                 default n
             endif
-        config BSP_USING_QSPI
-            bool "Enable QSPI S25FL032"
-            select RT_USING_QSPI
-            select RT_USING_SPI
-            default n
 
         config BSP_USING_UART
             bool "Enable UART"
@@ -75,14 +65,16 @@ menu "Hardware Drivers Config"
     menu "Onboard Peripheral Drivers"
 
         config BSP_USING_SDRAM
-            bool "Enable sdram"
+            bool "Enable SDRAM"
             default n
-
+        config BSP_USING_SPFI
+            bool "Enable QSPI S25FL032"
+            select RT_USING_FAL
+            default n
         config BSP_USING_FM31XX
             bool "Enable Fm31xx(wdg e2prom RTC)"
             select RT_USING_RTC
             default n
-
             if BSP_USING_FM31XX
             config BSP_USING_FM31XX_SHELL
                 bool "Enabel shell"
@@ -102,22 +94,6 @@ menu "Hardware Drivers Config"
                 bool "Enabel shell"
                 default n
             endif
-        config BSP_USING_ADS1115
-            bool "Enable ADS1115"
-            default n
-            if BSP_USING_ADS1115
-               config BSP_USING_ADS1115_SHELL
-                bool "Enabel shell"
-                default n
-            endif
-        config BSP_USING_ONCHIP_EEPROM
-            bool "Enable On-chip"
-            default n
-            if BSP_USING_ADS1115
-               config BSP_USING_ADS1115_SHELL
-                bool "Enabel shell"
-                default n
-            endif
     endmenu
 
 menu "Board extended module Drivers"
@@ -130,6 +106,17 @@ menu "Board extended module Drivers"
         config BSP_USING_BOARD_315101Z2V2
         bool "315101Z2V2"
     endchoice
+
+    if BSP_USING_BOARD_315101Z2V2
+            config BSP_USING_ADS1115
+            bool "Enable ADS1115"
+            default n
+            if BSP_USING_ADS1115
+               config BSP_USING_ADS1115_SHELL
+                bool "Enabel shell"
+                default n
+            endif
+    endif
 endmenu
 
 endmenu

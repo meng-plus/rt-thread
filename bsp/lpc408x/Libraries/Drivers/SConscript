@@ -5,9 +5,17 @@ from building import *
 
 cwd = GetCurrentDir()
 src   = Glob('source/*.c')
+LIBPATH =[cwd + '/lib']
+CPPPATH = [cwd + '/include',cwd + '/spifi']
+LIBS=[]
 
-CPPPATH = [cwd + '/include']
+CPPDEFINES = ['CORE_M4']
 
-group = DefineGroup('Libraries', src, depend = [''], CPPPATH = CPPPATH)
+src   += Glob('spifi/*.c')
+
+# if rtconfig.PLATFORM in ['iccarm']:
+#     LIBS +=["lib_lpcspifi_M4F.a"]
+
+group = DefineGroup('Libraries', src, depend = [''], CPPPATH = CPPPATH,LIBS = LIBS, LIBPATH = LIBPATH)
 
 Return('group')

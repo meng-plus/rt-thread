@@ -21,24 +21,23 @@ static int init(void)
 
 static int read(long offset, uint8_t *buf, size_t size)
 {
-    RT_ASSERT(offset + size <= 64 * 63);
-    EEPROM_Read(offset % 64, offset / 0x64, buf, MODE_8_BIT, size);
+    uint32_t addr = eeprom_onchip_flash.addr + offset;
+    EEPROM_Read(addr % 64, addr / 0x64, buf, MODE_8_BIT, size);
     return size;
 }
 
 static int write(long offset, const uint8_t *buf, size_t size)
 {
-    RT_ASSERT(offset + size <= 64 * 63);
-    EEPROM_Write(offset % 64, offset / 0x64, (void*)buf, MODE_8_BIT, size);
+    uint32_t addr = eeprom_onchip_flash.addr + offset;
+    EEPROM_Write(addr % 64, addr / 0x64, (void *)buf, MODE_8_BIT, size);
     return size;
 }
 
 static int erase(long offset, size_t size)
 {
-    RT_ASSERT(offset + size <= 64 * 63);
     for (long page_address = offset; page_address < size; page_address += 64)
     {
-        //EEPROM_Erase(page_address / 64);
+        // EEPROM_Erase(page_address / 64);
     }
 
     return size;
