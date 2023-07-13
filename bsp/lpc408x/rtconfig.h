@@ -191,6 +191,13 @@
 
 /* LVGL: powerful and easy-to-use embedded GUI library */
 
+#define PKG_USING_LVGL
+#define PKG_LVGL_THREAD_PRIO 20
+#define PKG_LVGL_THREAD_STACK_SIZE 4096
+#define PKG_LVGL_DISP_REFR_PERIOD 30
+#define PKG_USING_LVGL_SQUARELINE
+#define PKG_LVGL_USING_V08035
+#define PKG_LVGL_VER_NUM 0x08035
 
 /* u8g2: a monochrome graphic library */
 
@@ -300,6 +307,10 @@
 #define BSP_USING_FM31XX
 #define BSP_USING_WDT
 #define BSP_USING_ADXL345
+#define BSP_USING_LCD
+#define BSP_LCD_WIDTH 480
+#define BSP_LCD_HEIGHT 272
+#define BSP_LCD_BPP 16
 
 /* Board extended module Drivers */
 

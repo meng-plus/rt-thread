@@ -98,6 +98,17 @@ menu "Hardware Drivers Config"
         config BSP_USING_LCD
             bool "Enable LCD"
             default n
+            if BSP_USING_LCD
+                config BSP_LCD_WIDTH
+                    int "screen width"
+                    default 480
+                config BSP_LCD_HEIGHT
+                    int "screen height"
+                    default 272
+                config BSP_LCD_BPP
+                int "color depth"
+                default 16
+            endif
     endmenu
 
 menu "Board extended module Drivers"
