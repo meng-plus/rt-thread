@@ -12,7 +12,7 @@
 
 #include "spifilib_api.h"
 #define LOG_TAG __FILE__
-#define LOG_LVL LOG_LVL_DBG
+#define LOG_LVL LOG_LVL_INFO
 #include "ulog.h"
 #define LPC_SPIFI_BASE 0x20094000
 /** SPIFI memory base address */

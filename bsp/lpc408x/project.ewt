@@ -2956,9 +2956,6 @@
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\pipe.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\qspi_core.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\ringblk_buf.c</name>
         </file>
         <file>
@@ -2977,21 +2974,6 @@
             <name>$PROJ_DIR$\..\..\components\drivers\serial\serial.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\sfud\src\sfud_sfdp.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_dev.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_flash_sfud.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\waitqueue.c</name>
         </file>
         <file>
@@ -3008,6 +2990,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_interrupt.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\drv_lcd.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_pin.c</name>
@@ -3057,9 +3042,6 @@
         <file>
             <name>$PROJ_DIR$\..\..\components\fal\src\fal_rtt.c</name>
         </file>
-        <file>
-            <name>$PROJ_DIR$\drivers\Fal\sample\fal_sample.c</name>
-        </file>
     </group>
     <group>
         <name>Filesystem</name>
@@ -3077,6 +3059,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\src\dfs_posix.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\dfs\dfs_v1\filesystems\tmpfs\dfs_tmpfs.c</name>
         </file>
     </group>
     <group>
@@ -3128,6 +3113,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\src\mem.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\memheap.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\src\mempool.c</name>
@@ -3230,6 +3218,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_wwdt.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Libraries\Drivers\spifi\spifilib_dev_common.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Libraries\Drivers\spifi\spifilib_fam_standard_cmd.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Libraries\Device\NXP\LPC407x_8x_177x_8x\Source\Templates\IAR\startup_LPC407x_8x_177x_8x.s</name>

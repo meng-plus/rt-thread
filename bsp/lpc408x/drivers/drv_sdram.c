@@ -61,7 +61,6 @@ int rt_hw_sdram_init(void)
 {
     BSP_SDRAMInit();
 }
-INIT_BOARD_EXPORT(rt_hw_sdram_init);
 void BSP_SDRAMInit(void)
 {
     /* Enable EMC clock*/
