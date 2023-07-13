@@ -94,6 +94,10 @@ menu "Hardware Drivers Config"
                 bool "Enabel shell"
                 default n
             endif
+
+        config BSP_USING_LCD
+            bool "Enable LCD"
+            default n
     endmenu
 
 menu "Board extended module Drivers"

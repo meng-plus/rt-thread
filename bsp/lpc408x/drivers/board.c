@@ -14,6 +14,7 @@
 #include "lpc_rtc.h"
 #if defined(BSP_USING_SDRAM) && defined(RT_USING_MEMHEAP_AS_HEAP)
 #include "drv_sdram.h"
+int rt_hw_sdram_init(void);
 static struct rt_memheap system_heap;
 #endif
 
@@ -52,7 +53,7 @@ void rt_hw_board_init()
 #ifdef RT_USING_HEAP
 
 #if defined(BSP_USING_SDRAM) && defined(RT_USING_MEMHEAP_AS_HEAP)
-
+    rt_hw_sdram_init();
     rt_system_heap_init((void *)EXT_SDRAM_BEGIN, (void *)EXT_SDRAM_END);
     rt_memheap_init(&system_heap, "sdram", (void *)HEAP_BEGIN, ((rt_uint32_t)HEAP_END - (rt_uint32_t)HEAP_BEGIN));
 #else
