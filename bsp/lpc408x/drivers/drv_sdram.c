@@ -60,6 +60,7 @@ void BSP_SDRAMInit(void) ;
 int rt_hw_sdram_init(void)
 {
     BSP_SDRAMInit();
+    return 0;
 }
 void BSP_SDRAMInit(void)
 {

@@ -26,11 +26,11 @@
 ==
 ===============================================*/
 #define C_GLCD_REFRESH_FREQ (50)
-#define C_GLCD_H_SIZE LCD_X_SIZE
+#define C_GLCD_H_SIZE BSP_LCD_WIDTH
 #define C_GLCD_H_PULSE 41      // 12
 #define C_GLCD_H_FRONT_PORCH 4 // 10
 #define C_GLCD_H_BACK_PORCH 45 // 19
-#define C_GLCD_V_SIZE LCD_Y_SIZE
+#define C_GLCD_V_SIZE BSP_LCD_HEIGHT
 #define C_GLCD_V_PULSE 10      // 9//2
 #define C_GLCD_V_FRONT_PORCH 6 // 5//2
 #define C_GLCD_V_BACK_PORCH 12 // 11//1
@@ -39,9 +39,7 @@
 #define C_GLCD_LINES_PER_FRAME (C_GLCD_V_SIZE + C_GLCD_V_PULSE + C_GLCD_V_FRONT_PORCH + C_GLCD_V_BACK_PORCH)
 #define C_GLCD_PIX_CLK 9000000 //(C_GLCD_CLK_PER_LINE * C_GLCD_LINES_PER_FRAME * C_GLCD_REFRESH_FREQ)
 
-#define RT_HW_LCD_WIDTH 480
-#define RT_HW_LCD_HEIGHT 272
-#define LCD_BITS_PER_PIXEL             16
+#define LCD_BITS_PER_PIXEL BSP_LCD_BPP
 
 static rt_uint16_t *lcd_framebuffer = RT_NULL;
 static rt_uint16_t *_rt_framebuffer = RT_NULL;
@@ -88,22 +86,22 @@ static void lcd_gpio_init(void)
 
 void LCD_IRQHandler(void)
 {
-//    uint32_t intStatus = LCDC_GetEnabledInterruptsPendingStatus(LCD);
-//
-//    LCDC_ClearInterruptsStatus(LCD, intStatus);
-//
-//    if (intStatus & kLCDC_VerticalCompareInterrupt)
-//    {
-//        // s_frameEndFlag = true;
-//    }
+    //    uint32_t intStatus = LCDC_GetEnabledInterruptsPendingStatus(LCD);
+    //
+    //    LCDC_ClearInterruptsStatus(LCD, intStatus);
+    //
+    //    if (intStatus & kLCDC_VerticalCompareInterrupt)
+    //    {
+    //        // s_frameEndFlag = true;
+    //    }
     //__DSB();
 }
 /**********************************************************************************
 ** 函数名称:
-** �?    �?:
+** �?    �?:
 ** 输入参数:
 ** 输出参数:
-** �?    �?:
+** �?    �?:
 ***********************************************************************************/
 void LcdPowerCtrl(bool st)
 {
@@ -127,10 +125,10 @@ void LcdPowerCtrl(bool st)
 
 /**********************************************************************************
 ** 函数名称:
-** �?    �?:
+** �?    �?:
 ** 输入参数:
 ** 输出参数:
-** �?    �?:
+** �?    �?:
 ***********************************************************************************/
 void LcdBackLightCtrl(bool st)
 {
@@ -147,19 +145,19 @@ static rt_err_t rt_lcd_init(rt_device_t dev)
     /* Init GLCD cotroller */
     LPC_SC->PCONP |= (1 << 0); /* enable LCD controller clock */
     LPC_LCD->CRSR_CTRL &= ~(1 << 0);
-    ;                           /* Disable cursor */
-    LPC_LCD->CTRL = (0 << 0) |  /* disable GLCD controller */
-                    (6 << 1) |  /* 16 bpp 5:6:5*/
-                    (1 << 5) |  /* TFT panel */
-                    (0 << 7) |  /* single panel */
-                    (0 << 8) |  /* notmal output */
-                    (0 << 9) |  /* little endian byte order */
-                    (0 << 10) | /* little endian pix order */
-                    (0 << 11);  /* disable power */
-    /* init pixel clock */
-    //	LPC_SC->LCD_CFG = PeripheralClock / (uint32_t)C_GLCD_PIX_CLK;
-    //	LPC_SC->LCD_CFG = 0;
-   uint32_t temp = 5;                             // PeripheralClock / (uint32_t)C_GLCD_PIX_CLK;
+    ;                                     /* Disable cursor */
+    LPC_LCD->CTRL = (0 << 0) |            /* disable GLCD controller */
+                    (6 << 1) |            /* 16 bpp 5:6:5*/
+                    (1 << 5) |            /* TFT panel */
+                    (0 << 7) |            /* single panel */
+                    (0 << 8) |            /* notmal output */
+                    (0 << 9) |            /* little endian byte order */
+                    (0 << 10) |           /* little endian pix order */
+                    (0 << 11);            /* disable power */
+                                          /* init pixel clock */
+                                          //	LPC_SC->LCD_CFG = PeripheralClock / (uint32_t)C_GLCD_PIX_CLK;
+                                          //	LPC_SC->LCD_CFG = 0;
+    uint32_t temp = 5;                    // PeripheralClock / (uint32_t)C_GLCD_PIX_CLK;
     LPC_LCD->POL = ((temp & 0x1f) << 0) | /* PCD_LO */
                    (0 << 5) |             /* clock source for the LCD block is HCLK */
                    ((1 - 1) << 6) |       /* ACB */
@@ -184,7 +182,7 @@ static rt_err_t rt_lcd_init(rt_device_t dev)
                     ((C_GLCD_V_SIZE - 1) << 0);
 
     /* Frame Base Address doubleword aligned */
-    LPC_LCD->UPBASE =(rt_uint32_t)lcd_framebuffer;
+    LPC_LCD->UPBASE = (rt_uint32_t)lcd_framebuffer;
     LPC_LCD->LPBASE = (rt_uint32_t)lcd_framebuffer;
     for (volatile uint32_t i = 50000; i; i--)
         ;
@@ -199,29 +197,29 @@ static rt_err_t rt_lcd_control(rt_device_t dev, int cmd, void *args)
     {
         struct rt_device_rect_info *rect_info = (struct rt_device_rect_info *)args;
 
-        /* 先指向绘�? buff 显示 */
+        /* 先指向绘�? buff 显示 */
         LPC_LCD->UPBASE = (rt_uint32_t)_rt_framebuffer;
 
-        /* 从绘�? buff copy 数据到显�? buff */
-        if (rect_info->width * rect_info->height < RT_HW_LCD_WIDTH * RT_HW_LCD_HEIGHT / 5 * 3)
+        /* 从绘�? buff copy 数据到显�? buff */
+        if (rect_info->width * rect_info->height < BSP_LCD_WIDTH * BSP_LCD_HEIGHT / 5 * 3)
         {
             int index = 0;
             rt_uint8_t *p = (rt_uint8_t *)lcd_framebuffer;
             rt_uint8_t *q = (rt_uint8_t *)_rt_framebuffer;
 
-            p += (rect_info->x + rect_info->y * RT_HW_LCD_WIDTH) * sizeof(rt_uint16_t);
-            q += (rect_info->x + rect_info->y * RT_HW_LCD_WIDTH) * sizeof(rt_uint16_t);
+            p += (rect_info->x + rect_info->y * BSP_LCD_WIDTH) * sizeof(rt_uint16_t);
+            q += (rect_info->x + rect_info->y * BSP_LCD_WIDTH) * sizeof(rt_uint16_t);
 
             for (index = 0; index < rect_info->height; index++)
             {
                 memcpy((void *)p, (void *)q, sizeof(rt_uint16_t) * rect_info->width);
-                p += RT_HW_LCD_WIDTH * sizeof(rt_uint16_t);
-                q += RT_HW_LCD_WIDTH * sizeof(rt_uint16_t);
+                p += BSP_LCD_WIDTH * sizeof(rt_uint16_t);
+                q += BSP_LCD_WIDTH * sizeof(rt_uint16_t);
             }
         }
         else
         {
-            memcpy((void *)lcd_framebuffer, _rt_framebuffer, sizeof(rt_uint16_t) * RT_HW_LCD_HEIGHT * RT_HW_LCD_WIDTH);
+            memcpy((void *)lcd_framebuffer, _rt_framebuffer, sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH);
         }
         /* 指回显示 buff */
         LPC_LCD->UPBASE = (rt_uint32_t)lcd_framebuffer;
@@ -252,28 +250,41 @@ void lcd_clear(rt_uint16_t color)
     volatile rt_uint16_t *p = (rt_uint16_t *)lcd_framebuffer;
     int x, y;
 
-    for (y = 0; y <= RT_HW_LCD_HEIGHT; y++)
+    for (y = 0; y <= BSP_LCD_HEIGHT; y++)
     {
-        for (x = 0; x <= RT_HW_LCD_WIDTH; x++)
+        for (x = 0; x <= BSP_LCD_WIDTH; x++)
         {
             *p++ = color; /* red */
         }
     }
 }
-
+void lcd_fill_array(rt_uint16_t x_start, rt_uint16_t y_start, rt_uint16_t x_end, rt_uint16_t y_end, void *pcolor)
+{
+    uint16_t *color_ptr = (uint16_t *)pcolor;
+   uint32_t offset;
+    for (size_t y = y_start; y <= y_end; y++)
+    {
+        for (size_t x = x_start; x <= x_end; x++)
+        {
+            offset=y * BSP_LCD_WIDTH + x;
+            lcd_framebuffer[offset] = *color_ptr;
+            color_ptr++;
+        }
+    }
+}
 int rt_hw_lcd_init(void)
 {
-    _rt_framebuffer = rt_malloc_align(sizeof(rt_uint16_t) * RT_HW_LCD_HEIGHT * RT_HW_LCD_WIDTH, 32);
+    _rt_framebuffer = rt_malloc_align(sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH, 32);
     if (_rt_framebuffer == RT_NULL)
         return 0; /* no memory yet */
-    rt_memset(_rt_framebuffer, 0, sizeof(rt_uint16_t) * RT_HW_LCD_HEIGHT * RT_HW_LCD_WIDTH);
-    lcd_framebuffer = rt_malloc_align(sizeof(rt_uint16_t) * RT_HW_LCD_HEIGHT * RT_HW_LCD_WIDTH, 32);
-    rt_memset(lcd_framebuffer, 0, sizeof(rt_uint16_t) * RT_HW_LCD_HEIGHT * RT_HW_LCD_WIDTH);
+    rt_memset(_rt_framebuffer, 0, sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH);
+    lcd_framebuffer = rt_malloc_align(sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH, 32);
+    rt_memset(lcd_framebuffer, 0, sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH);
     _lcd_info.bits_per_pixel = LCD_BITS_PER_PIXEL;
     _lcd_info.pixel_format = RTGRAPHIC_PIXEL_FORMAT_RGB565; // RTGRAPHIC_PIXEL_FORMAT_ARGB888
     _lcd_info.framebuffer = (void *)_rt_framebuffer;
-    _lcd_info.width = RT_HW_LCD_WIDTH;
-    _lcd_info.height = RT_HW_LCD_HEIGHT;
+    _lcd_info.width = BSP_LCD_WIDTH;
+    _lcd_info.height = BSP_LCD_HEIGHT;
 
     /* init device structure */
     lcd.type = RT_Device_Class_Graphic;
