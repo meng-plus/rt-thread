@@ -97,7 +97,8 @@ const struct fal_flash_dev lpc4088_extflash =
 int SPIFI_Init(void)
 {
     /* init SPIFI clock and pins */
-    LPC_SC->PCONP |= (1UL << 16); /* enable SPIFI power/clock   */
+    LPC_SC->PCONP |= (1UL << 16);           /* enable SPIFI power/clock   */
+    LPC_SC->PCONP |= ((uint32_t)(1 << 15)); // CLKPWR_PCONP_PCGPIO
     LPC_IOCON->P2_7 &= ~(7UL << 0);
     LPC_IOCON->P2_7 |= (5UL << 0); /* SPIFI_CSN = P2.7  (FUNC 5) */
     LPC_IOCON->P0_22 &= ~(7UL << 0);
