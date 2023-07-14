@@ -5,12 +5,12 @@ CPPPATH = [cwd]
 
 # add the general drivers.
 src = Split("""
+lv_conf.h
 """)
-port_inc = [cwd]
 
-port_src = Glob("*.c")
+src += Glob("*.c")
 
-group = DefineGroup('LVGL-port', port_src, depend = ['PKG_USING_LVGL'], CPPPATH = port_inc)
+group = DefineGroup('LVGL-port', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)
 for item in list:
