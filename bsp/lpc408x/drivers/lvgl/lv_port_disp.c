@@ -83,12 +83,12 @@ void lv_port_disp_init(void)
      */
 
     /* Example for 1) */
-    static lv_disp_draw_buf_t draw_buf_dsc_1;
-    static lv_color_t* buf_1; /*A buffer for 10 rows*/
-    buf_1 = rt_malloc_align(sizeof(lv_color_t) * MY_DISP_HOR_RES * 10, 32);
-    if (buf_1 == RT_NULL)
-        return;
-    lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, MY_DISP_HOR_RES * 10); /*Initialize the display buffer*/
+    //    static lv_disp_draw_buf_t draw_buf_dsc_1;
+    //    static lv_color_t* buf_1; /*A buffer for 10 rows*/
+    //    buf_1 = rt_malloc_align(sizeof(lv_color_t) * MY_DISP_HOR_RES * 10, 32);
+    //    if (buf_1 == RT_NULL)
+    //        return;
+    //    lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, MY_DISP_HOR_RES * 10); /*Initialize the display buffer*/
 
     //    /* Example for 2) */
     //    static lv_disp_draw_buf_t draw_buf_dsc_2;
@@ -102,6 +102,18 @@ void lv_port_disp_init(void)
     //    static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*Another screen sized buffer*/
     //    lv_disp_draw_buf_init(&draw_buf_dsc_3, buf_3_1, buf_3_2,
     //                          MY_DISP_VER_RES * LV_VER_RES_MAX);   /*Initialize the display buffer*/
+    static lv_disp_draw_buf_t draw_buf_dsc_1;
+    static lv_color_t *buf_3_1; /*A screen sized buffer*/
+    static lv_color_t *buf_3_2; /*Another screen sized buffer*/
+    buf_3_1 = rt_malloc_align(sizeof(lv_color_t) * MY_DISP_HOR_RES * LV_VER_RES_MAX, 32);
+    if (buf_3_1 == RT_NULL)
+        return;
+    buf_3_2 = rt_malloc_align(sizeof(lv_color_t) * MY_DISP_HOR_RES * LV_VER_RES_MAX, 32);
+    if (buf_3_2 == RT_NULL)
+        return;
+
+    lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_3_1, buf_3_2,
+                          MY_DISP_VER_RES * LV_VER_RES_MAX); /*Initialize the display buffer*/
 
     /*-----------------------------------
      * Register the display in LVGL

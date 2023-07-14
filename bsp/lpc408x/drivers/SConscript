@@ -8,6 +8,7 @@ src = Split("""
 board.c
 drv_interrupt.c
 drv_pin.c
+linker_scripts/link.icf
 """)
 
 if GetDepend(['BSP_USING_EMAC']):
