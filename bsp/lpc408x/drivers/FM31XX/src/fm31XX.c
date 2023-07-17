@@ -19,8 +19,8 @@
 // Fm31xx_port.c
 void fm31xx_hw_i2c_init();
 
-int Fm31xxWriteReg(uint8_t reg, uint8_t *pdt, uint8_t len);
-int Fm31xxReadReg(uint8_t reg, uint8_t *pdt, uint8_t len);
+int Fm31xxWriteReg(uint8_t reg, uint8_t *pdt, uint32_t len);
+int Fm31xxReadReg(uint8_t reg, uint8_t *pdt, uint32_t len);
 /**********************************************************************************
 ** 函数名称:
 ** 功    能:

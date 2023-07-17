@@ -10,7 +10,6 @@ menu "Hardware Drivers Config"
             default n
             config BSP_USING_FAL_SAMPLE
                 bool "Enable FAL for test"
-                depends on   depends on
                 default n
         config BSP_USING_FLASH_ONCHIP
             bool "Enable On-chip Flash"
@@ -106,6 +105,16 @@ menu "Hardware Drivers Config"
     endmenu
 
 menu "Board extended module Drivers"
+    config BSP_USING_EASYFLASH
+        bool "Enable user easyFlash"
+        select PKG_USING_EASYFLASH
+        select RT_USING_FAL
+        default n
+    config BSP_USRING_FAL_NAME
+        string "Fal name"
+        depends on  BSP_USING_EASYFLASH
+        default "eeprom1"
+
     choice
         prompt "Board select "
         default BSP_USING_BOARD_9903Z1V2

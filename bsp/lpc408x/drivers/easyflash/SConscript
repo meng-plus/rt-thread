@@ -1,11 +1,15 @@
 from building import *
-import os
 
 cwd = GetCurrentDir()
-src = Glob('*.c')
 CPPPATH = [cwd]
-src +=["../rtconfig.h"]
-group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
+
+# add the general drivers.
+src = Split("""
+""")
+
+src += Glob("*.c")
+
+group = DefineGroup('EasyFlash', src, depend = ['BSP_USING_EASYFLASH'], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)
 for item in list:

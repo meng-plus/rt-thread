@@ -128,5 +128,5 @@ elif PLATFORM == 'iccarm':
     CXXFLAGS = CFLAGS
 
     EXEC_PATH = EXEC_PATH + '/arm/bin/'
-    POST_ACTION = 'ielftool --bin $TARGET rtthread.bin'
+    #POST_ACTION = 'ielftool --bin $TARGET rtthread.bin'
 
