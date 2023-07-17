@@ -40,19 +40,20 @@ do not initialize  { section .noinit };
 do not initialize  { section USB_DMA_RAM };
 
 place at address mem:__ICFEDIT_intvec_start__ { readonly section .intvec };
-place in ROM_region   { readonly, section .data_init };
+place in ROM_region   { readonly, 
+                        section .data_init,
+                         readonly data object lv_rt_thread_port.o};
 place in EXTROM_region   {readonly section EXTROM,
                        readonly data object img_lv_*,
                        readonly data object lv_font_*,
    };
-
 place in RAM_region   { readwrite,
                         block CSTACK,
 			            block HEAP};
 place in AHB_RAM_region
                       { readwrite data section AHB_RAM_MEMORY, section USB_DMA_RAM,  section EMAC_DMA_RAM};
 
-place in SDRAM_region {section SDRAM,section EXFLASH_RAM};
+place in SDRAM_region {,section SDRAM,section EXFLASH_RAM};
 
 place in CRP_region  	{ section .crp };
 

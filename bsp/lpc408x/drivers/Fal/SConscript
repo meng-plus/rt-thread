@@ -6,6 +6,7 @@ path = [cwd+'/inc']
 # add the general drivers.
 src = Split("""
 fal_port.c
+inc/fal_cfg.h
 """)
 
 #src  += Glob('*.c')

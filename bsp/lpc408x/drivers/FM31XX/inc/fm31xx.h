@@ -46,8 +46,8 @@ extern "C"
     int E2PromProtect(uint8_t ben);
 
     /** FM31XX port */
-    int E2PromWrite(uint16_t addr, void *p, uint16_t len);
-    int E2PromRead(uint16_t addr, void *p, uint16_t len);
+    int E2PromWrite(uint16_t addr, void *p, uint32_t len);
+    int E2PromRead(uint16_t addr, void *p, uint32_t len);
 #ifdef __cplusplus
 }
 #endif

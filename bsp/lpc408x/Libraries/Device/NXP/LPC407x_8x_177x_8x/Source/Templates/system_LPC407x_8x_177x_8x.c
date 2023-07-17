@@ -568,4 +568,6 @@ fpu_init();
 #endif
 #endif
   SystemCoreClockUpdate();
+  int rt_hw_sdram_init();
+  rt_hw_sdram_init();
 }

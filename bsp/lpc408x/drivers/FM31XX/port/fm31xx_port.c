@@ -18,7 +18,7 @@
 #define FM31XX_I2C_BUS "i2c0"
 static struct rt_i2c_bus_device *Fm31XX_handle = NULL;
 
-static rt_err_t fm31xx_read_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_len, rt_uint8_t *data, rt_uint8_t data_size)
+static rt_err_t fm31xx_read_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_len, rt_uint8_t *data, rt_uint32_t data_size)
 {
     if (Fm31XX_handle == RT_NULL)
     {
@@ -51,7 +51,7 @@ static rt_err_t fm31xx_read_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_
     }
 }
 
-static rt_err_t fm31xx_write_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_len, rt_uint8_t *data, rt_uint8_t data_size)
+static rt_err_t fm31xx_write_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_len, rt_uint8_t *data, rt_uint32_t data_size)
 {
     if (Fm31XX_handle == RT_NULL)
     {
@@ -93,15 +93,15 @@ void fm31xx_hw_i2c_init()
         return;
     }
 }
-int E2PromWrite(uint16_t addr, void *p, uint16_t len)
+int E2PromWrite(uint16_t addr, void *p, uint32_t len)
 {
     return fm31xx_write_reg(FM31XX_ADDR_MEM, addr, 2, p, len);
 }
-int E2PromRead(uint16_t addr, void *p, uint16_t len)
+int E2PromRead(uint16_t addr, void *p, uint32_t len)
 {
     return fm31xx_read_reg(FM31XX_ADDR_MEM, addr, 2, p, len);
 }
-int Fm31xxWriteReg(uint8_t reg, uint8_t *pdt, uint8_t len)
+int Fm31xxWriteReg(uint8_t reg, uint8_t *pdt, uint32_t len)
 {
     return fm31xx_write_reg(FM31XX_ADDR_REG, reg, 1, pdt, len);
 }
@@ -113,7 +113,7 @@ int Fm31xxWriteReg(uint8_t reg, uint8_t *pdt, uint8_t len)
 ** 输出参数:
 ** 返    回:
 ***********************************************************************************/
-int Fm31xxReadReg(uint8_t reg, uint8_t *pdt, uint8_t len)
+int Fm31xxReadReg(uint8_t reg, uint8_t *pdt, uint32_t len)
 {
     return fm31xx_read_reg(FM31XX_ADDR_REG, reg, 1, pdt, len);
 }

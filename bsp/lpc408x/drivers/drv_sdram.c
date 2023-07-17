@@ -66,6 +66,7 @@ void BSP_SDRAMInit(void)
 {
     /* Enable EMC clock*/
     LPC_SC->PCONP |= (1 << 11);
+    LPC_SC->PCONP |= ((uint32_t)(1 << 15)); // CLKPWR_PCONP_PCGPIO
     /*The EMC uses the same clock as the CPU*/
     LPC_SC->EMCCLKSEL = 0;
     /*Assign pins to SDRAM controller*/
