@@ -102,6 +102,10 @@ menu "Hardware Drivers Config"
                 int "color depth"
                 default 16
             endif
+        config BSP_USING_KEYIRD
+            bool "Enable KeyIrd"
+            default n
+
     endmenu
 
 menu "Board extended module Drivers"
@@ -113,7 +117,7 @@ menu "Board extended module Drivers"
     config BSP_USRING_FAL_NAME
         string "Fal name"
         depends on  BSP_USING_EASYFLASH
-        default "eeprom1"
+        default "easyflash"
 
     choice
         prompt "Board select "

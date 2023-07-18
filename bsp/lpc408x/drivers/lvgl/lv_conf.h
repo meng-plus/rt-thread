@@ -36,5 +36,5 @@
 // #define LV_USE_DEMO_BENCHMARK       1
 #define LV_USE_LOG 0
 // #define LV_LOG_LEVEL LV_LOG_LEVEL_TRACE
-
+#define LV_USE_DEMO_KEYPAD_AND_ENCODER 1
 #endif

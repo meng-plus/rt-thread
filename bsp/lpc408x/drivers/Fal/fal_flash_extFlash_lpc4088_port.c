@@ -36,7 +36,7 @@ static int read(long offset, uint8_t *buf, size_t size)
     err = spifiRead(pSPIFIHandle, addr, (uint32_t *)buf, size);
     if (err != SPIFI_ERR_NONE)
         return -err;
-
+    spifiDevSetMemMode(pSPIFIHandle, true);  
     return 0;
 }
 /**
@@ -71,7 +71,9 @@ static int write(long offset, const uint8_t *buf, size_t size)
     err = spifiProgram(pSPIFIHandle, addr, (const uint32_t *)buf, size);
     if (err != SPIFI_ERR_NONE)
         return -err;
-
+    
+    spifiDevSetMemMode(pSPIFIHandle, true);
+    
     return 0;
 }
 
@@ -79,9 +81,10 @@ static int erase(long offset, size_t size)
 {
     SPIFI_ERR_T err;
     uint32_t addr = lpc4088_extflash.addr + offset;
-    err = spifiEraseByAddr(pSPIFIHandle, addr, addr + size);
+    err = spifiEraseByAddr(pSPIFIHandle, addr, addr + size-1);
     if (err != SPIFI_ERR_NONE)
         return -err;
+    spifiDevSetMemMode(pSPIFIHandle, true);
     return 0;
 }
 
@@ -90,7 +93,7 @@ const struct fal_flash_dev lpc4088_extflash =
         .name = "lpc4088_extflash",
         .addr = 0x28000000,
         .len = 4 * 1024 * 1024,
-        .blk_size = 4 * 1024,
+        .blk_size = 64 * 1024,
         .ops = {init, read, write, erase},
         .write_gran = 32,
 };
