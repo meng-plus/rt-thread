@@ -14,7 +14,7 @@ void lv_user_gui_init()
    lv_obj_t *label = lv_label_create(lv_scr_act());
    lv_label_set_text(label, "Hello lvgl!");
    lv_obj_set_pos(label, 100, 10);
-   lv_demo_keypad_encoder();
+  
 }
 
 #ifdef RT_USING_FINSH
@@ -29,11 +29,15 @@ void lvgl_cmd(int argc, char *argv[])
    }
    if (0 == rt_strcmp("0", argv[1]))
    {
+#if LV_USE_DEMO_RTT_MUSIC
       lv_demo_music();
+#endif 
    }
    else if (0 == rt_strcmp("1", argv[1]))
    {
+#if LV_USE_DEMO_KEYPAD_AND_ENCODER
       lv_demo_keypad_encoder();
+#endif
    }
 }
 MSH_CMD_EXPORT_ALIAS(lvgl_cmd, lvgl, lvgl_demo)
