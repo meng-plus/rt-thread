@@ -77,6 +77,7 @@ menu "Hardware Drivers Config"
             config BSP_USING_WDT
                 bool "Enabel watchdog"
                 select RT_USING_WDT
+                select BSP_USING_FM31XX
                 default n
             endif
 

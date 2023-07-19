@@ -17,6 +17,8 @@
 #define LPC_SPIFI_BASE 0x20094000
 /** SPIFI memory base address */
 #define SPIFLASH_BASE_ADDRESS (0x28000000)
+
+
 int SPIFI_Init(void);
 static SPIFI_HANDLE_T *pSPIFIHandle;
 /* Local memory, 32-bit aligned that will be used for driver context (handle) */
@@ -25,7 +27,6 @@ static int init(void)
 {
     /* do nothing now */
     SPIFI_Init();
-
     return 0;
 }
 
@@ -33,10 +34,15 @@ static int read(long offset, uint8_t *buf, size_t size)
 {
     SPIFI_ERR_T err;
     uint32_t addr = lpc4088_extflash.addr + offset;
+    rt_enter_critical();
     err = spifiRead(pSPIFIHandle, addr, (uint32_t *)buf, size);
     if (err != SPIFI_ERR_NONE)
+    {
+        rt_exit_critical();
         return -err;
+    }
     spifiDevSetMemMode(pSPIFIHandle, true);  
+    rt_exit_critical();
     return 0;
 }
 /**
@@ -53,6 +59,7 @@ static int write(long offset, const uint8_t *buf, size_t size)
     uint32_t addr = lpc4088_extflash.addr + offset;
     uint32_t mask;
     uint32_t sendBytes;
+    rt_enter_critical();
     mask = ~(pSPIFIHandle->pInfoData->pageSize - 1);
     sendBytes = size;
     if (sendBytes > pSPIFIHandle->pInfoData->pageSize)
@@ -63,17 +70,22 @@ static int write(long offset, const uint8_t *buf, size_t size)
 
     err = pSPIFIHandle->pFamFx->pageProgram(pSPIFIHandle, addr, (const uint32_t *)buf, sendBytes);
     if (err != SPIFI_ERR_NONE)
+    {
+       rt_exit_critical();
         return err;
+    }
     addr += sendBytes;
     buf += sendBytes;
     size -= sendBytes;
 
     err = spifiProgram(pSPIFIHandle, addr, (const uint32_t *)buf, size);
     if (err != SPIFI_ERR_NONE)
+    {
+       rt_exit_critical();
         return -err;
-    
+    }
     spifiDevSetMemMode(pSPIFIHandle, true);
-    
+    rt_exit_critical();
     return 0;
 }
 
@@ -81,10 +93,15 @@ static int erase(long offset, size_t size)
 {
     SPIFI_ERR_T err;
     uint32_t addr = lpc4088_extflash.addr + offset;
+    rt_enter_critical();
     err = spifiEraseByAddr(pSPIFIHandle, addr, addr + size-1);
     if (err != SPIFI_ERR_NONE)
+    {
+        rt_exit_critical();
         return -err;
+    }
     spifiDevSetMemMode(pSPIFIHandle, true);
+     rt_exit_critical();
     return 0;
 }
 
