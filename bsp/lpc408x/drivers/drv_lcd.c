@@ -150,7 +150,7 @@ static rt_err_t rt_lcd_init(rt_device_t dev)
                     (6 << 1) |            /* 16 bpp 5:6:5*/
                     (1 << 5) |            /* TFT panel */
                     (0 << 7) |            /* single panel */
-                    (0 << 8) |            /* notmal output */
+                    (1 << 8) |            /* notmal output */
                     (0 << 9) |            /* little endian byte order */
                     (0 << 10) |           /* little endian pix order */
                     (0 << 11);            /* disable power */
@@ -281,7 +281,7 @@ int rt_hw_lcd_init(void)
     lcd_framebuffer = rt_malloc_align(sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH, 32);
     rt_memset(lcd_framebuffer, 0, sizeof(rt_uint16_t) * BSP_LCD_HEIGHT * BSP_LCD_WIDTH);
     _lcd_info.bits_per_pixel = LCD_BITS_PER_PIXEL;
-    _lcd_info.pixel_format = RTGRAPHIC_PIXEL_FORMAT_RGB565; // RTGRAPHIC_PIXEL_FORMAT_ARGB888
+    _lcd_info.pixel_format = RTGRAPHIC_PIXEL_FORMAT_BGR565; // RTGRAPHIC_PIXEL_FORMAT_ARGB888
     _lcd_info.framebuffer = (void *)_rt_framebuffer;
     _lcd_info.width = BSP_LCD_WIDTH;
     _lcd_info.height = BSP_LCD_HEIGHT;

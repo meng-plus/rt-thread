@@ -57,3 +57,5 @@ BrowseInfo/
 *.log
 Backup*
 bsp/lpc408x/rt-thread/
+autosave/
+cache/

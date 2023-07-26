@@ -2859,6 +2859,9 @@
         <file>
             <name>$PROJ_DIR$\applications\main.c</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\rtconfig.h</name>
+        </file>
     </group>
     <group>
         <name>Compiler</name>
@@ -3017,9 +3020,45 @@
         </file>
     </group>
     <group>
+        <name>EasyFlash</name>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\easyflash.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_cmd.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_env.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_env_legacy.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_env_legacy_wl.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\easyflash\ef_fal_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_iap.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_log.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\easyflash\ef_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packages\EasyFlash-v4.1.0\src\ef_utils.c</name>
+        </file>
+    </group>
+    <group>
         <name>Fal</name>
         <file>
             <name>$PROJ_DIR$\..\..\components\fal\src\fal.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\Fal\inc\fal_cfg.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\fal\src\fal_flash.c</name>
@@ -3137,6 +3176,27 @@
         </file>
     </group>
     <group>
+        <name>keyIrd</name>
+        <file>
+            <name>$PROJ_DIR$\drivers\key_Ird\drv_keyIrd.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\key_Ird\keyIrd_port.c</name>
+        </file>
+    </group>
+    <group>
+        <name>ktime</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\ktime\src\boottime.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\ktime\src\cputimer.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\ktime\src\hrtimer.c</name>
+        </file>
+    </group>
+    <group>
         <name>Libraries</name>
         <file>
             <name>$PROJ_DIR$\Libraries\Drivers\source\lpc_adc.c</name>
@@ -3241,165 +3301,6 @@
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\libs\gif\gifdec.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\img_benchmark_cogwheel_alpha16.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\img_benchmark_cogwheel_argb.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\img_benchmark_cogwheel_chroma_keyed.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\img_benchmark_cogwheel_indexed16.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\img_benchmark_cogwheel_rgb.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\img_benchmark_cogwheel_rgb565a8.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\widgets\assets\img_clothes.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\widgets\assets\img_demo_widgets_avatar.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_corner_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_list_pause.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_list_pause_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_list_play.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_list_play_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_loop.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_loop_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_next.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_next_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_pause.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_pause_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_play.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_play_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_prev.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_prev_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_rnd.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_btn_rnd_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_corner_left.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_corner_left_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_corner_right.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_corner_right_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_cover_1.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_cover_1_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_cover_2.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_cover_2_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_cover_3.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_cover_3_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_1.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_1_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_2.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_2_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_3.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_3_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_4.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_icon_4_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_list_border.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_list_border_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_logo.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_slider_knob.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_slider_knob_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_wave_bottom.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_wave_bottom_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_wave_top.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\assets\img_lv_demo_music_wave_top_large.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\widgets\assets\img_lvgl_logo.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\libs\png\lodepng.c</name>
         </file>
         <file>
@@ -3458,27 +3359,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\widgets\colorwheel\lv_colorwheel.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\lv_demo_benchmark.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\keypad_encoder\lv_demo_keypad_encoder.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\lv_demo_music.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\lv_demo_music_list.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\music\lv_demo_music_main.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\stress\lv_demo_stress.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\widgets\lv_demo_widgets.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\src\core\lv_disp.c</name>
@@ -3629,15 +3509,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\src\font\lv_font.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\lv_font_bechmark_montserrat_12_compr_az.c.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\lv_font_bechmark_montserrat_16_compr_az.c.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\LVGL-v8.3.5\demos\benchmark\assets\lv_font_bechmark_montserrat_28_compr_az.c.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\src\font\lv_font_dejavu_16_persian_hebrew.c</name>
@@ -3992,12 +3863,6 @@
         </file>
     </group>
     <group>
-        <name>LVGL-page</name>
-        <file>
-            <name>$PROJ_DIR$\applications\lvgl\user_gui_init.c</name>
-        </file>
-    </group>
-    <group>
         <name>LVGL-port</name>
         <file>
             <name>$PROJ_DIR$\drivers\lvgl\lv_conf.h</name>
@@ -4016,6 +3881,21 @@
         <name>LVGL-SquareLine</name>
         <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\env_support\rt-thread\squareline\lv_ui_entry.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\ui.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\ui_helpers.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\images\ui_img_logo_png.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\screens\ui_P00startup.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\screens\ui_P01main.c</name>
         </file>
     </group>
     <group>

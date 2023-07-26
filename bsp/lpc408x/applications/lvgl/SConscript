@@ -5,13 +5,17 @@ CPPPATH = [cwd]
 
 # add the general drivers.
 src = Split("""
+ui_helpers.c
+ui.c
+lvgl_user_cmd.c
 """)
-port_inc = [cwd]
+src += Glob("screens/*.c")
+src += Glob("images/*.c")
+src += Glob("fonts/*.c")
+src += Glob("components/*.c")
 
-port_src = Glob("*.c")
-
-group = DefineGroup('LVGL-page', port_src, depend = ['PKG_USING_LVGL'], CPPPATH = port_inc)
-
+# group = DefineGroup('LVGL-page', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
+group = DefineGroup('LVGL-SquareLine', src, depend = ['PKG_USING_LVGL_SQUARELINE'], CPPPATH = CPPPATH)
 list = os.listdir(cwd)
 for item in list:
     if os.path.isfile(os.path.join(cwd, item, 'SConscript')):

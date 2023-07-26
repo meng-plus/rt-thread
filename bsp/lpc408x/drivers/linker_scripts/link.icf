@@ -46,6 +46,8 @@ place in ROM_region   { readonly,
 place in EXTROM_region   {readonly section EXTROM,
                        readonly data object img_lv_*,
                        readonly data object lv_font_*,
+                       readonly data object ui_font_*,
+                       readonly data object ui_img_*,
    };
 place in RAM_region   { readwrite,
                         block CSTACK,

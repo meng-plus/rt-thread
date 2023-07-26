@@ -1,0 +1,16 @@
+{
+  "codename": "heiti16",
+  "ttf_path": "\\assets\\simhei.ttf",
+  "bin_path": "\\assets\\ui_font_heiti16.bin",
+  "c_path": "\\assets\\ui_font_heiti16.c",
+  "cfg_path": "\\assets\\ui_font_heiti16.fcfg",
+  "size": 16,
+  "bpp": 4,
+  "letters": 5,
+  "ranges": [
+    "0x20-0x7f"
+  ],
+  "symbols": "测量中文系统模块高级关于",
+  "customparams": "--no-compress --no-prefilter",
+  "uploaded": false
+}
