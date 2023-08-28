@@ -169,6 +169,35 @@ void lv_port_indev_init(void)
         {40, 100}, /*Button 1 -> x:40; y:100*/
     };
     lv_indev_set_button_points(indev_button, btn_points);
+    lv_group_t *group;
+    group = lv_group_get_default();
+    if (0 == group)
+    {
+        group = lv_group_create();
+        if (group)
+        {
+            lv_group_set_default(group);
+        }
+    }
+    lv_indev_t *cur_drv = NULL;
+    for (;;)
+    {
+        cur_drv = lv_indev_get_next(cur_drv);
+        if (!cur_drv)
+        {
+            break;
+        }
+
+        if (cur_drv->driver->type == LV_INDEV_TYPE_KEYPAD)
+        {
+            lv_indev_set_group(cur_drv, group);
+        }
+
+        if (cur_drv->driver->type == LV_INDEV_TYPE_ENCODER)
+        {
+            lv_indev_set_group(cur_drv, group);
+        }
+    }
 }
 
 /**********************
@@ -520,3 +549,48 @@ static bool button_is_pressed(uint8_t id)
 /*This dummy typedef exists purely to silence -Wpedantic.*/
 typedef int keep_pedantic_happy;
 #endif
+
+void lv_add_all_input_devices_to_group(lv_group_t *group)
+{
+    if (!group)
+    {
+        LV_LOG_WARN(
+            "The group object is NULL. Get the default group object instead.");
+
+        group = lv_group_get_default();
+        if (!group)
+        {
+            LV_LOG_WARN(
+                "The default group object is NULL. Create a new group object "
+                "and set it to default instead.");
+
+            group = lv_group_create();
+            if (group)
+            {
+                lv_group_set_default(group);
+            }
+        }
+    }
+
+    LV_ASSERT_MSG(group, "Cannot obtain an available group object.");
+
+        lv_indev_t *cur_drv = NULL;
+    for (;;)
+    {
+        cur_drv = lv_indev_get_next(cur_drv);
+        if (!cur_drv)
+        {
+            break;
+        }
+
+        if (cur_drv->driver->type == LV_INDEV_TYPE_KEYPAD)
+        {
+            lv_indev_set_group(cur_drv, group);
+        }
+
+        if (cur_drv->driver->type == LV_INDEV_TYPE_ENCODER)
+        {
+            lv_indev_set_group(cur_drv, group);
+        }
+    }  
+}

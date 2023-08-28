@@ -5,10 +5,10 @@
 
 #include "../ui.h"
 
-void ui_comp_Button2_create_hook(lv_obj_t * comp)
+void ui_comp_stateBar_create_hook(lv_obj_t * comp)
 {
 }
 
-void ui_comp_TabPage1_create_hook(lv_obj_t * comp)
+void ui_comp_head_create_hook(lv_obj_t * comp)
 {
 }

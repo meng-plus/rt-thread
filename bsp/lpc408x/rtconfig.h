@@ -24,7 +24,10 @@
 /* kservice optimization */
 
 #define RT_KSERVICE_USING_STDLIB
-#define RT_DEBUG
+#define RT_USING_DEBUG
+#define RT_DEBUGING_COLOR
+#define RT_DEBUGING_CONTEXT
+#define RT_DEBUGING_INIT
 
 /* Inter-Thread communication */
 
@@ -197,8 +200,8 @@
 #define PKG_LVGL_THREAD_STACK_SIZE 4096
 #define PKG_LVGL_DISP_REFR_PERIOD 30
 #define PKG_USING_LVGL_SQUARELINE
-#define PKG_LVGL_USING_V08035
-#define PKG_LVGL_VER_NUM 0x08035
+#define PKG_LVGL_USING_V08038
+#define PKG_LVGL_VER_NUM 0x08038
 
 /* u8g2: a monochrome graphic library */
 
@@ -313,23 +316,23 @@
 #define BSP_USING_UART3
 #define BSP_USING_UART4
 
-/* Onboard Peripheral Drivers */
+/* On Core Board Peripheral Drivers */
 
 #define BSP_USING_SDRAM
 #define BSP_USING_SPFI
 #define BSP_USING_FM31XX
 #define BSP_USING_WDT
 #define BSP_USING_ADXL345
-#define BSP_USING_LCD
-#define BSP_LCD_WIDTH 480
-#define BSP_LCD_HEIGHT 272
-#define BSP_LCD_BPP 16
-#define BSP_USING_KEYIRD
 
 /* Board extended module Drivers */
 
+#define BSP_USING_BOARD_370792Z1V1_20230828
 #define BSP_USING_EASYFLASH
 #define BSP_USRING_FAL_NAME "easyflash"
-#define BSP_USING_BOARD_315101Z2V2
+#define BSP_USING_LCD
+#define BSP_LCD_WIDTH 800
+#define BSP_LCD_HEIGHT 480
+#define BSP_LCD_BPP 16
+#define BSP_USING_KEYIRD
 
 #endif

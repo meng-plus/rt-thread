@@ -1,17 +1,23 @@
 from building import *
-import os
 
 cwd = GetCurrentDir()
-group = []
-src = Glob('*.c')
 CPPPATH = [cwd]
+src =[]
+# add the general drivers.
+#src = Split("""
+#ui_helpers.c
+#ui.c
+#lvgl_user_cmd.c
+#""")
+src += Glob("*.c")
+src += Glob("images/*.c")
+src += Glob("fonts/*.c")
 
+# group = DefineGroup('LVGL-page', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
+group = DefineGroup('LVGL-SquareLine', src, depend = ['PKG_USING_LVGL_SQUARELINE'], CPPPATH = CPPPATH)
 list = os.listdir(cwd)
-for d in list:
-    path = os.path.join(cwd, d)
-    if os.path.isfile(os.path.join(path, 'SConscript')):
-        group = group + SConscript(os.path.join(d, 'SConscript'))
-
-group = group + DefineGroup('LVGL-port', src, depend = ['BSP_USING_LVGL'], CPPPATH = CPPPATH)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
 
 Return('group')

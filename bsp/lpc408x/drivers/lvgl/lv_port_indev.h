@@ -31,7 +31,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 void lv_port_indev_init(void);
-
+void lv_add_all_input_devices_to_group(lv_group_t* group);
 /**********************
  *      MACROS
  **********************/

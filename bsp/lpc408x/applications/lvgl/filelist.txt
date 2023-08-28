@@ -3,5 +3,7 @@ screens/ui_P01main.c
 ui.c
 components/ui_comp_hook.c
 ui_helpers.c
-images/ui_img_logo_png.c
+images/ui_img_gltech_png.c
+fonts/ui_font_heiti12.c
 fonts/ui_font_heiti16.c
+fonts/ui_font_heiti24.c

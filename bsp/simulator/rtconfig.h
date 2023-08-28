@@ -152,6 +152,19 @@
 
 /* Utilities */
 
+#define RT_USING_ULOG
+#define ULOG_OUTPUT_LVL_D
+#define ULOG_OUTPUT_LVL 7
+#define ULOG_ASSERT_ENABLE
+#define ULOG_LINE_BUF_SIZE 128
+
+/* log format */
+
+#define ULOG_USING_COLOR
+#define ULOG_OUTPUT_TIME
+#define ULOG_OUTPUT_LEVEL
+#define ULOG_OUTPUT_TAG
+#define ULOG_BACKEND_USING_CONSOLE
 
 /* RT-Thread Utestcases */
 
@@ -187,6 +200,14 @@
 
 /* LVGL: powerful and easy-to-use embedded GUI library */
 
+#define PKG_USING_LVGL
+#define PKG_LVGL_THREAD_PRIO 20
+#define PKG_LVGL_THREAD_STACK_SIZE 4096
+#define PKG_LVGL_DISP_REFR_PERIOD 5
+#define PKG_USING_LVGL_SQUARELINE
+#define PKG_LVGL_USING_V08035
+#define PKG_LVGL_VER_NUM 0x08035
+#define PKG_USING_LV_MUSIC_DEMO
 
 /* u8g2: a monochrome graphic library */
 
@@ -274,6 +295,9 @@
 /* Peripheral Drivers */
 
 #define BSP_USING_RTC
+#define BSP_USING_LVGL
+#define BSP_LCD_WIDTH 480
+#define BSP_LCD_HEIGHT 272
 #include "rtconfig_project.h"
 
 #endif

@@ -1,0 +1,21 @@
+from building import *
+
+cwd = GetCurrentDir()
+CPPPATH = [cwd]
+src =[]
+# add the general drivers.
+#src = Split("""
+#ui_helpers.c
+#ui.c
+#lvgl_user_cmd.c
+#""")
+src += Glob("*.c")
+
+# group = DefineGroup('LVGL-page', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
+group = DefineGroup('lvgl-comp', src, depend = ['PKG_USING_LVGL_SQUARELINE'], CPPPATH = CPPPATH)
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

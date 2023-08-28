@@ -56,7 +56,7 @@ menu "Hardware Drivers Config"
            endif
     endmenu
 
-    menu "Onboard Peripheral Drivers"
+    menu "On Core Board Peripheral Drivers"
 
         config BSP_USING_SDRAM
             bool "Enable SDRAM"
@@ -88,9 +88,44 @@ menu "Hardware Drivers Config"
             bool "Enabel shell"
                 depends on BSP_USING_ADXL345
             default n
+    endmenu
+
+menu "Board extended module Drivers"
+    choice
+        prompt "Board select "
+        default BSP_USING_BOARD_9903Z1V2
+
+        config BSP_USING_BOARD_9903Z1V2
+        bool "9903Z1V2"
+        config BSP_USING_BOARD_315101Z2V2
+        bool "315101Z2V2"
+        config BSP_USING_BOARD_370792Z1V1_20230828
+        bool "370792Z1V1(20230828)"
+    endchoice
+
+        config BSP_USING_EASYFLASH
+            bool "Enable user easyFlash"
+            select PKG_USING_EASYFLASH
+            select RT_USING_FAL
+            default n
+        config BSP_USRING_FAL_NAME
+            string "Fal name"
+            depends on  BSP_USING_EASYFLASH
+            default "easyflash"
+
+
+        config BSP_USING_ADS1115
+        bool "Enable ADS1115"
+            depends on BSP_USING_BOARD_9903Z1V2 || BSP_USING_BOARD_315101Z2V2
+        default n
+        config BSP_USING_ADS1115_SHELL
+        bool "Enabel shell"
+            depends on BSP_USING_ADS1115
+        default n
 
         config BSP_USING_LCD
             bool "Enable LCD"
+            depends on BSP_USING_BOARD_9903Z1V2 || BSP_USING_BOARD_315101Z2V2 ||BSP_USING_BOARD_370792Z1V1_20230828
             default n
             if BSP_USING_LCD
                 config BSP_LCD_WIDTH
@@ -105,38 +140,8 @@ menu "Hardware Drivers Config"
             endif
         config BSP_USING_KEYIRD
             bool "Enable KeyIrd"
+            depends on BSP_USING_BOARD_9903Z1V2 || BSP_USING_BOARD_315101Z2V2 ||BSP_USING_BOARD_370792Z1V1_20230828
             default n
-
-    endmenu
-
-menu "Board extended module Drivers"
-    config BSP_USING_EASYFLASH
-        bool "Enable user easyFlash"
-        select PKG_USING_EASYFLASH
-        select RT_USING_FAL
-        default n
-    config BSP_USRING_FAL_NAME
-        string "Fal name"
-        depends on  BSP_USING_EASYFLASH
-        default "easyflash"
-
-    choice
-        prompt "Board select "
-        default BSP_USING_BOARD_9903Z1V2
-
-        config BSP_USING_BOARD_9903Z1V2
-        bool "9903Z1V2"
-        config BSP_USING_BOARD_315101Z2V2
-        bool "315101Z2V2"
-    endchoice
-        config BSP_USING_ADS1115
-        bool "Enable ADS1115"
-            depends on BSP_USING_BOARD_315101Z2V2
-        default n
-        config BSP_USING_ADS1115_SHELL
-        bool "Enabel shell"
-            depends on BSP_USING_ADS1115
-        default n
 endmenu
 
 endmenu

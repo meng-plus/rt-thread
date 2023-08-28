@@ -61,7 +61,7 @@ const static drv_uart_ops_t lpc_uart_ops = {
             dma_transmit,
         },
     .lpc_uart = {
-#ifdef BSP_USING_BOARD_315101Z2V2
+//#ifdef BSP_USING_BOARD_315101Z2V2
         [UART_0] = {
             .name = "uart0",
             .uart_id = UART_0,
@@ -136,7 +136,7 @@ const static drv_uart_ops_t lpc_uart_ops = {
             .rx = {5, 3, 4},
             .oe = {0, 21, 3},
         },
-#endif
+//#endif
     }};
 
 static void uart_gpio_init(const lpc_uart_t *uart)

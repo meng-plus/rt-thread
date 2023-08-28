@@ -25,8 +25,8 @@ extern "C" {
 /*********************
  *      DEFINES
  *********************/
-    #define MY_DISP_VER_RES    272
-    #define MY_DISP_HOR_RES    480
+#define MY_DISP_VER_RES BSP_LCD_HEIGHT
+#define MY_DISP_HOR_RES BSP_LCD_WIDTH
 /**********************
  *      TYPEDEFS
  **********************/
@@ -38,11 +38,11 @@ extern "C" {
 void lv_port_disp_init(void);
 
 /* Enable updating the screen (the flushing process) when disp_flush() is called by LVGL
- */
+    */
 void disp_enable_update(void);
 
 /* Disable updating the screen (the flushing process) when disp_flush() is called by LVGL
- */
+    */
 void disp_disable_update(void);
 
 /**********************

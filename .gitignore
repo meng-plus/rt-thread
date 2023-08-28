@@ -59,3 +59,5 @@ Backup*
 bsp/lpc408x/rt-thread/
 autosave/
 cache/
+bsp/simulator/.vs/
+.obsidian/
