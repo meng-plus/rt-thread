@@ -38,7 +38,7 @@ static rt_err_t stm32_configure(struct rt_serial_device *serial, struct serial_c
             "rtt",
             rtt_cb,
             0,
-            10,
+            100,
             RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER);
     }
     return RT_EOK;

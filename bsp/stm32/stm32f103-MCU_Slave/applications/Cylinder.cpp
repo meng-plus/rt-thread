@@ -25,16 +25,28 @@ CCylinder::CCylinder(rt_base_t O, rt_base_t i0, rt_base_t i1)
 void CCylinder::set()
 {
     rt_pin_write(m_O, 1);
+    m_status = CYLINDER_STATUS::SETING;
 }
 
 void CCylinder::reset()
 {
     rt_pin_write(m_O, 0);
+    m_status = CYLINDER_STATUS::RESETING;
 }
 
 rt_int8_t CCylinder::getOut()
 {
     return rt_pin_read(m_O) == 0;
+}
+
+uint8_t CCylinder::read_i0()
+{
+    return rt_pin_read(m_i0) == 0;
+}
+
+uint8_t CCylinder::read_i1()
+{
+    return rt_pin_read(m_i1) == 0;
 }
 
 CYLINDER_STATUS CCylinder::getStatus()

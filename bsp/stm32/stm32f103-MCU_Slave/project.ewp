@@ -2211,28 +2211,31 @@
   <group>
     <name>Applications</name>
     <file>
-      <name>$PROJ_DIR$\applications\osThread.cpp</name>
+      <name>$PROJ_DIR$\applications\app_shell.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\main.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\osTime.cpp</name>
+      <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\Applications.cpp</name>
+      <name>$PROJ_DIR$\applications\osThread.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\CylinderTime.cpp</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\applications\LedTime.cpp</name>
+      <name>$PROJ_DIR$\applications\osTime.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\App_main.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\Applications.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\LedTime.cpp</name>
     </file>
   </group>
   <group>
@@ -2496,10 +2499,10 @@
       <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_printf.c</name>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_ASM_ARMv7M.S</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_ASM_ARMv7M.S</name>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_printf.c</name>
     </file>
   </group>
   <group>

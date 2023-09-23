@@ -15,9 +15,9 @@
 
 enum class CYLINDER_STATUS
 {
-    RESET,
+    RESET, /*!< ×´Ì¬ */
     SETING,
-    SET,
+    SET, /*!< ¶¯×÷ */
     RESETING,
 };
 class CCylinder
@@ -33,6 +33,8 @@ public:
     void set();
     void reset();
     rt_int8_t getOut();
+    uint8_t read_i0();
+    uint8_t read_i1();
     CYLINDER_STATUS getStatus();
     ~CCylinder();
 };

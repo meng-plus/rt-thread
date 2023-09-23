@@ -12,14 +12,19 @@
 #include "osTime.hpp"
 #include "Cylinder.hpp"
 #include "singleton.h"
+enum class Cylinder_DEV
+{
+    A,
+    B,
+    C,
+    D,
+    E,
+    NUM
+};
 class CylinderTime : public osTime, public OHOS::DelayedRefSingleton<CylinderTime>
 {
-private:
-    CCylinder A;
-    CCylinder B;
-    CCylinder C;
-    CCylinder D;
-    CCylinder E;
+public:
+    CCylinder* m_Cylinder[(uint8_t)Cylinder_DEV::NUM];
 
 protected:
     virtual void Tick();
