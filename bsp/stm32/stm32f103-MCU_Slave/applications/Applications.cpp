@@ -9,15 +9,24 @@
  *
  */
 #include "Applications.hpp"
-#ifdef __cplusplus
-extern "C"
+#include "LedTime.hpp"
+#include "CylinderTime.hpp"
+CApplications::CApplications()
+    : osThread(__FILE__)
 {
-#endif
-    int Applications_GetInstance()
-    {
-        CApplications::GetInstance();
-        return 0;
-    }
-#ifdef __cplusplus
+    CLedTime::GetInstance();
+    CylinderTime::GetInstance();
 }
-#endif
+
+CApplications::~CApplications()
+{
+}
+
+void CApplications::thread()
+{
+    while (1)
+    {
+
+        rt_thread_delay(1000);
+    }
+}

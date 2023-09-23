@@ -1,0 +1,34 @@
+import os
+from building import *
+import rtconfig
+group = []
+cwd  = GetCurrentDir()
+
+
+# add general drivers
+src = Split('''
+''')
+
+src += Glob('RTT/*.c')
+src += Glob('RTT/*.s')
+
+path =  [cwd + '/Config']
+path += [cwd + '/RTT']
+
+# if rtconfig.PLATFORM in ['gcc']:
+#     src += ["Syscalls/" + 'SEGGER_RTT_Syscalls_GCC.c']
+# elif rtconfig.PLATFORM in ['armcc', 'armclang']:
+#     src += ["Syscalls/" + 'SEGGER_RTT_Syscalls_KEIL.c']
+# elif rtconfig.PLATFORM in ['iccarm']:
+#     src += ["Syscalls/" + 'SEGGER_RTT_Syscalls_IAR.c']
+
+
+group += DefineGroup('RTT', src, depend = [''], CPPPATH = path)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
+

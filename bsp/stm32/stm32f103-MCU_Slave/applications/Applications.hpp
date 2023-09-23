@@ -10,10 +10,15 @@
  */
 #pragma once
 #include "singleton.h"
+#include "osThread.hpp"
 using namespace OHOS;
-class CApplications : public DelayedRefSingleton<CApplications>
+class CApplications : public osThread, public DelayedRefSingleton<CApplications>
 {
 
-private:
+public:
+    CApplications();
+    virtual ~CApplications();
 
+protected:
+    virtual void thread();
 };

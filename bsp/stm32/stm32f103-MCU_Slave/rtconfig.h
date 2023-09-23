@@ -49,7 +49,7 @@
 #define RT_USING_DEVICE
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 128
-#define RT_CONSOLE_DEVICE_NAME "uart"
+#define RT_CONSOLE_DEVICE_NAME "RTT"
 #define RT_VER_NUM 0x50001
 #define RT_USING_HW_ATOMIC
 #define RT_USING_CPU_FFS
@@ -84,6 +84,10 @@
 
 #define RT_USING_DEVICE_IPC
 #define RT_UNAMED_PIPE_NUMBER 64
+#define RT_USING_SERIAL
+#define RT_USING_SERIAL_V1
+#define RT_SERIAL_USING_DMA
+#define RT_SERIAL_RB_BUFSZ 64
 #define RT_USING_PIN
 #define RT_USING_ADC
 #define RT_USING_RTC
@@ -262,6 +266,8 @@
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
+#define BSP_USING_UART
+#define BSP_USING_UART2
 
 /* Board extended module Drivers */
 

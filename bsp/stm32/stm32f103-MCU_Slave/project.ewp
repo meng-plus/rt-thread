@@ -61,7 +61,7 @@
         </option>
         <option>
           <name>RTDescription</name>
-          <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+          <state>A compact configuration of the C/C++14 runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
         </option>
         <option>
           <name>OGProductVersion</name>
@@ -353,9 +353,12 @@
           <state>$PROJ_DIR$\..\..\..\components\finsh</state>
           <state>$PROJ_DIR$\..\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include</state>
+          <state>$PROJ_DIR$\thrid_party\SEGGER_RTT\Config</state>
+          <state>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT</state>
           <state>$PROJ_DIR$\..\..\..\components\libc\compilers\common\extension</state>
           <state>$PROJ_DIR$\board\CubeMX_Config\Inc</state>
           <state>$PROJ_DIR$\..\..\..\components\libc\posix\ipc</state>
+          <state>$PROJ_DIR$\thrid_party\c_utils</state>
           <state>$PROJ_DIR$\..\libraries\HAL_Drivers\CMSIS\Include</state>
           <state>$PROJ_DIR$\.</state>
           <state>$PROJ_DIR$\..\libraries\HAL_Drivers\config</state>
@@ -368,6 +371,7 @@
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\..\components\libc\posix\io\poll</state>
           <state>$PROJ_DIR$\..\..\..\include</state>
+          <state>$PROJ_DIR$\thrid_party\c_utils\inc</state>
           <state>$PROJ_DIR$\..\..\..\components\utilities\ulog</state>
           <state>$PROJ_DIR$\..\..\..\libcpu\arm\cortex-m3</state>
           <state>$PROJ_DIR$\..\..\..\libcpu\arm\common</state>
@@ -413,7 +417,7 @@
         </option>
         <option>
           <name>IccLang</name>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>IccCDialect</name>
@@ -1453,9 +1457,12 @@
           <state>$PROJ_DIR$\..\..\..\components\finsh</state>
           <state>$PROJ_DIR$\..\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include</state>
+          <state>$PROJ_DIR$\thrid_party\SEGGER_RTT\Config</state>
+          <state>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT</state>
           <state>$PROJ_DIR$\..\..\..\components\libc\compilers\common\extension</state>
           <state>$PROJ_DIR$\board\CubeMX_Config\Inc</state>
           <state>$PROJ_DIR$\..\..\..\components\libc\posix\ipc</state>
+          <state>$PROJ_DIR$\thrid_party\c_utils</state>
           <state>$PROJ_DIR$\..\libraries\HAL_Drivers\CMSIS\Include</state>
           <state>$PROJ_DIR$\.</state>
           <state>$PROJ_DIR$\..\libraries\HAL_Drivers\config</state>
@@ -1468,6 +1475,7 @@
           <state>$PROJ_DIR$\applications</state>
           <state>$PROJ_DIR$\..\..\..\components\libc\posix\io\poll</state>
           <state>$PROJ_DIR$\..\..\..\include</state>
+          <state>$PROJ_DIR$\thrid_party\c_utils\inc</state>
           <state>$PROJ_DIR$\..\..\..\components\utilities\ulog</state>
           <state>$PROJ_DIR$\..\..\..\libcpu\arm\cortex-m3</state>
           <state>$PROJ_DIR$\..\..\..\libcpu\arm\common</state>
@@ -2203,7 +2211,34 @@
   <group>
     <name>Applications</name>
     <file>
+      <name>$PROJ_DIR$\applications\osThread.cpp</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\applications\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\osTime.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\Applications.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\CylinderTime.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\LedTime.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\App_main.cpp</name>
+    </file>
+  </group>
+  <group>
+    <name>c_utils</name>
+    <file>
+      <name>$PROJ_DIR$\thrid_party\c_utils\src\observer.cpp</name>
     </file>
   </group>
   <group>
@@ -2310,6 +2345,9 @@
     <file>
       <name>$PROJ_DIR$\..\..\..\components\drivers\rtc\soft_rtc.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\components\drivers\serial\serial.c</name>
+    </file>
   </group>
   <group>
     <name>Drivers</name>
@@ -2323,6 +2361,9 @@
       <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_gpio.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_usart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Source\Templates\iar\startup_stm32f103xb.s</name>
     </file>
     <file>
@@ -2330,6 +2371,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\board.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\drv_Console.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\ports\user_key.c</name>
@@ -2428,10 +2472,16 @@
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Source\Templates\system_stm32f1xx.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cec.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_usart.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c</name>
@@ -2439,6 +2489,18 @@
   </group>
   <group>
     <name>POSIX</name>
+  </group>
+  <group>
+    <name>RTT</name>
+    <file>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_printf.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_ASM_ARMv7M.S</name>
+    </file>
   </group>
   <group>
     <name>Utilities</name>

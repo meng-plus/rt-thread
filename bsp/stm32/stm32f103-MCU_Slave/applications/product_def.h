@@ -73,6 +73,9 @@
 #define O_ERROR_PORT Y_PORT(8)
 #define O_ERROR_PIN Y_PIN(8)
 
+#define O_LED_PORT LED_GPIO_Port
+#define O_LED_PIN LED_Pin
+
 typedef struct __GPIO
 {
     GPIO_TypeDef *port;

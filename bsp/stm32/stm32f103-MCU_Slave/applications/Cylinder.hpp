@@ -22,10 +22,11 @@ enum class CYLINDER_STATUS
 };
 class CCylinder
 {
-private:
+public:
     rt_base_t m_O;  /*!< 气缸输出 1 有信号*/
     rt_base_t m_i0; /*!< 位中信号 0 有信号*/
     rt_base_t m_i1; /*!< 位末信号 */
+    CYLINDER_STATUS m_status;
 
 public:
     CCylinder(rt_base_t O, rt_base_t i0, rt_base_t i1);

@@ -16,6 +16,10 @@ CCylinder::CCylinder(rt_base_t O, rt_base_t i0, rt_base_t i1)
     rt_pin_mode(m_O, PIN_MODE_OUTPUT);
     rt_pin_mode(m_i0, PIN_MODE_INPUT);
     rt_pin_mode(m_i1, PIN_MODE_INPUT);
+    if (getOut())
+    {
+    }
+    reset();
 }
 
 void CCylinder::set()
@@ -30,12 +34,17 @@ void CCylinder::reset()
 
 rt_int8_t CCylinder::getOut()
 {
-    return rt_pin_read(m_O);
+    return rt_pin_read(m_O) == 0;
+}
+
+CYLINDER_STATUS CCylinder::getStatus()
+{
+    return m_status;
 }
 
 CCylinder::~CCylinder()
 {
-    rt_pin_mode(m_O, PIN_MODE_OUTPUT);
+    rt_pin_mode(m_O, PIN_MODE_INPUT);
     rt_pin_mode(m_i0, PIN_MODE_INPUT);
     rt_pin_mode(m_i1, PIN_MODE_INPUT);
 }

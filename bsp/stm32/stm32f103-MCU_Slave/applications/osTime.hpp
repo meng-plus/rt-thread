@@ -18,7 +18,7 @@ private:
     static void time_cb(osTime *param);
 
 protected:
-    void Tick();
+    virtual void Tick() = 0;
 
 public:
     osTime(const char *name, uint8_t flag, void *parameter, uint32_t time);

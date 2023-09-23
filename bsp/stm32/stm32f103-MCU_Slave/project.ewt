@@ -2848,7 +2848,22 @@
     <group>
         <name>Applications</name>
         <file>
+            <name>$PROJ_DIR$\applications\Applications.cpp</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\osTime.cpp</name>
+        </file>
+    </group>
+    <group>
+        <name>c_utils</name>
+        <file>
+            <name>$PROJ_DIR$\thrid_party\c_utils\src\observer.cpp</name>
         </file>
     </group>
     <group>
@@ -2947,9 +2962,6 @@
             <name>$PROJ_DIR$\..\..\..\components\drivers\rtc\rtc.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\components\drivers\serial\serial.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\components\drivers\rtc\soft_rtc.c</name>
         </file>
         <file>
@@ -2972,9 +2984,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_gpio.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_usart.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Source\Templates\iar\startup_stm32f103xb.s</name>
@@ -3083,12 +3092,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc_ex.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_usart.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Source\Templates\system_stm32f1xx.c</name>
