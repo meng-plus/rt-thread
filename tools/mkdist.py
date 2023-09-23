@@ -147,8 +147,11 @@ def bsp_update_project(dist_dir,project_name):
             data = f.readlines()
         with open(file_path, 'w') as f:
             for line in data:
-                if line.find('..\\..\\') != -1:
-                    line = line.replace('..\\..\\','rt-thread\\')
+                if line.find('..\\..\\..\\') != -1:
+                    line = line.replace('..\\..\\..\\','rt-thread\\')
+                if line.find('\\..\\libraries') != -1:
+                    line = line.replace('\\..\\libraries','\\libraries')
+
                 f.write(line)
 
 def bsp_update_kconfig_library(dist_dir):
