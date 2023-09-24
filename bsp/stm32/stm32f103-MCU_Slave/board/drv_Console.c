@@ -116,3 +116,10 @@ int rt_hw_RTT_init(void)
     RT_ASSERT(result == RT_EOK);
     return result;
 }
+int rt_hw_jlink_console_init(void)
+{
+    rt_hw_RTT_init();
+    rt_console_set_device("RTT");
+    return 0;
+}
+INIT_DEVICE_EXPORT(rt_hw_jlink_console_init);

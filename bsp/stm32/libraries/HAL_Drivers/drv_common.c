@@ -195,8 +195,6 @@ rt_weak void rt_hw_board_init(void)
     /* USART driver initialization is open by default */
 #ifdef RT_USING_SERIAL
     rt_hw_usart_init();
-    int rt_hw_RTT_init(void);
-    rt_hw_RTT_init();
 #endif
 
     /* Set the shell console output device */

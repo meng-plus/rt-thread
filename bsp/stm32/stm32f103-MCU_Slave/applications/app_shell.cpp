@@ -31,7 +31,7 @@ void dev_show(int argc, char *argv[])
         for (size_t i = 0; i < (uint8_t)Cylinder_DEV::NUM; i++)
         {
             CCylinder *dev_ptr = cy_ptr.m_Cylinder[i];
-            rt_kprintf("[%d] st:%d\to:%d i0:%d i1:%d\n", dev_ptr->m_status, dev_ptr->getOut(), dev_ptr->read_i0(), dev_ptr->read_i1());
+            rt_kprintf("[%d] o:%d i0:%d i1:%d\n", dev_ptr->m_status, dev_ptr->getOut(), dev_ptr->read_i0(), dev_ptr->read_i1());
         }
     }
     else
