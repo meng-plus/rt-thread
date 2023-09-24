@@ -12,12 +12,11 @@
 #include "LedTime.hpp"
 #include "CylinderTime.hpp"
 CApplications::CApplications()
-    : osThread(__FILE__)
 {
     m_taskCy_ptr = &CTimeTaskcy::GetInstance();
     std::shared_ptr<Observer> led_ptr(&CLedTime::GetInstance()); /*!< ????? */
     std::shared_ptr<CTimeTaskcy> cy_ptr(m_taskCy_ptr);
-    CylinderTime::GetInstance().AddObserver(led_ptr); /*!< ????? */
+   // CylinderTime::GetInstance().AddObserver(led_ptr); /*!< ????? */
     CylinderTime::GetInstance().AddObserver(cy_ptr);  /*!< ????? */
 }
 

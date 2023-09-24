@@ -14,7 +14,9 @@
 
 #include "TimeTaskcy.hpp"
 using namespace OHOS;
-class CApplications : public osThread, public OHOS::DelayedRefSingleton<CApplications>
+class CApplications :
+    // public osThread,
+    public OHOS::DelayedRefSingleton<CApplications>
 {
 protected:
     CTimeTaskcy *m_taskCy_ptr;

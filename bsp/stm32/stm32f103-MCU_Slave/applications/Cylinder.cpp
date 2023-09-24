@@ -16,7 +16,7 @@ CCylinder::CCylinder(const char *name, rt_base_t O, rt_base_t i0, rt_base_t i1)
     rt_pin_mode(m_O, PIN_MODE_OUTPUT);
     rt_pin_mode(m_i0, PIN_MODE_INPUT);
     rt_pin_mode(m_i1, PIN_MODE_INPUT);
-    m_status=CYLINDER_STATUS::RESET;
+    m_status = CYLINDER_STATUS::RESET;
     setStatus(CYLINDER_STATUS::RESET);
     reset();
 }
@@ -24,14 +24,14 @@ CCylinder::CCylinder(const char *name, rt_base_t O, rt_base_t i0, rt_base_t i1)
 void CCylinder::set()
 {
     rt_pin_write(m_O, 1);
-    setStatus(CYLINDER_STATUS::SETING);
+    setStatus(CYLINDER_STATUS::SET);
     m_timestamp = rt_tick_get();
 }
 
 void CCylinder::reset()
 {
     rt_pin_write(m_O, 0);
-    setStatus(CYLINDER_STATUS::RESETING);
+    setStatus(CYLINDER_STATUS::RESET);
     m_timestamp = rt_tick_get();
 }
 

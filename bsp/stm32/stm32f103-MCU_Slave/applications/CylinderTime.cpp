@@ -16,7 +16,8 @@
 #define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
 CylinderTime::CylinderTime(/* args */)
-    : osTime("CylinderTime", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 10)
+    : osThread("cyTime", NULL, 512, 10)
+//: osTime("CylinderTime", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 2)
 {
     m_Cylinder[(uint8_t)Cylinder_DEV::A] = new CCylinder("A", GET_PIN(B, 0), GET_PIN(B, 11), GET_PIN(B, 12));
     m_Cylinder[(uint8_t)Cylinder_DEV::B] = new CCylinder("B", GET_PIN(A, 4), GET_PIN(B, 13), GET_PIN(B, 14));
@@ -24,11 +25,19 @@ CylinderTime::CylinderTime(/* args */)
     m_Cylinder[(uint8_t)Cylinder_DEV::D] = new CCylinder("D", GET_PIN(A, 6), GET_PIN(A, 8), GET_PIN(A, 9));
     m_Cylinder[(uint8_t)Cylinder_DEV::E] = new CCylinder("E", GET_PIN(A, 7), GET_PIN(A, 10), GET_PIN(A, 11));
 
-    start();
+    startup();
 }
 
 CylinderTime::~CylinderTime()
 {
+}
+void CylinderTime::thread()
+{
+    while (1)
+    {
+        rt_thread_delay(2);
+        Tick();
+    }
 }
 void CylinderTime::Tick()
 {
@@ -70,12 +79,17 @@ void CylinderTime::Tick()
             {
                 status_new = CYLINDER_STATUS::SET;
             }
+            //            if (dev_ptr->getActDiff() > 1000)
+            //            {
+            //                ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
+            //                NotifyObservers(&notify);
+            //                dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
+            //            }
         }
 
         if ((CYLINDER_STATUS::RESET == dev_ptr->getStatus_target()) &&
             (CYLINDER_STATUS::RESET != dev_ptr->m_status))
         {
-            CYLINDER_STATUS status_new = dev_ptr->m_status;
             switch (dev_ptr->m_status)
             {
             case CYLINDER_STATUS::SET:
@@ -100,6 +114,12 @@ void CylinderTime::Tick()
             default:
                 break;
             }
+            //            if (dev_ptr->getActDiff() > 1000)
+            //            {
+            //                ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
+            //                NotifyObservers(&notify);
+            //                dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
+            //            }
         }
 
         if (status_new != dev_ptr->m_status)
@@ -107,12 +127,6 @@ void CylinderTime::Tick()
             dev_ptr->m_status = status_new;
             ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
             NotifyObservers(&notify);
-        }
-        else if (dev_ptr->getActDiff() > 1000)
-        {
-            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-            NotifyObservers(&notify);
-            dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
         }
     }
 }

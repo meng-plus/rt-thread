@@ -10,6 +10,7 @@
  */
 #pragma once
 #include "osTime.hpp"
+#include "osThread.hpp"
 #include "Cylinder.hpp"
 #include "singleton.h"
 #include "observer.h"
@@ -43,7 +44,7 @@ enum class CylinderTimeCmd
     STOP,
 };
 
-class CylinderTime : public osTime,
+class CylinderTime : public osThread,
                      public OHOS::DelayedRefSingleton<CylinderTime>,
                      public OHOS::Observable
 {
@@ -52,7 +53,8 @@ public:
 
 protected:
     virtual void Tick();
-
+protected:
+    virtual void thread();
 public:
     CylinderTime(/* args */);
     virtual ~CylinderTime();

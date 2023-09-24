@@ -6,7 +6,7 @@ extern "C"
 #endif
     int Applications_GetInstance()
     {
-        CApplications::GetInstance().startup();
+        CApplications::GetInstance();
         return 0;
     }
     INIT_APP_EXPORT(Applications_GetInstance);
