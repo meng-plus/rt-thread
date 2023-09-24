@@ -15,20 +15,23 @@
 
 enum class CYLINDER_STATUS
 {
-    RESET, /*!< 状态 */
+    RESET, /*!< 复位 */
     SETING,
-    SET, /*!< 动作 */
+    SET, /*!< 置位 */
     RESETING,
+    MID_NO,
+    MID,   /*!< 中间位置 */
     ERROR, /*!< 超时动作 */
 };
 class CCylinder
 {
 public:
     const char *m_name;
-    rt_base_t m_O;  /*!< 气缸输出 1 有信号*/
-    rt_base_t m_i0; /*!< 位中信号 0 有信号*/
-    rt_base_t m_i1; /*!< 位末信号 */
-    CYLINDER_STATUS m_status;
+    rt_base_t m_O;                   /*!< 气缸输出 1 有信号*/
+    rt_base_t m_i0;                  /*!< 位中信号 0 有信号*/
+    rt_base_t m_i1;                  /*!< 位末信号 */
+    CYLINDER_STATUS m_status;        /*!< 当前动作 */
+    CYLINDER_STATUS m_status_target; /*!< 目标动作 */
     rt_tick_t m_timestamp;
 
 public:
@@ -38,7 +41,8 @@ public:
     rt_int8_t getOut();
     uint8_t read_i0();
     uint8_t read_i1();
-    CYLINDER_STATUS getStatus();
+    CYLINDER_STATUS getStatus();        /*!< 当前状态 */
+    CYLINDER_STATUS getStatus_target(); /*!< 目标动作 */
     void setStatus(CYLINDER_STATUS newStatus);
     /*!< 获得上次活动的差值 */
     rt_tick_t getActDiff();

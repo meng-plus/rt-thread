@@ -19,9 +19,10 @@ CTimeTaskcy::CTimeTaskcy(/* args */)
     : osTime("Taskcy", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 500),
       x0_start(GET_PIN(A, 0)),
       x13_dir1(GET_PIN(A, 15)),
-      x14_dir2(GET_PIN(B, 4))
+      x14_dir2(GET_PIN(B, 4)),
+      Y0_OF(GET_PIN(B, 2))
 {
-    m_step = 0;
+    m_step = 0xFF;
     m_cy_ptr = &CylinderTime::GetInstance();
 }
 
@@ -33,7 +34,7 @@ void CTimeTaskcy::control(TASK_CY_CMD cmd, void *param)
 {
     switch (cmd)
     {
-    case TASK_CY_CMD::idle:
+    case TASK_CY_CMD::stop:
         m_step = 0xFF;
         break;
     case TASK_CY_CMD::start:
@@ -81,20 +82,52 @@ void CTimeTaskcy::Tick()
             m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->set();
         }
         break;
-    case 2: /*!< ??????? */
+    case 2: /*!< 等待第一步就位 */
         if (CYLINDER_STATUS::SET == m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->getStatus() &&
             m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->getActDiff() > 50)
         {
             m_step++;
-
-            // CEfsmEvent event(EFSM_EVENT::NEXT);
-            // CEfsmTaskCy::GetInstance().action(&event);
         }
-        /*!< ??2**************************************** */
+        /*!< 步骤2**************************************** */
     case 3:
         m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][0]]->set();
         m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][1]]->set();
+        m_step++;
+        break;
+    case 4: /*!< 等待 CylinderTime 通知就位*/
+        /*!< 立刻断开第一步的输出 */
+        break;
+    case 5: /*!< 第一步复位 */
+        if (CYLINDER_STATUS::RESET == m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->getStatus())
+        {
+            m_step++;
+        }
+        break;
+        /*!< 步骤3 *************************************** */
+    case 6: /*!< 输出第三步 */
+        m_cy_ptr->m_Cylinder[cyMapStep3[m_dir]]->set();
+        m_step++;
+        break;
+    case 7: /*!< 第二步撤回 */
 
+        break;
+    case 8: /*!< 动作就绪 */
+        if ((CYLINDER_STATUS::SET == m_cy_ptr->m_Cylinder[cyMapStep3[m_dir]]->getStatus()) &&
+            (CYLINDER_STATUS::RESET == m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][0]]->getStatus()) &&
+            (CYLINDER_STATUS::RESET == m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][1]]->getStatus()))
+        {
+            m_step++;
+        }
+        break;
+    /*!< 步骤4 ************************************** */
+    case 9: /*!< 第四步 输出 */
+        m_cy_ptr->m_Cylinder[cyMapStep4[m_dir]]->set();
+        m_step++;
+        break;
+    case 10: /*!< 收回第三步 第四步 */
+        break;
+    case 12: /*!< 完成 */
+        m_step = 0;
         break;
     default:
         break;
@@ -103,5 +136,52 @@ void CTimeTaskcy::Tick()
 
 void CTimeTaskcy::Update(const OHOS::Observable *o, const OHOS::ObserverArg *arg)
 {
-
+    if (o == m_cy_ptr)
+    { /*!< 气缸的事件更新通知 */
+        const ObsertverCyVal *cyVal_ptr = static_cast<const ObsertverCyVal *>(arg);
+        if (m_step == 4)
+        {
+            if (((cyVal_ptr->status == CYLINDER_STATUS::MID) ||
+                 (cyVal_ptr->status == CYLINDER_STATUS::SET) ||
+                 (cyVal_ptr->status == CYLINDER_STATUS::SETING)) &&
+                ((cyVal_ptr->Cylinder == m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][0]]) ||
+                 (cyVal_ptr->Cylinder == m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][1]])))
+            {
+                m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->reset();
+                m_step++;
+            }
+        }
+        else if (m_step == 7)
+        {
+            if (((cyVal_ptr->status == CYLINDER_STATUS::MID) ||
+                 (cyVal_ptr->status == CYLINDER_STATUS::SET) ||
+                 (cyVal_ptr->status == CYLINDER_STATUS::SETING)) &&
+                ((cyVal_ptr->Cylinder == m_cy_ptr->m_Cylinder[cyMapStep3[m_dir]])))
+            {
+                m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][0]]->reset();
+                m_cy_ptr->m_Cylinder[cyMapStep2[m_dir][1]]->reset();
+                m_step++;
+            }
+        }
+        else if (m_step == 10)
+        {
+            const ObsertverCyVal *cyVal_ptr = static_cast<const ObsertverCyVal *>(arg);
+            if (((cyVal_ptr->status == CYLINDER_STATUS::MID) ||
+                 (cyVal_ptr->status == CYLINDER_STATUS::SET) ||
+                 (cyVal_ptr->status == CYLINDER_STATUS::SETING)) &&
+                ((cyVal_ptr->Cylinder == m_cy_ptr->m_Cylinder[cyMapStep4[m_dir]])))
+            {
+                m_cy_ptr->m_Cylinder[cyMapStep3[m_dir]]->reset();
+                m_step++;
+            }
+        }
+        else if (m_step == 11)
+        {
+            if ((cyVal_ptr->status == CYLINDER_STATUS::SET) &&
+                (cyVal_ptr->Cylinder == m_cy_ptr->m_Cylinder[cyMapStep4[m_dir]]))
+            {
+                m_cy_ptr->m_Cylinder[cyMapStep4[m_dir]]->reset();
+            }
+        }
+    }
 }

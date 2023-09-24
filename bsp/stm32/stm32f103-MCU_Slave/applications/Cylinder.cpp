@@ -16,24 +16,28 @@ CCylinder::CCylinder(const char *name, rt_base_t O, rt_base_t i0, rt_base_t i1)
     rt_pin_mode(m_O, PIN_MODE_OUTPUT);
     rt_pin_mode(m_i0, PIN_MODE_INPUT);
     rt_pin_mode(m_i1, PIN_MODE_INPUT);
+    m_status=CYLINDER_STATUS::RESET;
     setStatus(CYLINDER_STATUS::RESET);
+    reset();
 }
 
 void CCylinder::set()
 {
     rt_pin_write(m_O, 1);
     setStatus(CYLINDER_STATUS::SETING);
+    m_timestamp = rt_tick_get();
 }
 
 void CCylinder::reset()
 {
     rt_pin_write(m_O, 0);
     setStatus(CYLINDER_STATUS::RESETING);
+    m_timestamp = rt_tick_get();
 }
 
 rt_int8_t CCylinder::getOut()
 {
-    return rt_pin_read(m_O) == 0;
+    return rt_pin_read(m_O);
 }
 
 uint8_t CCylinder::read_i0()
@@ -50,7 +54,10 @@ CYLINDER_STATUS CCylinder::getStatus()
 {
     return m_status;
 }
-
+CYLINDER_STATUS CCylinder::getStatus_target()
+{
+    return m_status_target;
+}
 CCylinder::~CCylinder()
 {
     rt_pin_mode(m_O, PIN_MODE_INPUT);
@@ -60,8 +67,7 @@ CCylinder::~CCylinder()
 
 void CCylinder::setStatus(CYLINDER_STATUS newStatus)
 {
-    m_timestamp = rt_tick_get();
-    m_status = newStatus;
+    m_status_target = newStatus;
 }
 
 rt_tick_t CCylinder::getActDiff()

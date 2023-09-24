@@ -36,40 +36,83 @@ void CylinderTime::Tick()
     for (size_t i = 0; i < (uint8_t)Cylinder_DEV::NUM; i++)
     {
         CCylinder *dev_ptr = m_Cylinder[i];
-        if (dev_ptr->m_status == CYLINDER_STATUS::RESETING)
+        CYLINDER_STATUS status_new = dev_ptr->m_status;
+        if ((CYLINDER_STATUS::SET == dev_ptr->getStatus_target()) &&
+            (CYLINDER_STATUS::SET != dev_ptr->m_status))
         {
-            if (dev_ptr->read_i0() == 1)
+
+            switch (dev_ptr->m_status)
             {
-                LOG_I("resting->rest tick(%d)", dev_ptr->getActDiff());
-                dev_ptr->setStatus(CYLINDER_STATUS::RESET);
-                ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-                NotifyObservers(&notify);
+            case CYLINDER_STATUS::RESET:
+
+                if (0 == dev_ptr->read_i0())
+                {
+                    status_new = CYLINDER_STATUS::MID_NO;
+                }
+                break;
+            case CYLINDER_STATUS::MID_NO:
+                if (dev_ptr->read_i0())
+                {
+                    status_new = CYLINDER_STATUS::MID;
+                }
+                break;
+            case CYLINDER_STATUS::MID:
+                if (!dev_ptr->read_i0())
+                {
+                    status_new = CYLINDER_STATUS::SETING;
+                }
+                break;
+
+            default:
+                break;
             }
-            else if (dev_ptr->getActDiff() > 100)
+            if (dev_ptr->read_i1())
             {
-                LOG_E("resting error");
-                ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-                NotifyObservers(&notify);
-                dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
+                status_new = CYLINDER_STATUS::SET;
             }
         }
-        else if (dev_ptr->m_status == CYLINDER_STATUS::SETING)
-        {
-            if (dev_ptr->read_i1() == 1)
-            {
-                LOG_I("resting->rest tick(%d)", dev_ptr->getActDiff());
-                dev_ptr->setStatus(CYLINDER_STATUS::SET);
-                ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-                NotifyObservers(&notify);
-            }
-            else if (dev_ptr->getActDiff() > 100)
-            {
-                LOG_E("SETING error");
 
-                ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-                NotifyObservers(&notify);
-                dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
+        if ((CYLINDER_STATUS::RESET == dev_ptr->getStatus_target()) &&
+            (CYLINDER_STATUS::RESET != dev_ptr->m_status))
+        {
+            CYLINDER_STATUS status_new = dev_ptr->m_status;
+            switch (dev_ptr->m_status)
+            {
+            case CYLINDER_STATUS::SET:
+                if (!dev_ptr->read_i1())
+                {
+                    status_new = CYLINDER_STATUS::MID_NO;
+                }
+                break;
+            case CYLINDER_STATUS::MID_NO:
+                if (dev_ptr->read_i0())
+                {
+                    status_new = CYLINDER_STATUS::MID;
+                }
+                break;
+            case CYLINDER_STATUS::MID:
+                if (!dev_ptr->read_i0())
+                {
+                    status_new = CYLINDER_STATUS::RESET;
+                }
+                break;
+
+            default:
+                break;
             }
+        }
+
+        if (status_new != dev_ptr->m_status)
+        {
+            dev_ptr->m_status = status_new;
+            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
+            NotifyObservers(&notify);
+        }
+        else if (dev_ptr->getActDiff() > 1000)
+        {
+            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
+            NotifyObservers(&notify);
+            dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
         }
     }
 }

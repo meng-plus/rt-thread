@@ -18,7 +18,7 @@
 #include "CylinderTime.hpp"
 enum class TASK_CY_CMD
 {
-    idle,
+    stop,
     start,
     holdon,
     holdoff,
@@ -36,6 +36,8 @@ private:
     CGpioX x0_start;
     CGpioX x13_dir1;
     CGpioX x14_dir2;
+    CGpioY Y0_OF;
+
     CylinderTime *m_cy_ptr;
     TASK_CY_CMD m_status;
 

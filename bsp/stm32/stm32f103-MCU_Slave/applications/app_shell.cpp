@@ -5,6 +5,8 @@
 #define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
 
+#include "TimeTaskcy.hpp"
+
 #ifdef RT_USING_FINSH
 #include <finsh.h>
 #include <msh_parse.h>
@@ -82,7 +84,27 @@ void dev_set(int argc, char *argv[])
         LOG_E("out of rang  i>= MAX(%d)", i, (uint8_t)Cylinder_DEV::NUM);
     }
 }
-
+void dev_taskcy(int argc, char *argv[])
+{
+    if (argc < 3)
+    {
+        _app_cmd_usage();
+        return;
+    }
+    if (0 == rt_strcmp("start", argv[2]))
+    {
+        CTimeTaskcy::GetInstance().control(TASK_CY_CMD::start);
+        rt_kprintf("CTimeTaskcy start\n");
+    }
+    else if (0 == rt_strcmp("stop", argv[2]))
+    {
+        CTimeTaskcy::GetInstance().control(TASK_CY_CMD::stop);
+        rt_kprintf("CTimeTaskcy stop\n");
+    }else
+    {
+         LOG_E(" not support");
+    }
+}
 void app_shell(int argc, char *argv[])
 {
     if (argc < 2)
@@ -97,6 +119,10 @@ void app_shell(int argc, char *argv[])
     if (0 == rt_strcmp("set", argv[1]))
     {
         dev_set(argc, argv);
+    }
+    if (0 == rt_strcmp("taskcy", argv[1]))
+    {
+        dev_taskcy(argc, argv);
     }
 }
 
