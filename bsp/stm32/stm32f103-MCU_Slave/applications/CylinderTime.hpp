@@ -12,6 +12,7 @@
 #include "osTime.hpp"
 #include "Cylinder.hpp"
 #include "singleton.h"
+#include "observer.h"
 enum class Cylinder_DEV
 {
     A,
@@ -21,10 +22,33 @@ enum class Cylinder_DEV
     E,
     NUM
 };
-class CylinderTime : public osTime, public OHOS::DelayedRefSingleton<CylinderTime>
+
+class ObsertverCyVal : public OHOS::ObserverArg
 {
 public:
-    CCylinder* m_Cylinder[(uint8_t)Cylinder_DEV::NUM];
+    CCylinder *Cylinder;
+    CYLINDER_STATUS status;
+    rt_tick_t timeout;
+
+public:
+    ObsertverCyVal(CCylinder *cy, CYLINDER_STATUS st, rt_tick_t diff)
+        : Cylinder(cy), status(st), timeout(diff)
+    {
+    }
+    virtual ~ObsertverCyVal() = default;
+};
+enum class CylinderTimeCmd
+{
+    RESET,
+    STOP,
+};
+
+class CylinderTime : public osTime,
+                     public OHOS::DelayedRefSingleton<CylinderTime>,
+                     public OHOS::Observable
+{
+public:
+    CCylinder *m_Cylinder[(uint8_t)Cylinder_DEV::NUM];
 
 protected:
     virtual void Tick();
@@ -32,4 +56,5 @@ protected:
 public:
     CylinderTime(/* args */);
     virtual ~CylinderTime();
+    void control(CylinderTimeCmd cmd, void *param = NULL);
 };

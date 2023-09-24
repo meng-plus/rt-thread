@@ -14,8 +14,11 @@
 CApplications::CApplications()
     : osThread(__FILE__)
 {
-    CLedTime::GetInstance();
-    CylinderTime::GetInstance();
+    m_taskCy_ptr = &CTimeTaskcy::GetInstance();
+    std::shared_ptr<Observer> led_ptr(&CLedTime::GetInstance()); /*!< ????? */
+    std::shared_ptr<CTimeTaskcy> cy_ptr(m_taskCy_ptr);
+    CylinderTime::GetInstance().AddObserver(led_ptr); /*!< ????? */
+    CylinderTime::GetInstance().AddObserver(cy_ptr);  /*!< ????? */
 }
 
 CApplications::~CApplications()
@@ -24,9 +27,9 @@ CApplications::~CApplications()
 
 void CApplications::thread()
 {
+    m_taskCy_ptr->control(TASK_CY_CMD::start);
     while (1)
     {
-
         rt_thread_delay(1000);
     }
 }

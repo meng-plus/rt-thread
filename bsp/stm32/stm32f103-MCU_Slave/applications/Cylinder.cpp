@@ -1,7 +1,7 @@
 /**
  * @file Cylinder.cpp
- * @author ÃÉÃÉplus (chengmeng_2@outlook.com)
- * @brief Æû¸×Àà
+ * @author ????plus (chengmeng_2@outlook.com)
+ * @brief ???¡Á?¨¤
  * @version 0.1
  * @date 2023-09-23
  *
@@ -10,28 +10,25 @@
  */
 #include "Cylinder.hpp"
 
-CCylinder::CCylinder(rt_base_t O, rt_base_t i0, rt_base_t i1)
-    : m_O(O), m_i0(i0), m_i1(i1)
+CCylinder::CCylinder(const char *name, rt_base_t O, rt_base_t i0, rt_base_t i1)
+    : m_name(name), m_O(O), m_i0(i0), m_i1(i1)
 {
     rt_pin_mode(m_O, PIN_MODE_OUTPUT);
     rt_pin_mode(m_i0, PIN_MODE_INPUT);
     rt_pin_mode(m_i1, PIN_MODE_INPUT);
-    if (getOut())
-    {
-    }
-    reset();
+    setStatus(CYLINDER_STATUS::RESET);
 }
 
 void CCylinder::set()
 {
     rt_pin_write(m_O, 1);
-    m_status = CYLINDER_STATUS::SETING;
+    setStatus(CYLINDER_STATUS::SETING);
 }
 
 void CCylinder::reset()
 {
     rt_pin_write(m_O, 0);
-    m_status = CYLINDER_STATUS::RESETING;
+    setStatus(CYLINDER_STATUS::RESETING);
 }
 
 rt_int8_t CCylinder::getOut()
@@ -59,4 +56,15 @@ CCylinder::~CCylinder()
     rt_pin_mode(m_O, PIN_MODE_INPUT);
     rt_pin_mode(m_i0, PIN_MODE_INPUT);
     rt_pin_mode(m_i1, PIN_MODE_INPUT);
+}
+
+void CCylinder::setStatus(CYLINDER_STATUS newStatus)
+{
+    m_timestamp = rt_tick_get();
+    m_status = newStatus;
+}
+
+rt_tick_t CCylinder::getActDiff()
+{
+    return rt_tick_get() - m_timestamp;
 }

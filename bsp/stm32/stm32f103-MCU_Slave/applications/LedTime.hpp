@@ -13,7 +13,7 @@
 #include "singleton.h"
 #include <drv_gpio.h>
 #include "stdbool.h"
-
+#include "observer.h"
 class Cled
 {
 private:
@@ -22,7 +22,7 @@ private:
 
 public:
     Cled(rt_base_t pin)
-      :m_flag(0)
+        : m_flag(0)
     {
         m_pin = pin;
         rt_pin_mode(pin, PIN_MODE_OUTPUT);
@@ -43,10 +43,14 @@ public:
     }
 };
 
-class CLedTime : public osTime, public OHOS::DelayedRefSingleton<CLedTime>
+class CLedTime : public osTime,
+                 public OHOS::DelayedRefSingleton<CLedTime>,
+                 public OHOS::Observer
+
 {
 private:
     virtual void Tick();
+    virtual void Update(const OHOS::Observable *o, const OHOS::ObserverArg *arg);
 
 protected:
     Cled m_run;
@@ -56,4 +60,5 @@ protected:
 public:
     CLedTime(/* args */);
     virtual ~CLedTime();
+    void control(uint32_t cmd, void *param = NULL) {}
 };

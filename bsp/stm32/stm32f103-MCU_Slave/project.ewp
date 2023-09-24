@@ -289,7 +289,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>00000000</state>
+          <state>11111110</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -351,6 +351,7 @@
           <name>CCIncludePath2</name>
           <state />
           <state>$PROJ_DIR$\..\..\..\components\finsh</state>
+          <state>$PROJ_DIR$\thrid_party\efsm</state>
           <state>$PROJ_DIR$\..\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include</state>
           <state>$PROJ_DIR$\thrid_party\SEGGER_RTT\Config</state>
@@ -392,7 +393,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -401,7 +402,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CCPosIndRopi</name>
@@ -1455,6 +1456,7 @@
           <name>CCIncludePath2</name>
           <state />
           <state>$PROJ_DIR$\..\..\..\components\finsh</state>
+          <state>$PROJ_DIR$\thrid_party\efsm</state>
           <state>$PROJ_DIR$\..\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include</state>
           <state>$PROJ_DIR$\thrid_party\SEGGER_RTT\Config</state>
@@ -2211,31 +2213,34 @@
   <group>
     <name>Applications</name>
     <file>
-      <name>$PROJ_DIR$\applications\app_shell.cpp</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\applications\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\applications\osThread.cpp</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\applications\CylinderTime.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\osTime.cpp</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\App_main.cpp</name>
+      <name>$PROJ_DIR$\applications\app_shell.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\LedTime.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\Applications.cpp</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\LedTime.cpp</name>
+      <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\App_main.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\CylinderTime.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\osThread.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\TimeTaskcy.cpp</name>
     </file>
   </group>
   <group>
@@ -2383,6 +2388,12 @@
     </file>
   </group>
   <group>
+    <name>efsm</name>
+    <file>
+      <name>$PROJ_DIR$\thrid_party\efsm\efsm.cpp</name>
+    </file>
+  </group>
+  <group>
     <name>Finsh</name>
     <file>
       <name>$PROJ_DIR$\..\..\..\components\finsh\shell.c</name>
@@ -2499,19 +2510,19 @@
       <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_ASM_ARMv7M.S</name>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_printf.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_printf.c</name>
+      <name>$PROJ_DIR$\thrid_party\SEGGER_RTT\RTT\SEGGER_RTT_ASM_ARMv7M.S</name>
     </file>
   </group>
   <group>
     <name>Utilities</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\ulog.c</name>
+      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\backend\console_be.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\backend\console_be.c</name>
+      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\ulog.c</name>
     </file>
   </group>
 </project>

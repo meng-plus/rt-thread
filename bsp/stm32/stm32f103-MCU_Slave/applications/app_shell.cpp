@@ -31,7 +31,7 @@ void dev_show(int argc, char *argv[])
         for (size_t i = 0; i < (uint8_t)Cylinder_DEV::NUM; i++)
         {
             CCylinder *dev_ptr = cy_ptr.m_Cylinder[i];
-            rt_kprintf("[%d] o:%d i0:%d i1:%d\n", dev_ptr->m_status, dev_ptr->getOut(), dev_ptr->read_i0(), dev_ptr->read_i1());
+            rt_kprintf("%s [%d] o:%d i0:%d i1:%d\n", dev_ptr->m_name, dev_ptr->m_status, dev_ptr->getOut(), dev_ptr->read_i0(), dev_ptr->read_i1());
         }
     }
     else
@@ -75,7 +75,7 @@ void dev_set(int argc, char *argv[])
         {
             dev_ptr->reset();
         }
-        LOG_D("set %d %d", i, flag);
+        LOG_D("set %s %d", dev_ptr->m_name, flag);
     }
     else
     {

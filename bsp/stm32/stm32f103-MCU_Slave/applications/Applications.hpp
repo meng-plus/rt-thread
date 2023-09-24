@@ -11,9 +11,13 @@
 #pragma once
 #include "singleton.h"
 #include "osThread.hpp"
+
+#include "TimeTaskcy.hpp"
 using namespace OHOS;
-class CApplications : public osThread, public DelayedRefSingleton<CApplications>
+class CApplications : public osThread, public OHOS::DelayedRefSingleton<CApplications>
 {
+protected:
+    CTimeTaskcy *m_taskCy_ptr;
 
 public:
     CApplications();
