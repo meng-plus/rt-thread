@@ -29,7 +29,10 @@ public:
     {
         return rt_pin_read(m_pin);
     };
-    void write(rt_int8_t flag);
+    void write(rt_int8_t flag)
+    {
+        rt_pin_write(m_pin, flag);
+    }
 
     virtual ~CGpio() = default;
 };
@@ -51,7 +54,7 @@ class CGpioY : public CGpio
 public:
     CGpioY(rt_base_t pin) : CGpio(pin)
     {
-        pin_mode(PIN_MODE_INPUT);
+        pin_mode(PIN_MODE_OUTPUT);
     }
     void set()
     {

@@ -6,6 +6,8 @@
 #include "ulog.h"
 
 #include "TimeTaskcy.hpp"
+#include "Adc.hpp"
+#include "Motor.hpp"
 
 #ifdef RT_USING_FINSH
 #include <finsh.h>
@@ -35,6 +37,12 @@ void dev_show(int argc, char *argv[])
             CCylinder *dev_ptr = cy_ptr.m_Cylinder[i];
             rt_kprintf("%s [%d] o:%d i0:%d i1:%d\n", dev_ptr->m_name, dev_ptr->m_status, dev_ptr->getOut(), dev_ptr->read_i0(), dev_ptr->read_i1());
         }
+    }
+    else if (0 == rt_strcmp("adc", argv[2]))
+    {
+        uint16_t raw = CAdc::GetInstance().readraw();
+        float voltage = CAdc::GetInstance().readVoltage();
+        rt_kprintf("adc raw:%d vol:%f\n", raw, voltage);
     }
     else
     {
@@ -100,10 +108,22 @@ void dev_taskcy(int argc, char *argv[])
     {
         CTimeTaskcy::GetInstance().control(TASK_CY_CMD::stop);
         rt_kprintf("CTimeTaskcy stop\n");
-    }else
-    {
-         LOG_E(" not support");
     }
+    else
+    {
+        LOG_E(" not support");
+    }
+}
+void dev_motor(int argc, char *argv[])
+{
+    if (argc < 3)
+    {
+        _app_cmd_usage();
+        return;
+    }
+    float per = atof(argv[2]);
+    CMotor::GetInstance().setRatio(per);
+    rt_kprintf("CMotor set per %f\n", per);
 }
 void app_shell(int argc, char *argv[])
 {
@@ -123,6 +143,10 @@ void app_shell(int argc, char *argv[])
     if (0 == rt_strcmp("taskcy", argv[1]))
     {
         dev_taskcy(argc, argv);
+    }
+    if (0 == rt_strcmp("motor", argv[1]))
+    {
+        dev_motor(argc, argv);
     }
 }
 
