@@ -1,0 +1,17 @@
+import os
+from building import *
+import rtconfig
+group = []
+cwd  = GetCurrentDir()
+
+
+# add general drivers
+src = Split('''
+PID.c
+''')
+path = [cwd]
+
+group += DefineGroup('PID', src, depend = [''], CPPPATH = path)
+
+Return('group')
+

@@ -41,7 +41,7 @@ extern "C" {
     {                                           \
        .tim_handle.Instance     = TIM3,         \
        .name                    = "pwm3",       \
-       .channel                 = RT_NULL       \
+       .channel                 = 0x02       \
     }
 #endif /* BSP_USING_PWM3 */
 
@@ -50,7 +50,7 @@ extern "C" {
     {                                           \
        .tim_handle.Instance     = TIM4,         \
        .name                    = "pwm4",       \
-       .channel                 = RT_NULL       \
+       .channel                 = 0x01          \
     }
 #endif /* BSP_USING_PWM4 */
 

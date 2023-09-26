@@ -64,6 +64,9 @@ menu "On-chip Peripheral Drivers"
                 config BSP_USING_PWM4
                     bool "Enable PWM4"
                     default n
+                config BSP_USING_PWM3
+                    bool "Enable PWM3"
+                    default n
             endif
     config BSP_USING_ADC1
         bool "Enable ADC1"

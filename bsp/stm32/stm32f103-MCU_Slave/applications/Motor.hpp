@@ -10,19 +10,31 @@
  */
 #pragma once
 #include <drv_gpio.h>
-#include "Gpio.hpp"
+#include "osThread.hpp"
+#include "observer.h"
 #include "singleton.h"
-class CMotor : public OHOS::DelayedRefSingleton<CMotor>
+#include "Gpio.hpp"
+#include "PID.h"
+class CMotor : public osThread,
+               public OHOS::DelayedRefSingleton<CMotor>
 {
 private:
-    void *pwm_dev;
-    CGpioY m_Dir;
-
-    void pwm_set(uint32_t period, uint32_t pulse);
+    PIDController pid;
+    void *pwm_1;
+    void *pwm_2;
+    CGpioY m_Y7_Warning;
+    CGpioX X12_MotorEn;
+    float m_VoltageTarget;
+    float m_per;
+    uint8_t m_step;
+private:
+    virtual void thread();
 
 public:
     CMotor(/* args */);
     virtual ~CMotor();
+    /*!< Ä¿±êµçÑ¹ */
+    void setVoltageTarget(float target);
     void enable();
     void disable();
     /**

@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
- ******************************************************************************
- * @file           : main.h
- * @brief          : Header for main.c file.
- *                   This file contains the common defines of the application.
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file           : main.h
+  * @brief          : Header for main.c file.
+  *                   This file contains the common defines of the application.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -23,8 +23,7 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -51,7 +50,6 @@ extern "C"
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-// void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
@@ -110,8 +108,6 @@ extern "C"
 #define X7_GPIO_Port GPIOB
 #define X14_Pin GPIO_PIN_4
 #define X14_GPIO_Port GPIOB
-#define O11_Pin GPIO_PIN_5
-#define O11_GPIO_Port GPIOB
 #define O12_Pin GPIO_PIN_6
 #define O12_GPIO_Port GPIOB
 #define Y10_Pin GPIO_PIN_7
@@ -121,9 +117,9 @@ extern "C"
 #define Y8_Pin GPIO_PIN_9
 #define Y8_GPIO_Port GPIOB
 
-  /* USER CODE BEGIN Private defines */
+/* USER CODE BEGIN Private defines */
 
-  /* USER CODE END Private defines */
+/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

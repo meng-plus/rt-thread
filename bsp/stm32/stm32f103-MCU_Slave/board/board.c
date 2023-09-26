@@ -101,10 +101,22 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef *adcHandle)
     /* USER CODE END ADC2_MspInit 1 */
   }
 }
+
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *tim_baseHandle)
 {
 
-  if (tim_baseHandle->Instance == TIM4)
+  if (tim_baseHandle->Instance == TIM3)
+  {
+    /* USER CODE BEGIN TIM3_MspInit 0 */
+
+    /* USER CODE END TIM3_MspInit 0 */
+    /* TIM3 clock enable */
+    __HAL_RCC_TIM3_CLK_ENABLE();
+    /* USER CODE BEGIN TIM3_MspInit 1 */
+
+    /* USER CODE END TIM3_MspInit 1 */
+  }
+  else if (tim_baseHandle->Instance == TIM4)
   {
     /* USER CODE BEGIN TIM4_MspInit 0 */
 
@@ -120,7 +132,27 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *timHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if (timHandle->Instance == TIM4)
+  if (timHandle->Instance == TIM3)
+  {
+    /* USER CODE BEGIN TIM3_MspPostInit 0 */
+
+    /* USER CODE END TIM3_MspPostInit 0 */
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    /**TIM3 GPIO Configuration
+    PB5     ------> TIM3_CH2
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_5;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    __HAL_AFIO_REMAP_TIM3_PARTIAL();
+
+    /* USER CODE BEGIN TIM3_MspPostInit 1 */
+
+    /* USER CODE END TIM3_MspPostInit 1 */
+  }
+  else if (timHandle->Instance == TIM4)
   {
     /* USER CODE BEGIN TIM4_MspPostInit 0 */
 

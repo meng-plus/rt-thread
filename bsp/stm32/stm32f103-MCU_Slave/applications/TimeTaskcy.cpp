@@ -9,6 +9,7 @@
  *
  */
 #include "TimeTaskcy.hpp"
+#include "Motor.hpp"
 #define LOG_TAG "task.cy"
 #define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
@@ -85,6 +86,8 @@ void CTimeTaskcy::Tick()
             m_dir |= x13_dir1.read() ? 0x02 : 0x00;
             m_dir |= x14_dir2.read() ? 0x01 : 0x00;
             m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->set();
+            const float volmap[] = {0.25 / 3, 1.7 / 3, 3.15 / 3, 4.6 / 3};
+            CMotor::GetInstance().setRatio(volmap[m_dir]);
         }
         break;
     case 2: /*!< 等待第一步就位 */

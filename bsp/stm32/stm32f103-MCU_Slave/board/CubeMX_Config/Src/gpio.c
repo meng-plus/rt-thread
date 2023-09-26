@@ -61,9 +61,6 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, Y2_Pin|Y1_Pin|Y0_Pin|Y10_Pin
                           |Y9_Pin|Y8_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(O11_GPIO_Port, O11_Pin, GPIO_PIN_SET);
-
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = Y7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -89,9 +86,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin
-                           PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = Y2_Pin|Y1_Pin|Y0_Pin|O11_Pin
-                          |Y10_Pin|Y9_Pin|Y8_Pin;
+                           PBPin PBPin */
+  GPIO_InitStruct.Pin = Y2_Pin|Y1_Pin|Y0_Pin|Y10_Pin
+                          |Y9_Pin|Y8_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

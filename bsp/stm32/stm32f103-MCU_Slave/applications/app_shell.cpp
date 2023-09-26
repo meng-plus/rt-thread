@@ -121,9 +121,17 @@ void dev_motor(int argc, char *argv[])
         _app_cmd_usage();
         return;
     }
-    float per = atof(argv[2]);
-    CMotor::GetInstance().setRatio(per);
-    rt_kprintf("CMotor set per %f\n", per);
+    if (0 == rt_strcmp("vol ", argv[2]))
+    {
+        float vol = atof(argv[3]);
+        CMotor::GetInstance().setVoltageTarget(vol);
+    }else
+    {
+        float per = atof(argv[2]);
+        CMotor::GetInstance().setRatio(per);
+        rt_kprintf("CMotor set per %f\n", per);
+    }
+
 }
 void app_shell(int argc, char *argv[])
 {
