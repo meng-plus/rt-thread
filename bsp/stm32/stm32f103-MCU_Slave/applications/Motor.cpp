@@ -17,14 +17,14 @@
 #define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
 /* Controller parameters */
-#define PID_KP 2.0f
-#define PID_KI 0.05f
+#define PID_KP 13000.0f
+#define PID_KI 1500.0f
 #define PID_KD 0.05f
 
 #define PID_TAU 0.02f
 
-#define PID_LIM_MIN -1.0f
-#define PID_LIM_MAX 1.0f
+#define PID_LIM_MIN -19200.0f
+#define PID_LIM_MAX 19200.0f
 
 #define PID_LIM_MIN_INT -1.0f
 #define PID_LIM_MAX_INT 1.0f
@@ -41,7 +41,8 @@ CMotor::CMotor(/* args */)
     : osThread("motor", NULL, 1024, 15),
       m_Y7_Warning(GET_PIN(C, 13)),
       X12_MotorEn(GET_PIN(A, 12)),
-      m_step(0)
+      m_step(0),
+      m_X11dir(GET_PIN(B, 5))
 {
     pid = {PID_KP, PID_KI, PID_KD,
            PID_TAU,
@@ -50,15 +51,15 @@ CMotor::CMotor(/* args */)
            SAMPLE_TIME_S};
     PIDController_Init(&pid);
 
-    pwm_1 = rt_device_find(PWM_DEV1_NAME);
+    //   pwm_1 = rt_device_find(PWM_DEV1_NAME);
     pwm_2 = rt_device_find(PWM_DEV2_NAME);
-    setRatio(0);
-    rt_pwm_set_period((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, PWM_PERIOD);
-    rt_pwm_set_period((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, PWM_PERIOD);
-    rt_pwm_set((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, PWM_PERIOD, 0);
+    // setRatio(0);
+    //     rt_pwm_set_period((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, PWM_PERIOD);
+    //  rt_pwm_set_period((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, PWM_PERIOD);
+    //     rt_pwm_set((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, PWM_PERIOD, 0);
     rt_pwm_set((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, PWM_PERIOD, 0);
     enable();
-
+    m_step = 1;
     startup(); /*!< Æô¶¯¶¨Ê±Æ÷ */
 }
 
@@ -68,14 +69,15 @@ CMotor::~CMotor()
 
 void CMotor::enable()
 {
-    rt_pwm_enable((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL);
+    //   rt_pwm_enable((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL);
     rt_pwm_enable((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL);
 }
 
 void CMotor::disable()
 {
-    rt_pwm_disable((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL);
+    //    rt_pwm_disable((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL);
     rt_pwm_disable((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL);
+    m_X11dir.reset();
 }
 void CMotor::thread()
 {
@@ -105,14 +107,15 @@ void CMotor::thread()
 
                 /* Compute new control signal */
                 PIDController_Update(&pid, m_VoltageTarget, voltage);
-                setRatio(pid.out);
-                LOG_D("vol:%d  pid.out:%d  p:%d i:%d d:%d \r\n", (int)(voltage * 100), (int)(pid.out * 100), (int)(pid.Kp * 100), (int)(pid.Ki * 100), (int)(pid.Kd * 100));
+                // setRatio(pid.out);
+                setFreq(pid.out);
+                // LOG_D("vol:%d  pid.out:%d  p:%d i:%d d:%d \r\n", (int)(voltage * 100), (int)(pid.out * 100), (int)(pid.Kp * 100), (int)(pid.Ki * 100), (int)(pid.Kd * 100));
             }
             else
             {
                 if (m_per)
                 {
-                    setRatio(0);
+                    setFreq(0);
                 }
             }
         }
@@ -144,18 +147,34 @@ void CMotor::setRatio(float per)
     }
     else if (per > 0)
     {
-        rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, 0);
+        //       rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, 0);
         rt_pwm_set_pulse((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, (per * PWM_PERIOD));
+        m_X11dir.reset();
     }
     else if (per == 0)
     {
-        rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, 0);
+        //       rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, 0);
         rt_pwm_set_pulse((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, 0);
     }
     else if (per >= -1.0)
     {
-        rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, (-per * PWM_PERIOD));
+        //        rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, (-per * PWM_PERIOD));
         rt_pwm_set_pulse((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, 0);
+        m_X11dir.set();
     }
     m_per = per;
+}
+void CMotor::setFreq(int32_t freq)
+{
+    if (freq <= 0)
+    {
+        m_X11dir.reset();
+        freq = -freq;
+    }
+    else
+    {
+        m_X11dir.set();
+    }
+    uint32_t newprod = 1000000000 / freq;
+    rt_pwm_set((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, newprod, newprod / 2);
 }

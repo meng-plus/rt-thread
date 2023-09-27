@@ -20,13 +20,15 @@ class CMotor : public osThread,
 {
 private:
     PIDController pid;
-    void *pwm_1;
+    CGpioY m_X11dir;
+    // void *pwm_1;
     void *pwm_2;
     CGpioY m_Y7_Warning;
     CGpioX X12_MotorEn;
     float m_VoltageTarget;
     float m_per;
     uint8_t m_step;
+
 private:
     virtual void thread();
 
@@ -37,6 +39,7 @@ public:
     void setVoltageTarget(float target);
     void enable();
     void disable();
+    void setFreq(int32_t freq);
     /**
      * @brief Set the Ratio object
      *

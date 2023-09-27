@@ -121,7 +121,7 @@ void dev_motor(int argc, char *argv[])
         _app_cmd_usage();
         return;
     }
-    if (0 == rt_strcmp("vol ", argv[2]))
+    if (0 == rt_strcmp("vol", argv[2]))
     {
         float vol = atof(argv[3]);
         CMotor::GetInstance().setVoltageTarget(vol);

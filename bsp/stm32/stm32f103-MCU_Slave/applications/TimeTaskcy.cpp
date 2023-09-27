@@ -86,8 +86,9 @@ void CTimeTaskcy::Tick()
             m_dir |= x13_dir1.read() ? 0x02 : 0x00;
             m_dir |= x14_dir2.read() ? 0x01 : 0x00;
             m_cy_ptr->m_Cylinder[cyMapStep1[m_dir]]->set();
-            const float volmap[] = {0.25 / 3, 1.7 / 3, 3.15 / 3, 4.6 / 3};
-            CMotor::GetInstance().setRatio(volmap[m_dir]);
+            const float volmap[] = {0.265, 1.115, 1.95, 2.84};
+            LOG_D("vol:%d", (int)(volmap[m_dir] * 100));
+            CMotor::GetInstance().setVoltageTarget(volmap[m_dir]);
         }
         break;
     case 2: /*!< 等待第一步就位 */
