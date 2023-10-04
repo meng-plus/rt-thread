@@ -21,10 +21,9 @@
 #define LOG_TAG "drv.drv_Console"
 #include <drv_log.h>
 #define BufferIndex 0
-static rt_timer_t RTT_time_handle;
 // static uint8_t RTT_RX_Buff[32];
 struct rt_serial_device serial_RTT;
-void rtt_cb(void *param)
+void segger_rtt_check()
 {
     //    unsigned NumBytesRead = SEGGER_RTT_Read(BufferIndex, RTT_RX_Buff, sizeof(RTT_RX_Buff));
     rt_hw_serial_isr(&serial_RTT, RT_SERIAL_EVENT_RX_IND);
@@ -32,15 +31,6 @@ void rtt_cb(void *param)
 static rt_err_t stm32_configure(struct rt_serial_device *serial, struct serial_configure *cfg)
 {
     SEGGER_RTT_Init();
-    if (RTT_time_handle == NULL)
-    {
-        RTT_time_handle = rt_timer_create(
-            "rtt",
-            rtt_cb,
-            0,
-            100,
-            RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER);
-    }
     return RT_EOK;
 }
 
@@ -55,7 +45,8 @@ static rt_err_t stm32_control(struct rt_serial_device *serial, int cmd, void *ar
 
     /* enable interrupt */
     case RT_DEVICE_CTRL_SET_INT:
-        rt_timer_start(RTT_time_handle);
+        // rt_timer_start(RTT_time_handle);
+        rt_thread_idle_sethook(segger_rtt_check);
         break;
 
     case RT_DEVICE_CTRL_CLOSE:

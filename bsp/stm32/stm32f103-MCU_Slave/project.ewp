@@ -351,6 +351,7 @@
           <name>CCIncludePath2</name>
           <state />
           <state>$PROJ_DIR$\..\..\..\components\finsh</state>
+          <state>$PROJ_DIR$\thrid_party\PID-master</state>
           <state>$PROJ_DIR$\thrid_party\efsm</state>
           <state>$PROJ_DIR$\..\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include</state>
@@ -1456,6 +1457,7 @@
           <name>CCIncludePath2</name>
           <state />
           <state>$PROJ_DIR$\..\..\..\components\finsh</state>
+          <state>$PROJ_DIR$\thrid_party\PID-master</state>
           <state>$PROJ_DIR$\thrid_party\efsm</state>
           <state>$PROJ_DIR$\..\..\..\components\drivers\include</state>
           <state>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include</state>
@@ -2213,19 +2215,16 @@
   <group>
     <name>Applications</name>
     <file>
-      <name>$PROJ_DIR$\applications\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\applications\osTime.cpp</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\applications\app_shell.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\LedTime.cpp</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\Applications.cpp</name>
+      <name>$PROJ_DIR$\applications\Motor.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\osTime.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\Cylinder.cpp</name>
@@ -2237,10 +2236,19 @@
       <name>$PROJ_DIR$\applications\CylinderTime.cpp</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\applications\osThread.cpp</name>
+      <name>$PROJ_DIR$\applications\Applications.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\Adc.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\main.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\applications\TimeTaskcy.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\applications\osThread.cpp</name>
     </file>
   </group>
   <group>
@@ -2348,10 +2356,7 @@
       <name>$PROJ_DIR$\..\..\..\components\drivers\misc\pin.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\components\drivers\rtc\rtc.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\components\drivers\rtc\soft_rtc.c</name>
+      <name>$PROJ_DIR$\..\..\..\components\drivers\misc\rt_drv_pwm.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\components\drivers\serial\serial.c</name>
@@ -2369,6 +2374,12 @@
       <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_gpio.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_pwm.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_tim.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\libraries\HAL_Drivers\drv_usart.c</name>
     </file>
     <file>
@@ -2382,9 +2393,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\drv_Console.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\ports\user_key.c</name>
     </file>
   </group>
   <group>
@@ -2441,6 +2449,9 @@
       <name>$PROJ_DIR$\..\..\..\src\scheduler_up.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\src\signal.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\src\thread.c</name>
     </file>
     <file>
@@ -2456,13 +2467,7 @@
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc_ex.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</name>
@@ -2474,10 +2479,10 @@
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</name>
+      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc.c</name>
+      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_crc.c</name>
@@ -2486,7 +2491,13 @@
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Source\Templates\system_stm32f1xx.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c</name>
@@ -2499,6 +2510,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c</name>
+    </file>
+  </group>
+  <group>
+    <name>PID</name>
+    <file>
+      <name>$PROJ_DIR$\thrid_party\PID-master\PID.c</name>
     </file>
   </group>
   <group>
@@ -2519,10 +2536,10 @@
   <group>
     <name>Utilities</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\backend\console_be.c</name>
+      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\ulog.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\ulog.c</name>
+      <name>$PROJ_DIR$\..\..\..\components\utilities\ulog\backend\console_be.c</name>
     </file>
   </group>
 </project>

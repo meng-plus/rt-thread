@@ -59,7 +59,7 @@ CMotor::CMotor(/* args */)
     //     rt_pwm_set((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, PWM_PERIOD, 0);
     rt_pwm_set((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, PWM_PERIOD, 0);
     enable();
-    m_step = 1;
+    m_step = 0;
     startup(); /*!< 启动定时器 */
 }
 
@@ -83,11 +83,27 @@ void CMotor::thread()
 {
     while (1)
     {
+        /**电机启动，开始检测ADC */
+        float voltage = CAdc::GetInstance().readVoltage();
 
-        if (m_step > 0)
+        switch (m_step)
         {
-            /**电机启动，开始检测ADC */
-            float voltage = CAdc::GetInstance().readVoltage();
+        case 0: /*!< 待机状态 */
+            if (X12_MotorEn.read())
+            {
+                m_Y7_Warning.reset();
+                m_step = 1;
+                /* Simulate response using test system */
+                // float setpoint = 1.0f; 目标电压
+
+                /* Compute new control signal */
+                PIDController_Update(&pid, m_VoltageTarget, voltage);
+                // setRatio(pid.out);
+                setFreq(pid.out);
+                // LOG_D("vol:%d  pid.out:%d  p:%d i:%d d:%d \r\n", (int)(voltage * 100), (int)(pid.out * 100), (int)(pid.Kp * 100), (int)(pid.Ki * 100), (int)(pid.Kd * 100));
+            }
+            break;
+        case 1: /*!< run */
             if (m_Y7_Warning.read() && (m_VoltageTarget * 0.995 < voltage) &&
                 (voltage < m_VoltageTarget * 1.005))
             {
@@ -102,6 +118,7 @@ void CMotor::thread()
             }
             if (X12_MotorEn.read())
             {
+                m_step = 1;
                 /* Simulate response using test system */
                 // float setpoint = 1.0f; 目标电压
 
@@ -117,15 +134,11 @@ void CMotor::thread()
                 {
                     setFreq(0);
                 }
+                m_step = 0;
             }
-        }
-        switch (m_step)
-        {
-        case 0: /*!< 待机状态 */
-            /* code */
             break;
-        case 1:
-
+        case 2: /*!< stop */
+            setFreq(0);
             break;
         default:
             break;

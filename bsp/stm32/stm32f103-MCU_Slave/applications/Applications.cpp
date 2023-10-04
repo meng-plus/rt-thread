@@ -13,11 +13,17 @@
 #include "CylinderTime.hpp"
 CApplications::CApplications()
 {
+    /* enter interrupt */
+    rt_interrupt_enter();
+
     m_taskCy_ptr = &CTimeTaskcy::GetInstance();
     std::shared_ptr<Observer> led_ptr(&CLedTime::GetInstance()); /*!< ????? */
     std::shared_ptr<CTimeTaskcy> cy_ptr(m_taskCy_ptr);
-   // CylinderTime::GetInstance().AddObserver(led_ptr); /*!< ????? */
+    CylinderTime::GetInstance().AddObserver(led_ptr); /*!< ????? */
     CylinderTime::GetInstance().AddObserver(cy_ptr);  /*!< ????? */
+    m_motorPtr = &CMotor::GetInstance();
+    /* leave interrupt */
+    rt_interrupt_leave();
 }
 
 CApplications::~CApplications()

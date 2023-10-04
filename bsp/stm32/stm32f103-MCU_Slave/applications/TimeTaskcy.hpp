@@ -33,6 +33,7 @@ class CTimeTaskcy : public osTime,
 private:
     uint8_t m_dir; // 方向检测结果
     uint8_t m_step;
+    CGpioX x1_En;
     CGpioX x0_start;
     CGpioX x13_dir1;
     CGpioX x14_dir2;

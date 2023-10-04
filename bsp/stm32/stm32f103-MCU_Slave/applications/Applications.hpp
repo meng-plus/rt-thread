@@ -13,6 +13,7 @@
 #include "osThread.hpp"
 
 #include "TimeTaskcy.hpp"
+#include "Motor.hpp"
 using namespace OHOS;
 class CApplications :
     // public osThread,
@@ -20,6 +21,7 @@ class CApplications :
 {
 protected:
     CTimeTaskcy *m_taskCy_ptr;
+    CMotor *m_motorPtr;
 
 public:
     CApplications();

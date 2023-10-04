@@ -46,15 +46,20 @@ enum class CylinderTimeCmd
 
 class CylinderTime : public osThread,
                      public OHOS::DelayedRefSingleton<CylinderTime>,
-                     public OHOS::Observable
+                     public OHOS::Observable,
+                     public OHOS::Observer
 {
 public:
     CCylinder *m_Cylinder[(uint8_t)Cylinder_DEV::NUM];
 
 protected:
     virtual void Tick();
+    virtual void Update(const Observable *o, const OHOS::ObserverArg *arg);
+    void UpdateCylinder(uint8_t idx);
+
 protected:
     virtual void thread();
+
 public:
     CylinderTime(/* args */);
     virtual ~CylinderTime();

@@ -19,8 +19,9 @@ static const uint8_t cyMapStep3[] = {2, 3, 0, 1};
 static const uint8_t cyMapStep4[] = {4, 4, 4, 4};
 CylinderTime *g_cy_ptr = NULL;
 CTimeTaskcy::CTimeTaskcy(/* args */)
-    : osTime("Taskcy", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 100),
+    : osTime("Taskcy", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 200),
       x0_start(GET_PIN(A, 0)),
+      x1_En(GET_PIN(B, 10)),
       x13_dir1(GET_PIN(A, 15)),
       x14_dir2(GET_PIN(B, 4)),
       Y0_OF(GET_PIN(B, 2))
@@ -63,6 +64,10 @@ void CTimeTaskcy::control(TASK_CY_CMD cmd, void *param)
 
 void CTimeTaskcy::Tick()
 {
+    if (x1_En.read() == 0)
+    {
+        m_step = 0;
+    }
     switch (m_step)
     {
     case 0xFF: /*!< stop idle */
