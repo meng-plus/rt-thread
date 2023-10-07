@@ -30,7 +30,7 @@ CylinderTime::CylinderTime(/* args */)
         m_Cylinder[i]->IrqEnable(true);
     }
 
-     startup();
+    startup();
 }
 
 CylinderTime::~CylinderTime()
@@ -61,7 +61,10 @@ void CylinderTime::Update(const Observable *o, const OHOS::ObserverArg *arg)
         for (uint8_t i = 0; i < (uint8_t)Cylinder_DEV::NUM; i++)
         {
             if (argPtr->name[0] == strTable[i])
+            {
                 UpdateCylinder(i);
+                // rt_kprintf("%s irq:%d\r\n",argPtr->name,argPtr->val );
+            }
         }
     }
 }
@@ -82,6 +85,11 @@ void CylinderTime::UpdateCylinder(uint8_t idx)
             {
                 status_new = CYLINDER_STATUS::MID_NO;
             }
+            else
+            {
+                status_new = CYLINDER_STATUS::MID;
+            }
+
             break;
         case CYLINDER_STATUS::MID_NO:
             if (dev_ptr->read_i0())
@@ -103,12 +111,12 @@ void CylinderTime::UpdateCylinder(uint8_t idx)
         {
             status_new = CYLINDER_STATUS::SET;
         }
-        if (dev_ptr->getActDiff() > 1000)
-        {
-            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-            NotifyObservers(&notify);
-            dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
-        }
+        //        if (dev_ptr->getActDiff() > 1000)
+        //        {
+        //            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
+        //            NotifyObservers(&notify);
+        //            dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
+        //        }
     }
 
     if ((CYLINDER_STATUS::RESET == dev_ptr->getStatus_target()) &&
@@ -119,7 +127,14 @@ void CylinderTime::UpdateCylinder(uint8_t idx)
         case CYLINDER_STATUS::SET:
             if (!dev_ptr->read_i1())
             {
-                status_new = CYLINDER_STATUS::MID_NO;
+                if (dev_ptr->read_i0())
+                {
+                    status_new = CYLINDER_STATUS::MID;
+                }
+                else
+                {
+                    status_new = CYLINDER_STATUS::MID_NO;
+                }
             }
             break;
         case CYLINDER_STATUS::MID_NO:
@@ -138,16 +153,18 @@ void CylinderTime::UpdateCylinder(uint8_t idx)
         default:
             break;
         }
-        if (dev_ptr->getActDiff() > 1000)
-        {
-            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
-            NotifyObservers(&notify);
-            dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
-        }
+        //        if (dev_ptr->getActDiff() > 1000)
+        //        {
+        //            ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
+        //            NotifyObservers(&notify);
+        //            dev_ptr->setStatus(CYLINDER_STATUS::ERROR);
+        //        }
     }
 
     if (status_new != dev_ptr->m_status)
     {
+        // rt_kprintf("%s:status %d->%d\r\n",dev_ptr->m_name,dev_ptr->m_status,status_new );
+
         dev_ptr->m_status = status_new;
         ObsertverCyVal notify(dev_ptr, dev_ptr->getStatus(), dev_ptr->getActDiff());
         NotifyObservers(&notify);

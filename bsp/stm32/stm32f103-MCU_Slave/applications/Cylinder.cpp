@@ -55,7 +55,14 @@ rt_int8_t CCylinder::getOut()
 
 uint8_t CCylinder::read_i0()
 {
-    return m_i0Irq.read();
+    if (m_i0Irq.arg)
+    {
+        return m_i0Irq.arg->val;
+    }
+    else
+    {
+        return m_i0Irq.read();
+    }
 }
 
 uint8_t CCylinder::read_i1()
