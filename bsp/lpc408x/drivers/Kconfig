@@ -143,5 +143,15 @@ menu "Board extended module Drivers"
             depends on BSP_USING_BOARD_9903Z1V2 || BSP_USING_BOARD_315101Z2V2 ||BSP_USING_BOARD_370792Z1V1_20230828
             default n
 endmenu
-
+menu "Board extended packages"
+        config PKG_USING_LIBCRC
+            bool "Enable libcrc"
+            default n
+        config PKG_USING_PROTOCOL
+            bool "Enable Protocol framework"
+            default n
+            select PKG_USING_LIBCRC
+           help
+                user protocol
+endmenu
 endmenu

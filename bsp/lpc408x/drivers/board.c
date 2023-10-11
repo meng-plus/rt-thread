@@ -50,6 +50,7 @@ void rt_hw_board_init()
     NVIC_SetPriority(PendSV_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
     GPDMA_Init();
     GPIO_Init();
+ 
 #ifdef RT_USING_HEAP
 
 #if defined(BSP_USING_SDRAM) && defined(RT_USING_MEMHEAP_AS_HEAP)
@@ -66,6 +67,8 @@ void rt_hw_board_init()
     rt_components_board_init();
 #endif
 #if defined(RT_USING_CONSOLE) && defined(RT_USING_DEVICE)
-    rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
+    //rt_console_set_device(RT_CONSOLE_DEVICE_NAME);  
+    int rt_hw_jlink_console_init(void);
+    rt_hw_jlink_console_init();
 #endif
 }

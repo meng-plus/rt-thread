@@ -8,8 +8,9 @@ src = Split("""
 """)
 
 src += Glob("*.c")
-
-group = DefineGroup('EasyFlash', src, depend = ['BSP_USING_EASYFLASH'], CPPPATH = CPPPATH)
+# 提取当前工作目录的文件夹名称
+folder_name = os.path.basename(cwd)
+group = DefineGroup(folder_name, src, depend = ['BSP_USING_EASYFLASH'], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)
 for item in list:

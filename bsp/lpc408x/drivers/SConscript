@@ -8,6 +8,7 @@ src = Split("""
 board.c
 drv_interrupt.c
 drv_pin.c
+drv_led.c
 linker_scripts/link.icf
 """)
 
@@ -16,9 +17,6 @@ if GetDepend(['BSP_USING_EMAC']):
 
 if GetDepend(['BSP_USING_HWTIMER0']):
     src += ['drv_hwtimer.c']
-
-if GetDepend(['BSP_USING_LED']):
-    src += ['drv_led.c']
 
 if GetDepend(['BSP_USING_SDRAM']):
     src += ['drv_sdram.c']
@@ -42,7 +40,11 @@ if GetDepend("BSP_USING_SPI"):
 if GetDepend("BSP_USING_LCD"):
     src += ["drv_lcd.c"]
 
-group = DefineGroup('Drivers', src, depend = [''], CPPPATH = CPPPATH)
+
+# 提取当前工作目录的文件夹名称
+folder_name = os.path.basename(cwd)
+
+group = DefineGroup(folder_name, src, depend = [''], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)
 for item in list:

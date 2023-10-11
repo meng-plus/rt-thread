@@ -1,7 +1,7 @@
 /**
  * @file drv_pin.h
  * @author mengplus (chengmeng_2@outlook.com)
- * @brief Í¨ÓÃÊäÈëÊä³ö¿Ú
+ * @brief Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * @version 0.1
  * @date 2023-07-04
  *
@@ -19,30 +19,12 @@
 extern "C"
 {
 #endif
-/* Exported types ------------------------------------------------------------*/
-/**
- * @brief PINĞòºÅÖ»ÔÊĞíµ÷ÕûË³Ğò£¬²»µÃÖ¸¶¨ÊıÖµ
- *
- */
-typedef enum __DRV_PIN
-{
-    PIN_LED_0, /*!< P4.26 */
-    PIN_LED_1, /*!< P4.27 */
-    PIN_LED_2, /*!< P4.29 */
-    PIN_LED_3, /*!< P4.30 */
-    PIN_LED_END = PIN_LED_3,
-    PIN_SCL_0, /*!< P0.28 */
-    PIN_SDA_0, /*!< P0.27 */
-    PIN_SCL_1, /*!< P4.21 */
-    PIN_SDA_1, /*!< P1.15 */
-    PIN_SOFT_I2C_END = PIN_SDA_1,
-    PIN_NUM, /*!< PIN¼ÆÊı */
-} DRV_PIN_E;
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-#define DEV_PIN_NAME "PIN"
-/* Exported functions prototypes ---------------------------------------------*/
-
+    /* Exported types ------------------------------------------------------------*/
+#define GET_PIN(PORTx, PIN) (rt_base_t)((32 * PORTx) + PIN)
+    /* Exported constants --------------------------------------------------------*/
+    /* Exported macro ------------------------------------------------------------*/
+    /* Exported functions prototypes ---------------------------------------------*/
+    int rt_hw_pin_init();
 #ifdef __cplusplus
 }
 #endif

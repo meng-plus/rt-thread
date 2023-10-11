@@ -12,7 +12,8 @@ src  += Glob('src/*.c')
 
 if  GetDepend('BSP_USING_ADS1115_SHELL'):
   src += ['sample/ads1115_shell.c']
-
-group = DefineGroup('ADS1115', src, depend = ['BSP_USING_ADS1115'], CPPPATH = path)
+# 提取当前工作目录的文件夹名称
+folder_name = os.path.basename(cwd)
+group = DefineGroup(folder_name, src, depend = ['BSP_USING_ADS1115'], CPPPATH = path)
 
 Return('group')

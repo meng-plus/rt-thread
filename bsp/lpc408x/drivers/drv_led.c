@@ -8,14 +8,16 @@
  */
 #include <rtthread.h>
 #include "board.h"
+#include "drv_pin.h"
+#include <ctype.h>
+#include <stdlib.h>
+#include "drv_led.h"
+#define LED_DEVICE_CTRL 0x81 /*LED control command*/
 
-#define LED_DEVICE_CTRL     0x81        /*LED control command*/
-
-#define LED_NUM    4
+#define LED_NUM 4
 struct led_ctrl
 {
-    uint32_t num;
-    LPC_GPIO_TypeDef *port;
+    rt_base_t pin;
 };
 
 struct lpc_led
@@ -26,33 +28,29 @@ struct lpc_led
     struct led_ctrl ctrl[LED_NUM];
 };
 
-static struct lpc_led led;
-
+static struct lpc_led led = {.ctrl = {
+                                 GET_PIN(4, 30),
+                                 GET_PIN(4, 29),
+                                 GET_PIN(4, 27),
+                                 GET_PIN(4, 26),
+                             }};
+void rt_LED_write(enum LED_PIN pin, rt_uint8_t value)
+{
+   rt_pin_write(led.ctrl[pin].pin, !value);
+}
 static rt_err_t rt_led_init(rt_device_t dev)
 {
-    /* led0 : P4.27,led1:P4.15 ,led2:P4.16 ,led3:P4.17*/
-    /* set P4.14,P4.15,P4.16,P4.17 as GPIO. */
-    LPC_IOCON->P4_27 = 0x00;
-    LPC_IOCON->P4_15 = 0x00;
-    LPC_IOCON->P4_16 = 0x00;
-    LPC_IOCON->P4_17 = 0x00;
-    /* set P4.27,P4.15,P4.16,P4.17  output. */
-    LPC_GPIO4->DIR |= (0x07 << 15) | (0x01 << 27);
-    /* turn off all the led */
-    LPC_GPIO4->SET = (0x07 << 15) | (0x01 << 27);
-    led.ctrl[3].num = 27;
-    led.ctrl[3].port = LPC_GPIO4;
-    led.ctrl[2].num = 15;
-    led.ctrl[2].port = LPC_GPIO4;
-    led.ctrl[1].num = 16;
-    led.ctrl[1].port = LPC_GPIO4;
-    led.ctrl[0].num = 17;
-    led.ctrl[0].port = LPC_GPIO4;
+    for (int index = 0; index < LED_NUM; index++)
+    {
+        rt_pin_write(led.ctrl[index].pin, 1);
+        rt_pin_mode(led.ctrl[index].pin, PIN_MODE_OUTPUT);
+    }
     return RT_EOK;
 }
 
 static rt_err_t rt_led_open(rt_device_t dev, rt_uint16_t oflag)
 {
+
     return RT_EOK;
 }
 
@@ -62,32 +60,24 @@ static rt_err_t rt_led_close(rt_device_t dev)
 }
 
 static rt_ssize_t rt_led_read(rt_device_t dev, rt_off_t pos, void *buffer,
-                             rt_size_t size)
+                              rt_size_t size)
 {
     rt_ubase_t index = 0;
     rt_ubase_t nr = size;
     rt_uint8_t *value = buffer;
 
     RT_ASSERT(dev == &led.parent);
-    RT_ASSERT((pos + size) <= LED_NUM);
 
-    for (index = 0; index < nr; index++)
+    for (int index = 0; (pos + index < LED_NUM) && index < nr; index++)
     {
-        if ((led.ctrl[pos + index].port->PIN) & 1 << led.ctrl[pos + index].num)
-        {
-            *value = 0;
-        }
-        else
-        {
-            *value = 1;
-        }
+        *value = (!rt_pin_read(led.ctrl[pos + index].pin)) + '0';
         value++;
     }
     return index;
 }
 
 static rt_ssize_t rt_led_write(rt_device_t dev, rt_off_t pos,
-                              const void *buffer, rt_size_t size)
+                               const void *buffer, rt_size_t size)
 {
     rt_ubase_t index = 0;
     rt_ubase_t nw = size;
@@ -98,14 +88,15 @@ static rt_ssize_t rt_led_write(rt_device_t dev, rt_off_t pos,
 
     for (index = 0; index < nw; index++)
     {
-        if (*value++)
+        if (isdigit(*value))
         {
-            led.ctrl[pos + index].port->CLR |= (1 << led.ctrl[pos + index].num);
+            rt_pin_write(led.ctrl[index].pin, !(*value - '0'));
         }
         else
         {
-            led.ctrl[pos + index].port->SET |= (1 << led.ctrl[pos + index].num);
+            return -RT_EINVAL;
         }
+        value++;
     }
     return index;
 }
@@ -124,20 +115,19 @@ static rt_err_t rt_led_control(rt_device_t dev, int cmd, void *args)
 
 int rt_hw_led_init(void)
 {
-    led.parent.type         = RT_Device_Class_Char;
-    led.parent.rx_indicate  = RT_NULL;
-    led.parent.tx_complete  = RT_NULL;
-    led.parent.init         = rt_led_init;
-    led.parent.open         = rt_led_open;
-    led.parent.close        = rt_led_close;
-    led.parent.read         = rt_led_read;
-    led.parent.write        = rt_led_write;
-    led.parent.control      = rt_led_control;
-    led.parent.user_data    = RT_NULL;
+    led.parent.type = RT_Device_Class_Pin;
+    led.parent.rx_indicate = RT_NULL;
+    led.parent.tx_complete = RT_NULL;
+    led.parent.init = rt_led_init;
+    led.parent.open = rt_led_open;
+    led.parent.close = rt_led_close;
+    led.parent.read = rt_led_read;
+    led.parent.write = rt_led_write;
+    led.parent.control = rt_led_control;
+    led.parent.user_data = RT_NULL;
 
     /* register a character device */
     rt_device_register(&led.parent, "led", RT_DEVICE_FLAG_RDWR);
-    /* init led device */
     rt_led_init(&led.parent);
     return 0;
 }
@@ -150,5 +140,6 @@ void led_test(rt_uint32_t led_num, rt_uint32_t value)
     rt_uint8_t led_value = value;
     rt_led_write(&led.parent, led_num, &led_value, 1);
 }
-FINSH_FUNCTION_EXPORT(led_test, e.g: led_test(0, 100).)
+FINSH_FUNCTION_EXPORT(led_test, e.g
+                      : led_test(0, 100).)
 #endif

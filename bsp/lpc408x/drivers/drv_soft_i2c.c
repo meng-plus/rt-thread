@@ -16,7 +16,7 @@
 
 #define LOG_TAG __FILE__
 #define LOG_LVL LOG_LVL_DBG
-#include "ulog.h"
+#include "rtdbg.h"
 #ifdef RT_USING_I2C
 #ifdef BSP_USING_I2C
 
@@ -29,8 +29,8 @@
 #ifdef BSP_USING_I2C0
 #define I2C0_BUS_CFG      \
     {                     \
-        .scl = PIN_SCL_0, \
-        .sda = PIN_SDA_0, \
+        .scl = GET_PIN(0,28), \
+        .sda = GET_PIN(0,27), \
         .name = "i2c0",   \
     }
 #endif
@@ -38,8 +38,8 @@
 #ifdef BSP_USING_I2C1
 #define I2C1_BUS_CFG      \
     {                     \
-        .scl = PIN_SCL_1, \
-        .sda = PIN_SDA_1, \
+        .scl = GET_PIN(4,21), \
+        .sda = GET_PIN(1,15), \
         .name = "i2c1",   \
     }
 #endif

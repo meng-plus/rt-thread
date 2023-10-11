@@ -8,8 +8,10 @@ src = Split("""
 """)
 
 src += Glob("*.c")
+# 提取当前工作目录的文件夹名称
+folder_name = os.path.basename(cwd)
+group = DefineGroup(folder_name, src, depend = ['BSP_USING_KEYIRD'], CPPPATH = CPPPATH)
 
-group = DefineGroup('keyIrd', src, depend = ['BSP_USING_KEYIRD'], CPPPATH = CPPPATH)
 list = os.listdir(cwd)
 for item in list:
     if os.path.isfile(os.path.join(cwd, item, 'SConscript')):

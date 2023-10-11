@@ -12,7 +12,8 @@ src  += Glob('src/*.c')
 
 if  GetDepend('BSP_USING_FM31XX_SHELL'):
   src += ['sample/fm31xx_shell.c']
-
-group = DefineGroup('FM31XX', src, depend = ['BSP_USING_FM31XX'], CPPPATH = path)
+# 提取当前工作目录的文件夹名称
+folder_name = os.path.basename(cwd)
+group = DefineGroup(folder_name, src, depend = ['BSP_USING_FM31XX'], CPPPATH = path)
 
 Return('group')
