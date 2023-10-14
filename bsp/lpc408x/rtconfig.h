@@ -182,6 +182,9 @@
 
 /* IoT Cloud */
 
+#define PKG_USING_AGILE_MODBUS
+#define PKG_USING_AGILE_MODBUS_V112
+#define PKG_AGILE_MODBUS_VER_NUM 0x10102
 
 /* security packages */
 
@@ -347,5 +350,10 @@
 #define BSP_LCD_HEIGHT 480
 #define BSP_LCD_BPP 16
 #define BSP_USING_KEYIRD
+
+/* Board extended packages */
+
+#define PKG_USING_LIBCRC
+#define PKG_USING_PROTOCOL
 
 #endif
