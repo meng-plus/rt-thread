@@ -19,6 +19,7 @@
 #define LV_VER_RES_MAX BSP_LCD_HEIGHT
 
 #define LV_FONT_MONTSERRAT_12 1
+#define LV_FONT_MONTSERRAT_14 1
 #define LV_FONT_MONTSERRAT_16 1
 #define LV_FONT_MONTSERRAT_18 1
 #define LV_FONT_MONTSERRAT_48 0
@@ -26,11 +27,11 @@
 
 #define LV_USE_DEMO_RTT_MUSIC 0
 #if LV_USE_DEMO_RTT_MUSIC
-#define LV_COLOR_SCREEN_TRANSP 0
-#define LV_DEMO_RTT_MUSIC_AUTO_PLAY 1
+  #define LV_COLOR_SCREEN_TRANSP 0
+  #define LV_DEMO_RTT_MUSIC_AUTO_PLAY 1
 
-#define LV_USE_DEMO_MUSIC  1
-#define LV_DEMO_MUSIC_AUTO_PLAY 1
+  #define LV_USE_DEMO_MUSIC  1
+  #define LV_DEMO_MUSIC_AUTO_PLAY 1
 #endif
 
 /* Please comment LV_USE_DEMO_RTT_MUSIC declaration before un-comment below */

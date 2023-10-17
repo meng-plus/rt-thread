@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include <rtthtead.h>
+#include <rtthread.h>
 #include <rtdevice.h>
 
 #define LOG_TAG __FILE__

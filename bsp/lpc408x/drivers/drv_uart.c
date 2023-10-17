@@ -26,6 +26,7 @@ typedef struct drv_uart_pin
 
 typedef struct lpc_uart
 {
+    rt_serial_t serial;
     const char *name;
     UART_ID_Type uart_id;
     IRQn_Type UART_IRQn;
@@ -42,7 +43,6 @@ typedef struct lpc_uart
 typedef struct drv_uart_ops
 {
     struct rt_uart_ops ops;
-    lpc_uart_t lpc_uart[SERIAL_NUM];
 } drv_uart_ops_t;
 
 static rt_err_t lpc_configure(struct rt_serial_device *serial, struct serial_configure *cfg);
@@ -50,7 +50,7 @@ static rt_err_t lpc_control(struct rt_serial_device *serial, int cmd, void *arg)
 static int lpc_putc(struct rt_serial_device *serial, char c);
 static int lpc_getc(struct rt_serial_device *serial);
 rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_size_t size, int direction);
-static rt_serial_t serial[SERIAL_NUM];
+
 const static drv_uart_ops_t lpc_uart_ops = {
     .ops =
         {
@@ -60,84 +60,85 @@ const static drv_uart_ops_t lpc_uart_ops = {
             lpc_getc,
             dma_transmit,
         },
-    .lpc_uart = {
-//#ifdef BSP_USING_BOARD_315101Z2V2
-        [UART_0] = {
-            .name = "uart0",
-            .uart_id = UART_0,
-            .UART_IRQn = UART0_IRQn,
-            .nPriority = 2,
-            .nTxDMAReq = GPDMA_CONN_UART0_Tx,
-            .nRxDMAReq = GPDMA_CONN_UART0_Rx,
-            .nTxDMAChnnl = 0,
-            .nRxDMAChnnl = 1,
-            .rs485 = 0,
+};
+static lpc_uart_t lpc_uart[SERIAL_NUM] = {
+    // #ifdef BSP_USING_BOARD_315101Z2V2
+    [UART_0] = {
+        .name = "uart0",
+        .uart_id = UART_0,
+        .UART_IRQn = UART0_IRQn,
+        .nPriority = 2,
+        .nTxDMAReq = GPDMA_CONN_UART0_Tx,
+        .nRxDMAReq = GPDMA_CONN_UART0_Rx,
+        .nTxDMAChnnl = 0,
+        .nRxDMAChnnl = 1,
+        .rs485 = 0,
 
-            .tx = {0, 2, 1},
-            .rx = {0, 3, 1},
-            .oe = {0, 14, 0},
-        },
-        [UART_1] = {
-            .name = "uart1",
-            .uart_id = UART_1,
-            .UART_IRQn = UART1_IRQn,
-            .nPriority = 2,
-            .nTxDMAReq = GPDMA_CONN_UART1_Tx,
-            .nRxDMAReq = GPDMA_CONN_UART1_Rx,
-            .nTxDMAChnnl = 2,
-            .nRxDMAChnnl = 3,
-            .rs485 = 0,
+        .tx = {0, 2, 1},
+        .rx = {0, 3, 1},
+        .oe = {0, 14, 0},
+    },
+    [UART_1] = {
+        .name = "uart1",
+        .uart_id = UART_1,
+        .UART_IRQn = UART1_IRQn,
+        .nPriority = 2,
+        .nTxDMAReq = GPDMA_CONN_UART1_Tx,
+        .nRxDMAReq = GPDMA_CONN_UART1_Rx,
+        .nTxDMAChnnl = 2,
+        .nRxDMAChnnl = 3,
+        .rs485 = 0,
 
-            .tx = {0, 15, 1},
-            .rx = {0, 16, 1},
-            .oe = {0, 6, 4},
-        },
-        [UART_2] = {
-            .name = "uart2",
-            .uart_id = UART_2,
-            .UART_IRQn = UART2_IRQn,
-            .nPriority = 1,
-            .nTxDMAReq = GPDMA_CONN_UART2_Tx,
-            .nRxDMAReq = GPDMA_CONN_UART2_Rx,
-            .nTxDMAChnnl = 4,
-            .nRxDMAChnnl = 5,
-            .rs485 = 1,
+        .tx = {0, 15, 1},
+        .rx = {0, 16, 1},
+        .oe = {0, 6, 4},
+    },
+    [UART_2] = {
+        .name = "uart2",
+        .uart_id = UART_2,
+        .UART_IRQn = UART2_IRQn,
+        .nPriority = 1,
+        .nTxDMAReq = GPDMA_CONN_UART2_Tx,
+        .nRxDMAReq = GPDMA_CONN_UART2_Rx,
+        .nTxDMAChnnl = 4,
+        .nRxDMAChnnl = 5,
+        .rs485 = 1,
 
-            .tx = {4, 22, 2},
-            .rx = {4, 23, 2},
-            .oe = {1, 19, 6},
-        },
-        [UART_3] = {
-            .name = "uart3",
-            .uart_id = UART_3,
-            .UART_IRQn = UART3_IRQn,
-            .nPriority = 2,
-            .nTxDMAReq = GPDMA_CONN_UART3_Tx,
-            .nRxDMAReq = GPDMA_CONN_UART3_Rx,
-            .nTxDMAChnnl = 0,
-            .nRxDMAChnnl = 0,
-            .rs485 = 1,
+        .tx = {4, 22, 2},
+        .rx = {4, 23, 2},
+        .oe = {1, 19, 6},
+    },
+    [UART_3] = {
+        .name = "uart3",
+        .uart_id = UART_3,
+        .UART_IRQn = UART3_IRQn,
+        .nPriority = 2,
+        .nTxDMAReq = GPDMA_CONN_UART3_Tx,
+        .nRxDMAReq = GPDMA_CONN_UART3_Rx,
+        .nTxDMAChnnl = 0,
+        .nRxDMAChnnl = 0,
+        .rs485 = 1,
 
-            .tx = {0, 25, 3},
-            .rx = {0, 26, 3},
-            .oe = {1, 30, 3},
-        },
-        [UART_4] = {
-            .name = "uart4",
-            .uart_id = UART_4,
-            .UART_IRQn = UART4_IRQn,
-            .nPriority = 2,
-            .nTxDMAReq = GPDMA_CONN_UART4_Tx,
-            .nRxDMAReq = GPDMA_CONN_UART4_Rx,
-            .nTxDMAChnnl = 0,
-            .nRxDMAChnnl = 1,
-            .rs485 = 1,
-            .tx = {5, 4, 4},
-            .rx = {5, 3, 4},
-            .oe = {0, 21, 3},
-        },
-//#endif
-    }};
+        .tx = {0, 25, 3},
+        .rx = {0, 26, 3},
+        .oe = {1, 30, 5},
+    },
+    [UART_4] = {
+        .name = "uart4",
+        .uart_id = UART_4,
+        .UART_IRQn = UART4_IRQn,
+        .nPriority = 2,
+        .nTxDMAReq = GPDMA_CONN_UART4_Tx,
+        .nRxDMAReq = GPDMA_CONN_UART4_Rx,
+        .nTxDMAChnnl = 0,
+        .nRxDMAChnnl = 1,
+        .rs485 = 1,
+        .tx = {5, 4, 4},
+        .rx = {5, 3, 4},
+        .oe = {0, 21, 3},
+    },
+    // #endif
+};
 
 static void uart_gpio_init(const lpc_uart_t *uart)
 {
@@ -164,7 +165,7 @@ static rt_err_t lpc_configure(struct rt_serial_device *serial, struct serial_con
 
     RT_ASSERT(serial != RT_NULL);
     RT_ASSERT(cfg != RT_NULL);
-    uart = (lpc_uart_t *)serial->parent.user_data;
+    uart = (lpc_uart_t *)serial;
     uart_gpio_init(uart);
     UART_CFG_Type UART_InitStruct;
 
@@ -201,7 +202,7 @@ static rt_err_t lpc_control(struct rt_serial_device *serial, int cmd, void *arg)
     struct lpc_uart *uart;
 
     RT_ASSERT(serial != RT_NULL);
-    uart = (struct lpc_uart *)serial->parent.user_data;
+    uart = (struct lpc_uart *)serial;
 
     switch (cmd)
     {
@@ -254,36 +255,32 @@ static rt_err_t lpc_control(struct rt_serial_device *serial, int cmd, void *arg)
 static int lpc_putc(struct rt_serial_device *serial, char c)
 {
     struct lpc_uart *uart;
-    uart = (struct lpc_uart *)serial->parent.user_data;
-    UART_Send(uart->uart_id, (uint8_t *)&c, 1, BLOCKING);
-    return 1;
+    uart = (struct lpc_uart *)serial;
+    // UART_Send(uart->uart_id, (uint8_t *)&c, 1, BLOCKING);
+    if (serial->parent.open_flag & RT_DEVICE_FLAG_INT_TX)
+    {
+        uint8_t LSR = UART_GetLineStatus(uart->uart_id);
+        if (LSR & UART_LSR_THRE)
+        {
+            UART_SendByte(uart->uart_id, c);
+            return 1;
+        }
+        return -1;
+    }
+    else
+    {
+        UART_Send(uart->uart_id, (uint8_t *)&c, 1, BLOCKING);
+        return 1;
+    }
 }
 
 static int lpc_getc(struct rt_serial_device *serial)
 {
     struct lpc_uart *uart;
 
-    uart = (struct lpc_uart *)serial->parent.user_data;
-    __IO uint32_t *LSR = NULL;
-    switch (uart->uart_id)
-    {
-    case UART_0:
-        LSR = (__IO uint32_t *)&LPC_UART0->LSR;
-        break;
-    case UART_1:
-        LSR = (__IO uint32_t *)&LPC_UART1->LSR;
-        break;
-    case UART_2:
-        LSR = (__IO uint32_t *)&LPC_UART2->LSR;
-        break;
-    case UART_3:
-        LSR = (__IO uint32_t *)&LPC_UART3->LSR;
-        break;
-    case UART_4:
-        LSR = (__IO uint32_t *)&LPC_UART4->LSR;
-        break;
-    }
-    if (*LSR & UART_LSR_RDR)
+    uart = (struct lpc_uart *)serial;
+    uint8_t LSR = UART_GetLineStatus(uart->uart_id);
+    if (LSR & UART_LSR_RDR)
         return UART_ReceiveByte(uart->uart_id);
     else
         return -1;
@@ -292,7 +289,7 @@ rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_siz
 {
     struct lpc_uart *uart;
 
-    uart = (struct lpc_uart *)serial->parent.user_data;
+    uart = (struct lpc_uart *)serial;
     if (RT_SERIAL_DMA_TX == direction)
     {
         // TODO: need  fix it
@@ -330,7 +327,7 @@ void uart_isr(rt_serial_t *serial_ptr)
     volatile uint32_t IIR, tmp;
     struct lpc_uart *uart;
 
-    uart = (struct lpc_uart *)serial->parent.user_data;
+    uart = (struct lpc_uart *)serial_ptr;
     /* enter interrupt */
     rt_interrupt_enter();
 
@@ -340,8 +337,9 @@ void uart_isr(rt_serial_t *serial_ptr)
         rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_IND);
     }
     if (UART_IIR_INTID_CTI & IIR)
-    { // rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_TIMEOUT);
-        rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_IND);
+    { 
+      rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_TIMEOUT);
+      //rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_IND);
     }
     if (UART_IIR_INTID_THRE & IIR)
     {
@@ -354,32 +352,32 @@ void uart_isr(rt_serial_t *serial_ptr)
 
 void UART0_IRQHandler()
 {
-    uart_isr(&serial[UART_0]);
+    uart_isr(&lpc_uart[UART_0].serial);
 }
 #endif
 #ifdef BSP_USING_UART1
 
 void UART1_IRQHandler()
 {
-    uart_isr(&serial[UART_1]);
+    uart_isr(&lpc_uart[UART_1].serial);
 }
 #endif
 #ifdef BSP_USING_UART2
 void UART2_IRQHandler()
 {
-    uart_isr(&serial[UART_2]);
+    uart_isr(&lpc_uart[UART_2].serial);
 }
 #endif
 #ifdef BSP_USING_UART3
 void UART3_IRQHandler()
 {
-    uart_isr(&serial[UART_3]);
+    uart_isr(&lpc_uart[UART_3].serial);
 }
 #endif
 #ifdef BSP_USING_UART4
 void UART4_IRQHandler()
 {
-    uart_isr(&serial[UART_4]);
+    uart_isr(&lpc_uart[UART_4].serial);
 }
 #endif
 #ifdef RT_SERIAL_USING_DMA
@@ -388,45 +386,45 @@ void DMA_UART_isr(void)
 
     for (size_t i = 0; i < SERIAL_NUM; i++)
     {
-        if ((LPC_GPDMA->IntStat & GPDMA_DMACIntTCStat_Ch(lpc_uart_ops.lpc_uart[i].nTxDMAChnnl)) != 0)
+        if ((LPC_GPDMA->IntStat & GPDMA_DMACIntTCStat_Ch(lpc_uart[i].nTxDMAChnnl)) != 0)
         {
-            rt_hw_serial_isr(&serial[i], RT_SERIAL_EVENT_TX_DMADONE);
-            GPDMA_ClearIntPending(GPDMA_STATCLR_INTTC, lpc_uart_ops.lpc_uart[i].nTxDMAChnnl);
+            rt_hw_serial_isr(&lpc_uart[i].serial, RT_SERIAL_EVENT_TX_DMADONE);
+            GPDMA_ClearIntPending(GPDMA_STATCLR_INTTC, lpc_uart[i].nTxDMAChnnl);
         }
-        if ((LPC_GPDMA->IntStat & GPDMA_DMACIntTCStat_Ch(lpc_uart_ops.lpc_uart[i].nRxDMAChnnl)) != 0)
+        if ((LPC_GPDMA->IntStat & GPDMA_DMACIntTCStat_Ch(lpc_uart[i].nRxDMAChnnl)) != 0)
         {
-            rt_hw_serial_isr(&serial[i], RT_SERIAL_EVENT_RX_DMADONE);
-            GPDMA_ClearIntPending(GPDMA_STATCLR_INTTC, lpc_uart_ops.lpc_uart[i].nRxDMAChnnl);
+            rt_hw_serial_isr(&lpc_uart[i].serial, RT_SERIAL_EVENT_RX_DMADONE);
+            GPDMA_ClearIntPending(GPDMA_STATCLR_INTTC, lpc_uart[i].nRxDMAChnnl);
         }
     }
 }
 #endif
-static rt_err_t rx_indicate(rt_device_t dev, rt_size_t size)
-{ // 接受回调
-    return 0;
-}
-static rt_err_t tx_complete(rt_device_t dev, void *buffer)
-{ // 发送回调
-    //struct lpc_uart *uart;
+// static rt_err_t rx_indicate(rt_device_t dev, rt_size_t size)
+// { // 接受回调
+//     return 0;
+// }
+// static rt_err_t tx_complete(rt_device_t dev, void *buffer)
+// { // 发送回调
+//     // struct lpc_uart *uart;
 
-    //uart = (struct lpc_uart *)dev->user_data;
-    return 0;
-}
+//     // uart = (struct lpc_uart *)dev->user_data;
+//     return 0;
+// }
 
 int rt_hw_uart_init(void)
 {
     struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
     for (int i = 0; i < SERIAL_NUM; i++)
     {
-        serial[i].ops = &lpc_uart_ops.ops;
-        serial[i].config = config;
+        lpc_uart[i].serial.ops = &lpc_uart_ops.ops;
+        lpc_uart[i].serial.config = config;
         /* register UART1 device */
-        rt_hw_serial_register(&serial[i],
-                              lpc_uart_ops.lpc_uart[i].name,
-                              RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX,
-                              (void *)&lpc_uart_ops.lpc_uart[i]);
-        rt_device_set_rx_indicate(&serial[i].parent, rx_indicate);
-        rt_device_set_tx_complete(&serial[i].parent, tx_complete);
+        rt_hw_serial_register(&lpc_uart[i].serial,
+                              lpc_uart[i].name,
+                              RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX,
+                              NULL);
+        // rt_device_set_rx_indicate(&lpc_uart[i].serial.parent, rx_indicate);
+        // rt_device_set_tx_complete(&lpc_uart[i].serial.parent, tx_complete);
     }
     return 0;
 }

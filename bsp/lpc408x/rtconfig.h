@@ -353,7 +353,5 @@
 
 /* Board extended packages */
 
-#define PKG_USING_LIBCRC
-#define PKG_USING_PROTOCOL
 
 #endif
