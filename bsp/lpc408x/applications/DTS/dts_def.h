@@ -19,7 +19,7 @@ extern "C"
 {
 #endif
 
-#define DTS_ADDRESS 0x34
+#define DTS_ADDRESS 34
 #define DTS_CHANNEL_NUM 16
 #define DTS_PARTITION_NUM 125
     typedef struct dts_sys

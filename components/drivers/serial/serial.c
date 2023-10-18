@@ -1325,8 +1325,9 @@ void rt_hw_serial_isr(struct rt_serial_device *serial, int event)
 
     switch (event & 0xff)
     {
-        case RT_SERIAL_EVENT_RX_IND:
-        {
+    case RT_SERIAL_EVENT_RX_TIMEOUT:
+    case RT_SERIAL_EVENT_RX_IND:
+    {
             int ch = -1;
             rt_base_t level;
             struct rt_serial_rx_fifo* rx_fifo;
@@ -1458,31 +1459,6 @@ void rt_hw_serial_isr(struct rt_serial_device *serial, int event)
             }
             break;
         }
-#endif /* RT_SERIAL_USING_DMA */
-        case RT_SERIAL_EVENT_RX_TIMEOUT:
-        {
-            rt_base_t level;
-            struct rt_serial_rx_fifo *rx_fifo;
-
-            /* interrupt mode receive */
-            rx_fifo = (struct rt_serial_rx_fifo *)serial->serial_rx;
-
-            /* invoke callback */
-            if (serial->parent.rx_indicate != RT_NULL)
-            {
-                rt_size_t rx_length;
-
-                /* get rx length */
-                level = rt_hw_interrupt_disable();
-                rx_length = (rx_fifo->put_index >= rx_fifo->get_index) ? (rx_fifo->put_index - rx_fifo->get_index) : (serial->config.bufsz - (rx_fifo->get_index - rx_fifo->put_index));
-                rt_hw_interrupt_enable(level);
-
-                if (rx_length)
-                {
-                    serial->parent.rx_indicate(&serial->parent, rx_length);
-                }
-            }
-        }
-        break;
+#endif /* RT_sadSERIAL_USING_DMA */
         }
 }

@@ -148,7 +148,7 @@ struct rt_serial_device
 
     const struct rt_uart_ops *ops;
     struct serial_configure   config;
-    uint8_t event;
+    rt_uint8_t event;
     void *serial_rx;
     void *serial_tx;
 

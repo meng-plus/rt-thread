@@ -145,17 +145,17 @@ static void uart_gpio_init(const lpc_uart_t *uart)
     RT_ASSERT(NULL != uart);
 
     PINSEL_ConfigPin(uart->tx.port, uart->tx.pin, uart->tx.nFunc); // 0: Select GPIO (Default)
-    GPIO_SetDir(uart->tx.port, uart->tx.pin, 1);
-    PINSEL_SetPinMode(uart->tx.port, uart->tx.pin, PINSEL_BASICMODE_PULLUP);
+    // GPIO_SetDir(uart->tx.port, uart->tx.pin, 1);
+    // PINSEL_SetPinMode(uart->tx.port, uart->tx.pin, PINSEL_BASICMODE_PULLUP);
 
     PINSEL_ConfigPin(uart->rx.port, uart->rx.pin, uart->rx.nFunc); // 0: Select GPIO (Default)
-    GPIO_SetDir(uart->rx.port, uart->rx.pin, 0);
-    // PINSEL_SetPinMode(uart->tx.port, uart->tx.pin, PINSEL_BASICMODE_PULLUP);
+    // GPIO_SetDir(uart->rx.port, uart->rx.pin, 0);
+    //  PINSEL_SetPinMode(uart->tx.port, uart->tx.pin, PINSEL_BASICMODE_PULLUP);
     if (uart->rs485)
     {
         PINSEL_ConfigPin(uart->oe.port, uart->oe.pin, uart->oe.nFunc); // 0: Select GPIO (Default)
-        GPIO_SetDir(uart->oe.port, uart->oe.pin, 1);
-        PINSEL_SetPinMode(uart->oe.port, uart->oe.pin, PINSEL_BASICMODE_PULLUP);
+        // GPIO_SetDir(uart->oe.port, uart->oe.pin, 1);
+        // PINSEL_SetPinMode(uart->oe.port, uart->oe.pin, PINSEL_BASICMODE_PULLUP);
     }
 }
 
@@ -178,7 +178,7 @@ static rt_err_t lpc_configure(struct rt_serial_device *serial, struct serial_con
 
     UART_FIFO_CFG_Type FIFOCfg;
     // UART_FIFOConfigStructInit(&FIFOCfg);
-    FIFOCfg.FIFO_DMAMode = ENABLE;
+    FIFOCfg.FIFO_DMAMode = DISABLE;
     FIFOCfg.FIFO_Level = UART_FIFO_TRGLEV3;
     FIFOCfg.FIFO_ResetRxBuf = ENABLE;
     FIFOCfg.FIFO_ResetTxBuf = ENABLE;
@@ -190,8 +190,29 @@ static rt_err_t lpc_configure(struct rt_serial_device *serial, struct serial_con
         UART1_RS485_CTRLCFG_Type RS485ConfigStruct;
         RS485ConfigStruct.AutoDirCtrl_State = ENABLE;
         RS485ConfigStruct.DirCtrlPol_Level = SET;
+        RS485ConfigStruct.DirCtrlPin = UART_RS485_DIRCTRL_DTR;
         RS485ConfigStruct.DelayValue = 1;
+        RS485ConfigStruct.Rx_State = ENABLE;
         UART_RS485Config(uart->uart_id, &RS485ConfigStruct);
+        //**UART_RS485Config会强制配置,清理掉奇偶校验位
+        switch (uart->uart_id)
+        {
+        case UART_0:
+            LPC_UART0->LCR &= ~(UART_LCR_PARITY_F_0 | UART_LCR_PARITY_EN);
+            break;
+        case UART_1:
+            LPC_UART1->LCR &= ~(UART_LCR_PARITY_F_0 | UART_LCR_PARITY_EN);
+            break;
+        case UART_2:
+            LPC_UART2->LCR &= ~(UART_LCR_PARITY_F_0 | UART_LCR_PARITY_EN);
+            break;
+        case UART_3:
+            LPC_UART3->LCR &= ~(UART_LCR_PARITY_F_0 | UART_LCR_PARITY_EN);
+            break;
+        case UART_4:
+            LPC_UART4->LCR &= ~(UART_LCR_PARITY_F_0 | UART_LCR_PARITY_EN);
+            break;
+        }
     }
     return RT_EOK;
 }
@@ -279,11 +300,17 @@ static int lpc_getc(struct rt_serial_device *serial)
     struct lpc_uart *uart;
 
     uart = (struct lpc_uart *)serial;
-    uint8_t LSR = UART_GetLineStatus(uart->uart_id);
-    if (LSR & UART_LSR_RDR)
-        return UART_ReceiveByte(uart->uart_id);
-    else
+    // uint8_t LSR = UART_GetLineStatus(uart->uart_id);
+    // if (LSR & UART_LSR_RDR)
+    //     return UART_ReceiveByte(uart->uart_id);
+    // else
+    //     return -1;
+    uint8_t buff[1];
+    if (0 == UART_Receive(uart->uart_id, buff, sizeof(buff), NONE_BLOCKING))
+    {
         return -1;
+    }
+    return buff[0];
 }
 rt_ssize_t dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_size_t size, int direction)
 {
@@ -337,9 +364,9 @@ void uart_isr(rt_serial_t *serial_ptr)
         rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_IND);
     }
     if (UART_IIR_INTID_CTI & IIR)
-    { 
-      rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_TIMEOUT);
-      //rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_IND);
+    {
+        rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_TIMEOUT);
+        // rt_hw_serial_isr(serial_ptr, RT_SERIAL_EVENT_RX_IND);
     }
     if (UART_IIR_INTID_THRE & IIR)
     {
