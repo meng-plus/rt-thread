@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "Adc.hpp"
+#include "CAdc.hpp"
 
 CAdc::CAdc(const char *name)
 { /* ≤È’“…Ë±∏ */

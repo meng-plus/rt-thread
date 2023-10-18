@@ -10,7 +10,7 @@
  */
 #include "Motor.hpp"
 #include "rtdevice.h"
-#include "Adc.hpp"
+#include "CAdc.hpp"
 
 #include "PID.h"
 #define LOG_TAG "dev.motor"

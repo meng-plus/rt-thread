@@ -6,7 +6,7 @@
 #include "ulog.h"
 
 #include "TimeTaskcy.hpp"
-#include "Adc.hpp"
+#include "CAdc.hpp"
 #include "Motor.hpp"
 
 #ifdef RT_USING_FINSH
