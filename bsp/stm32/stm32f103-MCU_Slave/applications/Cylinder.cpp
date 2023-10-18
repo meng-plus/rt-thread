@@ -11,7 +11,7 @@
 #include "Cylinder.hpp"
 
 CCylinder::CCylinder(const char *name, rt_base_t O, rt_base_t i0, rt_base_t i1)
-    : m_name(name), m_O(O), m_i0Irq(i0), m_i1(i1)
+    : m_name(name), m_O(O), m_i0Irq(i0), m_i1Irq(i1)
 {
     CGpioArg *argPtr = new CGpioArg();
     argPtr->name = m_name;
@@ -29,10 +29,12 @@ CCylinder::~CCylinder()
 void CCylinder::AddObserver(const std::shared_ptr<OHOS::Observer> &o)
 {
     m_i0Irq.AddObserver(o);
+    m_i1Irq.AddObserver(o);
 }
 void CCylinder::IrqEnable(bool en)
 {
     m_i0Irq.IrqEnable(en);
+    m_i1Irq.IrqEnable(en);
 }
 void CCylinder::set()
 {
@@ -67,7 +69,14 @@ uint8_t CCylinder::read_i0()
 
 uint8_t CCylinder::read_i1()
 {
-    return m_i1.read();
+    if (m_i1Irq.arg)
+    {
+        return m_i1Irq.arg->val;
+    }
+    else
+    {
+        return m_i1Irq.read();
+    }
 }
 
 CYLINDER_STATUS CCylinder::getStatus()

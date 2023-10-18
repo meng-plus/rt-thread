@@ -23,7 +23,7 @@ CylinderTime::CylinderTime(/* args */)
     m_Cylinder[(uint8_t)Cylinder_DEV::B] = new CCylinder("B", GET_PIN(A, 4), GET_PIN(B, 13), GET_PIN(B, 14));
     m_Cylinder[(uint8_t)Cylinder_DEV::C] = new CCylinder("C", GET_PIN(A, 5), GET_PIN(B, 15), GET_PIN(B, 3));
     m_Cylinder[(uint8_t)Cylinder_DEV::D] = new CCylinder("D", GET_PIN(A, 6), GET_PIN(A, 8), GET_PIN(A, 9));
-    m_Cylinder[(uint8_t)Cylinder_DEV::E] = new CCylinder("E", GET_PIN(A, 7), GET_PIN(A, 10), GET_PIN(A, 11));
+    m_Cylinder[(uint8_t)Cylinder_DEV::E] = new CCylinder("E", GET_PIN(A, 7), GET_PIN(A, 10), GET_PIN(A, 0));
     for (size_t i = 0; i < (uint8_t)Cylinder_DEV::NUM; i++)
     {
         m_Cylinder[i]->AddObserver(std::shared_ptr<OHOS::Observer>(this));

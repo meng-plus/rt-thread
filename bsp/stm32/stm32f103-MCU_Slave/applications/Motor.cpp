@@ -99,7 +99,7 @@ void CMotor::thread()
                 /* Compute new control signal */
                 PIDController_Update(&pid, m_VoltageTarget, voltage);
                 // setRatio(pid.out);
-                setFreq(pid.out);
+                setFreq((int32_t)pid.out);
                 // LOG_D("vol:%d  pid.out:%d  p:%d i:%d d:%d \r\n", (int)(voltage * 100), (int)(pid.out * 100), (int)(pid.Kp * 100), (int)(pid.Ki * 100), (int)(pid.Kd * 100));
             }
             break;
@@ -108,6 +108,7 @@ void CMotor::thread()
                 (voltage < m_VoltageTarget * 1.005))
             {
                 m_Y7_Warning.reset();
+                m_step = 2;
             }
             else
             {
@@ -125,7 +126,7 @@ void CMotor::thread()
                 /* Compute new control signal */
                 PIDController_Update(&pid, m_VoltageTarget, voltage);
                 // setRatio(pid.out);
-                setFreq(pid.out);
+                setFreq((int32_t)pid.out);
                 // LOG_D("vol:%d  pid.out:%d  p:%d i:%d d:%d \r\n", (int)(voltage * 100), (int)(pid.out * 100), (int)(pid.Kp * 100), (int)(pid.Ki * 100), (int)(pid.Kd * 100));
             }
             else
@@ -152,6 +153,10 @@ void CMotor::setVoltageTarget(float target)
     m_VoltageTarget = target;
     m_step = 1;
 }
+uint8_t CMotor::getStatus()
+{
+    return m_step == 2;
+}
 void CMotor::setRatio(float per)
 {
     if (per > 1.0)
@@ -161,7 +166,7 @@ void CMotor::setRatio(float per)
     else if (per > 0)
     {
         //       rt_pwm_set_pulse((struct rt_device_pwm *)pwm_1, PWM_DEV1_CHANNEL, 0);
-        rt_pwm_set_pulse((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, (per * PWM_PERIOD));
+        rt_pwm_set_pulse((struct rt_device_pwm *)pwm_2, PWM_DEV2_CHANNEL, (rt_uint32_t)(per * PWM_PERIOD));
         m_X11dir.reset();
     }
     else if (per == 0)

@@ -37,6 +37,12 @@ public:
     virtual ~CMotor();
     /*!< Ä¿±êµçÑ¹ */
     void setVoltageTarget(float target);
+    /**
+     * @brief Get the Status object
+     *
+     * @return uint8_t  1: stop
+     */
+    uint8_t getStatus();
     void enable();
     void disable();
     void setFreq(int32_t freq);

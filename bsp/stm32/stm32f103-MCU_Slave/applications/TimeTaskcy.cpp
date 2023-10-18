@@ -19,8 +19,8 @@ static const uint8_t cyMapStep3[] = {2, 3, 0, 1};
 static const uint8_t cyMapStep4[] = {4, 4, 4, 4};
 CylinderTime *g_cy_ptr = NULL;
 CTimeTaskcy::CTimeTaskcy(/* args */)
-    : osTime("Taskcy", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 200),
-      x0_start(GET_PIN(A, 0)),
+    : osTime("Taskcy", RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER, NULL, 20),
+      x0_start(GET_PIN(A, 11)),
       x1_En(GET_PIN(B, 10)),
       x13_dir1(GET_PIN(A, 15)),
       x14_dir2(GET_PIN(B, 4)),
@@ -140,8 +140,11 @@ void CTimeTaskcy::Tick()
         break;
     /*!< 步骤4 ************************************** */
     case 9: /*!< 第四步 输出 */
-        m_cy_ptr->m_Cylinder[cyMapStep4[m_dir]]->set();
-        m_step++;
+        if (CMotor::GetInstance().getStatus())
+        {
+            m_cy_ptr->m_Cylinder[cyMapStep4[m_dir]]->set();
+            m_step++;
+        }
         break;
     case 10: /*!< 收回第三步 第四步 */
         break;

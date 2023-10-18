@@ -30,7 +30,7 @@ public:
     const char *m_name;
 
     CGpioIrq m_i0Irq;                /*!< 位中信号 0 有信号*/
-    CGpioX m_i1;                     /*!< 位末信号 */
+    CGpioIrq m_i1Irq;                /*!< 位末信号 */
     CGpioY m_O;                      /*!< 气缸输出 1 有信号*/
     CYLINDER_STATUS m_status;        /*!< 当前动作 */
     CYLINDER_STATUS m_status_target; /*!< 目标动作 */
@@ -57,5 +57,5 @@ public:
     void setStatus(CYLINDER_STATUS newStatus);
     /*!< 获得上次活动的差值 */
     rt_tick_t getActDiff();
-    ~CCylinder();
+    virtual ~CCylinder();
 };
