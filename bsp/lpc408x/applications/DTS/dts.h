@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-    void dts_init(dts_data_t *dts_ptr);
+   void dts_init(dts_data_t *dts_ptr);
 #ifdef __cplusplus
 }
 #endif
