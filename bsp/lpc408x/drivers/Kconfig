@@ -18,20 +18,6 @@ menu "Hardware Drivers Config"
             bool "Using ADC"
             select RT_USING_ADC
             default n
-        config BSP_USING_I2C
-            bool "Using I2C"
-            select RT_USING_I2C
-            default n
-            if BSP_USING_I2C
-            config BSP_USING_I2C0
-                bool "Using I2C0"
-                select RT_USING_I2C_BITOPS
-                default n
-                config BSP_USING_I2C1
-                bool "Using I2C1"
-                select RT_USING_I2C_BITOPS
-                default n
-            endif
 
         config BSP_USING_UART
             bool "Enable UART"
@@ -144,13 +130,9 @@ menu "Board extended module Drivers"
             default n
 endmenu
 menu "Board extended packages"
-        config PKG_USING_LIBCRC
-            bool "Enable libcrc"
-            default n
         config PKG_USING_PROTOCOL
             bool "Enable Protocol framework"
             default n
-            select PKG_USING_LIBCRC
            help
                 user protocol
 endmenu

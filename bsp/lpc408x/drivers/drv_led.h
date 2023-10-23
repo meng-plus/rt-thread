@@ -25,9 +25,8 @@ extern "C"
         LED_3,
     };
 
-    void rt_LED_write(enum LED_PIN pin, rt_uint8_t value);
-    rt_base_t rt_led_set(rt_base_t idx, rt_bool_t);
-
+    void rt_led_write(enum LED_PIN pin, rt_uint8_t value);
+    void rt_led_toggle(enum LED_PIN pin);
     int rt_hw_led_init(void);
 #ifdef __cplusplus
 }

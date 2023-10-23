@@ -5,7 +5,9 @@ cwd = GetCurrentDir()
 src = Glob('*.c')
 CPPPATH = [cwd]
 src +=["../rtconfig.h"]
-group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
+
+folder_name = os.path.basename(cwd)
+group = DefineGroup(folder_name, src, depend = [''], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)
 for item in list:

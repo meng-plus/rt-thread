@@ -15,7 +15,7 @@
 #define LOG_TAG __FILE__
 #define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
-#define ADXL345_I2C_BUS "i2c0"
+#define ADXL345_I2C_BUS "i2c1"
 #define ADXL345_I2C_ADDR 0x1D //(0x3a)
 
 static struct rt_i2c_bus_device *adxl345_handle = NULL;

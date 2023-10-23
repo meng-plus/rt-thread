@@ -34,11 +34,16 @@ static struct lpc_led led = {.ctrl = {
                                  GET_PIN(4, 27),
                                  GET_PIN(4, 26),
                              }};
-void rt_LED_write(enum LED_PIN pin, rt_uint8_t value)
+void rt_led_write(enum LED_PIN pin, rt_uint8_t value)
 {
-   rt_pin_write(led.ctrl[pin].pin, !value);
+    rt_pin_write(led.ctrl[pin].pin, !value);
 }
-static rt_err_t rt_led_init(rt_device_t dev)
+void rt_led_toggle(enum LED_PIN epin)
+{
+    rt_base_t pin = led.ctrl[epin].pin;
+    rt_pin_write(pin, !rt_pin_read(pin));
+}
+static rt_err_t led_init(rt_device_t dev)
 {
     for (int index = 0; index < LED_NUM; index++)
     {
@@ -48,18 +53,18 @@ static rt_err_t rt_led_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_led_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t led_open(rt_device_t dev, rt_uint16_t oflag)
 {
 
     return RT_EOK;
 }
 
-static rt_err_t rt_led_close(rt_device_t dev)
+static rt_err_t led_close(rt_device_t dev)
 {
     return RT_EOK;
 }
 
-static rt_ssize_t rt_led_read(rt_device_t dev, rt_off_t pos, void *buffer,
+static rt_ssize_t led_read(rt_device_t dev, rt_off_t pos, void *buffer,
                               rt_size_t size)
 {
     rt_ubase_t index = 0;
@@ -76,7 +81,7 @@ static rt_ssize_t rt_led_read(rt_device_t dev, rt_off_t pos, void *buffer,
     return index;
 }
 
-static rt_ssize_t rt_led_write(rt_device_t dev, rt_off_t pos,
+static rt_ssize_t led_write(rt_device_t dev, rt_off_t pos,
                                const void *buffer, rt_size_t size)
 {
     rt_ubase_t index = 0;
@@ -118,17 +123,17 @@ int rt_hw_led_init(void)
     led.parent.type = RT_Device_Class_Pin;
     led.parent.rx_indicate = RT_NULL;
     led.parent.tx_complete = RT_NULL;
-    led.parent.init = rt_led_init;
-    led.parent.open = rt_led_open;
-    led.parent.close = rt_led_close;
-    led.parent.read = rt_led_read;
-    led.parent.write = rt_led_write;
+    led.parent.init = led_init;
+    led.parent.open = led_open;
+    led.parent.close = led_close;
+    led.parent.read = led_read;
+    led.parent.write = led_write;
     led.parent.control = rt_led_control;
     led.parent.user_data = RT_NULL;
 
     /* register a character device */
     rt_device_register(&led.parent, "led", RT_DEVICE_FLAG_RDWR);
-    rt_led_init(&led.parent);
+    led_init(&led.parent);
     return 0;
 }
 INIT_DEVICE_EXPORT(rt_hw_led_init);
@@ -138,7 +143,7 @@ INIT_DEVICE_EXPORT(rt_hw_led_init);
 void led_test(rt_uint32_t led_num, rt_uint32_t value)
 {
     rt_uint8_t led_value = value;
-    rt_led_write(&led.parent, led_num, &led_value, 1);
+    led_write(&led.parent, led_num, &led_value, 1);
 }
 FINSH_FUNCTION_EXPORT(led_test, e.g
                       : led_test(0, 100).)

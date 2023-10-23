@@ -92,7 +92,7 @@ static ads1115_err write(const struct __ads1115_i2c *i2c, uint16_t MemAddress, u
 ads1115_err ads1115_i2c_port_init(ads1115_i2c_t ads1115)
 {
     ads1115_err result = ADS1115_ERR_NOT_FOUND;
-    if (strcmp(ads1115->name, "i2c1") == 0)
+    if (strcmp(ads1115->name, "i2c2") == 0)
     {
         userData.hi2c = rt_i2c_bus_device_find(ads1115->name);
         ads1115->write = write; // Required

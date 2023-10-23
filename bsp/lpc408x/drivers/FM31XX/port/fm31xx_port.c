@@ -15,7 +15,7 @@
 #define LOG_TAG __FILE__
 #define LOG_LVL LOG_LVL_DBG
 #include "ulog.h"
-#define FM31XX_I2C_BUS "i2c0"
+#define FM31XX_I2C_BUS "i2c1"
 static struct rt_i2c_bus_device *Fm31XX_handle = NULL;
 
 static rt_err_t fm31xx_read_reg(uint16_t dev_id, rt_uint16_t addr, uint8_t addr_len, rt_uint8_t *data, rt_uint32_t data_size)

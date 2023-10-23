@@ -7,6 +7,7 @@
 /* RT-Thread Kernel */
 
 #define RT_NAME_MAX 8
+#define RT_CPUS_NR 1
 #define RT_ALIGN_SIZE 8
 #define RT_THREAD_PRIORITY_32
 #define RT_THREAD_PRIORITY_MAX 32
@@ -46,14 +47,12 @@
 #define RT_USING_MEMHEAP_AS_HEAP
 #define RT_USING_MEMHEAP_AUTO_BINDING
 #define RT_USING_HEAP
-
-/* Kernel Device Object */
-
 #define RT_USING_DEVICE
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 128
 #define RT_CONSOLE_DEVICE_NAME "uart0"
 #define RT_VER_NUM 0x50100
+#define RT_BACKTRACE_LEVEL_MAX_NR 32
 #define RT_USING_HW_ATOMIC
 #define RT_USING_CPU_FFS
 #define ARCH_ARM
@@ -108,6 +107,19 @@
 #define RT_USING_HWTIMER
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
+#define RT_USING_SOFT_I2C
+#define RT_USING_SOFT_I2C1
+#define RT_SOFT_I2C1_SCL_PIN 28
+#define RT_SOFT_I2C1_SDA_PIN 27
+#define RT_SOFT_I2C1_BUS_NAME "i2c1"
+#define RT_SOFT_I2C1_TIMING_DELAY 10
+#define RT_SOFT_I2C1_TIMING_TIMEOUT 10
+#define RT_USING_SOFT_I2C2
+#define RT_SOFT_I2C2_SCL_PIN 149
+#define RT_SOFT_I2C2_SDA_PIN 47
+#define RT_SOFT_I2C2_BUS_NAME "i2c2"
+#define RT_SOFT_I2C2_TIMING_DELAY 10
+#define RT_SOFT_I2C2_TIMING_TIMEOUT 10
 #define RT_USING_PIN
 #define RT_USING_RTC
 #define RT_USING_WDT
@@ -160,6 +172,9 @@
 #define ULOG_OUTPUT_LEVEL
 #define ULOG_OUTPUT_TAG
 #define ULOG_BACKEND_USING_CONSOLE
+
+/* Memory management */
+
 
 /* RT-Thread Utestcases */
 
@@ -322,9 +337,6 @@
 
 #define BSP_USING_EEPROM_ONCHIP
 #define BSP_USING_FLASH_ONCHIP
-#define BSP_USING_I2C
-#define BSP_USING_I2C0
-#define BSP_USING_I2C1
 #define BSP_USING_UART
 #define BSP_USING_UART0
 #define BSP_USING_UART1
@@ -353,5 +365,7 @@
 
 /* Board extended packages */
 
+#define PKG_USING_LIBCRC
+#define PKG_USING_PROTOCOL
 
 #endif

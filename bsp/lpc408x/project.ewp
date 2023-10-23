@@ -266,7 +266,7 @@
                 </option>
                 <option>
                     <name>CCDiagSuppress</name>
-                    <state>Pa089,Pe188</state>
+                    <state>Pa089,Pe188,Pe182</state>
                 </option>
                 <option>
                     <name>CCDiagRemark</name>
@@ -359,15 +359,16 @@
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\layouts\flex</state>
                     <state>$PROJ_DIR$\drivers\Fal\inc</state>
                     <state>$PROJ_DIR$\drivers\key_Ird</state>
+                    <state>$PROJ_DIR$\packages\libcrc\include</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\widgets\led</state>
                     <state>$PROJ_DIR$\..\..\components\fal\inc</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\libs\sjpg</state>
                     <state>$PROJ_DIR$\applications\lvgl</state>
                     <state>$PROJ_DIR$\..\..\components\drivers\ktime\inc</state>
+                    <state>$PROJ_DIR$\applications\Protocol</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\draw\arm2d</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\others\monkey</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\libs\rlottie</state>
-                    <state>$PROJ_DIR$\packages\Protocol</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\others\fragment</state>
                     <state>$PROJ_DIR$\Libraries\Drivers\include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\io\epoll</state>
@@ -1520,15 +1521,16 @@
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\layouts\flex</state>
                     <state>$PROJ_DIR$\drivers\Fal\inc</state>
                     <state>$PROJ_DIR$\drivers\key_Ird</state>
+                    <state>$PROJ_DIR$\packages\libcrc\include</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\widgets\led</state>
                     <state>$PROJ_DIR$\..\..\components\fal\inc</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\libs\sjpg</state>
                     <state>$PROJ_DIR$\applications\lvgl</state>
                     <state>$PROJ_DIR$\..\..\components\drivers\ktime\inc</state>
+                    <state>$PROJ_DIR$\applications\Protocol</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\draw\arm2d</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\others\monkey</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\libs\rlottie</state>
-                    <state>$PROJ_DIR$\packages\Protocol</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.9\src\extra\others\fragment</state>
                     <state>$PROJ_DIR$\Libraries\Drivers\include</state>
                     <state>$PROJ_DIR$\..\..\components\libc\posix\io\epoll</state>
@@ -2347,12 +2349,15 @@
         </file>
     </group>
     <group>
-        <name>Applications</name>
+        <name>applications</name>
         <file>
             <name>$PROJ_DIR$\applications\main.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\rtconfig.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\task_led.c</name>
         </file>
     </group>
     <group>
@@ -2469,6 +2474,9 @@
             <name>$PROJ_DIR$\..\..\components\drivers\serial\serial.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\i2c\soft_i2c.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\waitqueue.c</name>
         </file>
         <file>
@@ -2500,9 +2508,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_sdram.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\drivers\drv_soft_i2c.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_uart.c</name>
@@ -2707,6 +2712,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ktime\src\hrtimer.c</name>
+        </file>
+    </group>
+    <group>
+        <name>libcrc</name>
+        <file>
+            <name>$PROJ_DIR$\packages\libcrc\src\crc16.c</name>
         </file>
     </group>
     <group>
@@ -3453,13 +3464,7 @@
     <group>
         <name>Protocol</name>
         <file>
-            <name>$PROJ_DIR$\packages\Protocol\Protocol.c</name>
-            <excluded>
-                <configuration>rt-thread</configuration>
-            </excluded>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\packages\Protocol\Transport.c</name>
+            <name>$PROJ_DIR$\applications\Protocol\Transport.c</name>
         </file>
     </group>
     <group>
