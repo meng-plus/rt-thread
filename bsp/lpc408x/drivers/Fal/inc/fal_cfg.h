@@ -34,10 +34,10 @@ extern const struct fal_flash_dev eeprom_onRTC_flash;
 {                                                                                           \
     {FAL_PART_MAGIC_WORD,        "bl",   "lpc4088_onchip",           0,       64*0x400, 0}, \
     {FAL_PART_MAGIC_WORD,      "app0",   "lpc4088_onchip",    64*0x400, (512-64)*0x400, 0}, \
-    {FAL_PART_MAGIC_WORD,  "eeprom0" ,    "eeprom_onchip",           0,           4032, 0}, \
-    {FAL_PART_MAGIC_WORD,  "eeprom1" ,     "eeprom_onRTC",           0,       32*0x400, 0}, \
+    {FAL_PART_MAGIC_WORD,   "eeprom0",    "eeprom_onchip",           0,           4032, 0}, \
+    {FAL_PART_MAGIC_WORD,   "eeprom1",     "eeprom_onRTC",           0,       32*0x400, 0}, \
     {FAL_PART_MAGIC_WORD,      "app1", "lpc4088_extflash",           0,    0x400*0x400, 0}, \
-    {FAL_PART_MAGIC_WORD, "easyflash", "lpc4088_extflash", 0x400*0x400,    0x400*0x400, 0}, \
+    {FAL_PART_MAGIC_WORD,      "data", "lpc4088_extflash", 0x400*0x400,    0x400*0x400, 0}, \
     {FAL_PART_MAGIC_WORD,  "download", "lpc4088_extflash", 0x800*0x400,    0x800*0x400, 0}, \
 }
 #endif /* FAL_PART_HAS_TABLE_CFG */

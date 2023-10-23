@@ -89,14 +89,29 @@ menu "Board extended module Drivers"
         bool "370792Z1V1(20230828)"
     endchoice
 
+    choice
+        prompt "Flash database select "
+        default BSP_USING_FLASHDB
+
         config BSP_USING_EASYFLASH
-            bool "Enable user easyFlash"
-            select PKG_USING_EASYFLASH
-            select RT_USING_FAL
-            default n
+        bool "easyFlash"
+        config BSP_USING_FLASHDB
+        bool "flash db"
+    endchoice
+
+        if BSP_USING_EASYFLASH
+            config BSP_USING_EASYFLASH
+                select PKG_USING_EASYFLASH
+                select RT_USING_FAL
+         endif
+        if BSP_USING_FLASHDB
+            config BSP_USING_FLASHDB
+                select PKG_USING_FLASHDB
+                select RT_USING_FAL
+        endif
         config BSP_USRING_FAL_NAME
-            string "Fal name"
-            depends on  BSP_USING_EASYFLASH
+            string "Fal part name"
+            depends on  BSP_USING_EASYFLASH || BSP_USING_FLASHDB
             default "easyflash"
 
 

@@ -229,18 +229,6 @@
 
 /* tools packages */
 
-#define PKG_USING_EASYFLASH
-#define PKG_EASYFLASH_ENV
-#define PKG_EASYFLASH_ENV_AUTO_UPDATE
-#define PKG_EASYFLASH_ENV_VER_NUM 0
-#define PKG_EASYFLASH_IAP
-#define PKG_EASYFLASH_ERASE_GRAN 65536
-#define PKG_EASYFLASH_WRITE_GRAN_8BITS
-#define PKG_EASYFLASH_WRITE_GRAN 8
-#define PKG_EASYFLASH_START_ADDR 0
-#define PKG_EASYFLASH_DEBUG
-#define PKG_USING_EASYFLASH_V410
-#define PKG_EASYFLASH_VER_NUM 0x40100
 #define PKG_USING_SEGGER_RTT
 #define SEGGER_RTT_ENABLE
 #define SEGGER_RTT_MAX_NUM_UP_BUFFERS 3
@@ -265,6 +253,15 @@
 
 /* Micrium: Micrium software products porting for RT-Thread */
 
+#define PKG_USING_FLASHDB
+#define FDB_USING_KVDB
+#define FDB_USING_FAL_MODE
+#define FDB_WRITE_GRAN_8BITS
+#define FDB_WRITE_GRAN 8
+#define FDB_NOT_USING_FILE_MODE
+#define FDB_DEBUG_ENABLE
+#define PKG_USING_FLASHDB_V10102
+#define PKG_FLASHDB_VER_NUM 0x10102
 
 /* peripheral libraries and drivers */
 
@@ -276,8 +273,6 @@
 
 /* Kendryte SDK */
 
-#define PKG_USING_RS485
-#define PKG_USING_RS485_LATEST_VERSION
 
 /* AI packages */
 
@@ -355,8 +350,8 @@
 /* Board extended module Drivers */
 
 #define BSP_USING_BOARD_370792Z1V1_20230828
-#define BSP_USING_EASYFLASH
-#define BSP_USRING_FAL_NAME "easyflash"
+#define BSP_USING_FLASHDB
+#define BSP_USRING_FAL_NAME "eeprom1"
 #define BSP_USING_LCD
 #define BSP_LCD_WIDTH 800
 #define BSP_LCD_HEIGHT 480
@@ -365,7 +360,6 @@
 
 /* Board extended packages */
 
-#define PKG_USING_LIBCRC
 #define PKG_USING_PROTOCOL
 
 #endif
