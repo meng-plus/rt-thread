@@ -15,7 +15,7 @@ static struct fdb_default_kv_node default_kv_set[] = {
     {"stop_in_bootloader", "0"},
 };
 
-static struct fdb_kvdb kj428_kvdb;
+struct fdb_kvdb kj428_kvdb;
 
 static int kj428_fdb_kvdb_init(void)
 {
