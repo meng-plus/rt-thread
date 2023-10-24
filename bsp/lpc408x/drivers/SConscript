@@ -21,6 +21,9 @@ if GetDepend(['BSP_USING_HWTIMER0']):
 if GetDepend(['BSP_USING_SDRAM']):
     src += ['drv_sdram.c']
 
+if GetDepend(['BSP_USING_EXTFLASH']):
+    src += ['drv_extflash.c']
+
 if GetDepend('RT_USING_SERIAL'):
     src += ['drv_uart.c']
 

@@ -46,11 +46,17 @@ menu "Hardware Drivers Config"
 
         config BSP_USING_SDRAM
             bool "Enable SDRAM"
-            default n
+            default y
+        config BSP_USING_EXTFLASH
+            bool "Enable extflash"
+            default y
+
         config BSP_USING_SPFI
             bool "Enable QSPI S25FL032"
             select RT_USING_FAL
+            depends on BSP_USING_EXTFLASH
             default n
+
         config BSP_USING_FM31XX
             bool "Enable Fm31xx(wdg e2prom RTC)"
             select RT_USING_RTC
@@ -63,7 +69,6 @@ menu "Hardware Drivers Config"
             config BSP_USING_WDT
                 bool "Enabel watchdog"
                 select RT_USING_WDT
-                select BSP_USING_FM31XX
                 default n
             endif
 
@@ -78,7 +83,7 @@ menu "Hardware Drivers Config"
 
 menu "Board extended module Drivers"
     choice
-        prompt "Board select "
+        prompt "Board select"
         default BSP_USING_BOARD_9903Z1V2
 
         config BSP_USING_BOARD_9903Z1V2
@@ -90,7 +95,7 @@ menu "Board extended module Drivers"
     endchoice
 
     choice
-        prompt "Flash database select "
+        prompt "Flash database select"
         default BSP_USING_FLASHDB
 
         config BSP_USING_EASYFLASH

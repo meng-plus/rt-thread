@@ -342,6 +342,7 @@
 /* On Core Board Peripheral Drivers */
 
 #define BSP_USING_SDRAM
+#define BSP_USING_EXTFLASH
 #define BSP_USING_SPFI
 #define BSP_USING_FM31XX
 #define BSP_USING_WDT
