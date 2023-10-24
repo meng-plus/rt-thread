@@ -9,6 +9,9 @@ ui_helpers.c
 ui.c
 lvgl_user_cmd.c
 """)
+CPPPATH += [cwd+"/screens"]
+CPPPATH += [cwd+"/components"]
+
 src += Glob("screens/*.c")
 src += Glob("images/*.c")
 src += Glob("fonts/*.c")

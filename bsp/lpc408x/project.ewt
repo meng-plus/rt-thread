@@ -3482,6 +3482,9 @@
             <name>$PROJ_DIR$\applications\lvgl\screens\ui_P00startup.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\screens\ui_P00startup_event.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\screens\ui_P01main.c</name>
         </file>
     </group>

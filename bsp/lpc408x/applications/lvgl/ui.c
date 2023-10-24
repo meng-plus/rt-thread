@@ -5,19 +5,9 @@
 
 #include "ui.h"
 #include "ui_helpers.h"
-
+#include "ui_P00startup.h"
+#include "ui_comp.h"
 ///////////////////// VARIABLES ////////////////////
-
-
-// SCREEN: ui_P00startup
-void ui_P00startup_screen_init(void);
-lv_obj_t *ui_P00startup;
-lv_obj_t *ui_Image1;
-lv_obj_t *ui_startBar;
-
-
-// SCREEN: ui_P01main
-void ui_P01main_screen_init(void);
 lv_obj_t *ui_P01main;
 lv_obj_t *ui_head;
 lv_obj_t *ui_title;
@@ -36,10 +26,10 @@ lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
-    #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
+#error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
 #endif
-#if LV_COLOR_16_SWAP !=0
-    #error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
+#if LV_COLOR_16_SWAP != 0
+#error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
 #endif
 
 ///////////////////// ANIMATIONS ////////////////////
@@ -48,13 +38,11 @@ lv_obj_t *ui____initial_actions0;
 
 ///////////////////// SCREENS ////////////////////
 
-void ui_init( void )
+void ui_init(void)
 {
-lv_disp_t *dispp = lv_disp_get_default();
-lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
-lv_disp_set_theme(dispp, theme);
-ui_P00startup_screen_init();
-ui_P01main_screen_init();
-ui____initial_actions0 = lv_obj_create(NULL);
-lv_disp_load_scr( ui_P00startup);
+    lv_disp_t *dispp = lv_disp_get_default();
+    lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
+    lv_disp_set_theme(dispp, theme);
+    LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
+    lv_disp_load_scr(ui_startup_create(NULL));
 }

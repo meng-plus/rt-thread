@@ -4,37 +4,50 @@
 // Project name: SquareLine_Project
 
 #include "../ui.h"
+#include "ui_P00startup.h"
+#include "ui_comp.h"
 
-void ui_P00startup_screen_init(void)
+lv_obj_t *ui_startup_create(lv_obj_t *parent)
 {
-ui_P00startup = lv_obj_create(NULL);
-lv_obj_clear_flag( ui_P00startup, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_flex_flow(ui_P00startup,LV_FLEX_FLOW_COLUMN);
-lv_obj_set_flex_align(ui_P00startup, LV_FLEX_ALIGN_SPACE_AROUND, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-lv_obj_set_style_bg_color(ui_P00startup, lv_color_hex(0x2C2C2C), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_P00startup, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_left(ui_P00startup, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_right(ui_P00startup, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_top(ui_P00startup, 10, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_bottom(ui_P00startup, 40, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_t *obj;
+    lv_obj_t *obj_logo;
+    lv_obj_t *obj_bar;
+    obj = lv_obj_create(parent);
+    lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_set_flex_flow(obj, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(obj, LV_FLEX_ALIGN_SPACE_AROUND, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-ui_Image1 = lv_img_create(ui_P00startup);
-lv_img_set_src(ui_Image1, &ui_img_gltech_png);
-lv_obj_set_width( ui_Image1, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Image1, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Image1, -3 );
-lv_obj_set_y( ui_Image1, -267 );
-lv_obj_set_align( ui_Image1, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_Image1, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
-lv_obj_clear_flag( ui_Image1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+    obj_logo = lv_img_create(obj);
+    lv_img_set_src(obj_logo, &ui_img_gltech_png);
+    lv_obj_set_size(obj_logo, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_pos(obj_logo, -3, -267);
 
-ui_startBar = lv_bar_create(ui_P00startup);
-lv_bar_set_value(ui_startBar,25,LV_ANIM_OFF);
-lv_obj_set_width( ui_startBar, 312);
-lv_obj_set_height( ui_startBar, 10);
-lv_obj_set_x( ui_startBar, -18 );
-lv_obj_set_y( ui_startBar, 94 );
-lv_obj_set_align( ui_startBar, LV_ALIGN_CENTER );
+    lv_obj_set_align(obj_logo, LV_ALIGN_CENTER);
+    lv_obj_add_flag(obj_logo, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
+    lv_obj_clear_flag(obj_logo, LV_OBJ_FLAG_SCROLLABLE); /// Flags
 
+    obj_bar = lv_bar_create(obj);
+    lv_bar_set_range(obj_bar, 0, 100);
 
+    lv_obj_set_size(obj_bar, 312, 10);
+    lv_obj_set_pos(obj_bar, 94, -18);
+    lv_obj_set_align(obj_bar, LV_ALIGN_CENTER);
+
+    lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * COMP_P00_NUM);
+    children[COMP_P00_LOGO] = obj_logo;
+    children[COMP_P00_BAR] = obj_bar;
+    lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
+    lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
+
+    /** add event*/
+    void ui_startup_all_event_cb(lv_event_t * e);
+    lv_obj_add_event_cb(obj, ui_startup_all_event_cb, LV_EVENT_ALL, NULL);
+
+    return obj;
 }

@@ -30,5 +30,6 @@ int task_led_init()
     {
         rt_timer_start(timer_led);
     }
+    return 0;
 }
 INIT_APP_EXPORT(task_led_init);
