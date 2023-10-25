@@ -6,29 +6,16 @@
 #include "../ui.h"
 #include "ui_P00startup.h"
 #include "ui_comp.h"
+#include "ui_P01main.h"
 
-typedef struct ui_P00startup_TIME
+static void set_bar(void *bar, int32_t bar_value)
 {
-
-    lv_obj_t *screen;
-
-} P00_time_t;
-static lv_timer_t *timehandle;
-void ui_P01main_screen_init(void);
-static void time_cb(struct _lv_timer_t *timer)
-{
-    lv_obj_t *obj_bar = ui_comp_get_child(timer->user_data, COMP_P00_BAR);
-    if (obj_bar)
+    lv_bar_set_value(bar, bar_value, LV_ANIM_ON);
+    int32_t max = lv_bar_get_max_value(bar);
+    if (bar_value == max)
     {
-        int32_t min = lv_bar_get_min_value(obj_bar);
-        int32_t max = lv_bar_get_max_value(obj_bar);
-        int32_t cur = lv_bar_get_value(obj_bar);
-        int32_t step = (max - min) / 50;
-        if (cur >= max)
-        {
-            _ui_screen_change(&ui_P01main, LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, ui_P01main_screen_init);
-        }
-        lv_bar_set_value(obj_bar, cur + step, LV_ANIM_ON);
+        //_ui_screen_change(&ui_P01main, LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, ui_P01main_screen_init);
+        lv_scr_load_anim(ui_main_create(NULL), LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, true); /*!< 切换页面并删除启动页 */
     }
 }
 
@@ -38,10 +25,17 @@ void ui_startup_all_event_cb(lv_event_t *e)
     lv_obj_t *obj = lv_event_get_target(e);
     if (LV_EVENT_SCREEN_LOADED == code)
     {
-        timehandle = lv_timer_create(time_cb, 50, obj);
+        lv_obj_t *obj_bar = ui_comp_get_child(obj, SCREEN_P00_BAR);
+        /*!< 进度条动画 */
+        lv_anim_t a;
+        lv_anim_init(&a);
+        lv_anim_set_exec_cb(&a, set_bar);
+        lv_anim_set_time(&a, 3000); /*!< 3000ms 动画时间 */
+        lv_anim_set_var(&a, obj_bar);
+        lv_anim_set_values(&a, 0, 100); /*!< 动画从0到100 */
+        lv_anim_start(&a);
     }
     else if (LV_EVENT_SCREEN_UNLOADED == code)
     {
-        lv_timer_del(timehandle);
     }
 }

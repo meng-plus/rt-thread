@@ -14,11 +14,11 @@ extern "C"
 #endif
 
     // COMPONENT P00_STARTUP
-    enum UI_COMP_P00_STARTUP
+    enum UI_SCREEN_P00_STARTUP
     {
-        COMP_P00_LOGO,
-        COMP_P00_BAR,
-        COMP_P00_NUM,
+        SCREEN_P00_LOGO,
+        SCREEN_P00_BAR,
+        SCREEN_P00_NUM,
     };
     lv_obj_t *ui_startup_create(lv_obj_t *parent);
 

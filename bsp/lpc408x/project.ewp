@@ -3412,9 +3412,6 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_hook.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_statebar.c</name>
         </file>
         <file>

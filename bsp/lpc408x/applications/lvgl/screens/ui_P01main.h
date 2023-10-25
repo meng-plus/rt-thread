@@ -3,8 +3,8 @@
 // LVGL version: 8.3.6
 // Project name: SquareLine_Project
 
-#ifndef _UI_COMP_STATEBAR_H
-#define _UI_COMP_STATEBAR_H
+#ifndef _UI_SCREEN_P01_MAIN_H
+#define _UI_SCREEN_P01_MAIN_H
 
 #include "../ui.h"
 
@@ -13,15 +13,16 @@ extern "C"
 {
 #endif
 
-    // COMPONENT stateBar
-    enum UI_COMP_STATE_BAR
+    // COMPONENT P00_STARTUP
+    enum UI_SCREEN_P01_MAIN
     {
-        STATE_BAR_STATEBAR,
-        STATE_BAR_TIPS,
-        STATE_BAR_DATE,
-        STATE_BAR_NUM,
+        SCREEN_P01_TITLE_BAR,
+        SCREEN_P01_TABLE,
+        SCREEN_P01_STATE_BAR,
+        SCREEN_P01_NUM,
+
     };
-    lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent);
+    lv_obj_t *ui_main_create(lv_obj_t *parent);
 
 #ifdef __cplusplus
 } /*extern "C"*/
