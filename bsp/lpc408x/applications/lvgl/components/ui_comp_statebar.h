@@ -16,7 +16,6 @@ extern "C"
     // COMPONENT stateBar
     enum UI_COMP_STATE_BAR
     {
-        STATE_BAR_STATEBAR,
         STATE_BAR_TIPS,
         STATE_BAR_DATE,
         STATE_BAR_NUM,

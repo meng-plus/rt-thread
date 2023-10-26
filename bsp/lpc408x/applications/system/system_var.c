@@ -14,7 +14,7 @@
 
 product_param_t g_prod_param;
 extern const product_param_t l_prod_param_init;
-const var_init_t g_var_init;
+const var_init_t g_var_init = {.product_name = "矿用本安型激光火情监控主机"};
 varWork_t g_var_work;
 
 extern struct fdb_kvdb kj428_kvdb;

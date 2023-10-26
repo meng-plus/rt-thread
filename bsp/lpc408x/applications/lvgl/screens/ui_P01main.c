@@ -7,6 +7,8 @@
 #include "ui_comp.h"
 #include "ui_P01main.h"
 #include "ui_comp_statebar.h"
+#include "ui_comp_titlebar.h"
+#include "system_var.h"
 lv_obj_t *ui_main_create(lv_obj_t *parent)
 {
     static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -22,21 +24,10 @@ lv_obj_t *ui_main_create(lv_obj_t *parent)
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
 
-    ui_head = lv_obj_create(obj);
+    lv_obj_t *ui_head = ui_titleBar_create(obj);
     lv_obj_set_grid_cell(ui_head, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
-    lv_obj_clear_flag(ui_head, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_obj_set_style_radius(ui_head, 0, (lv_part_t)LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_t *ui_title = lv_label_create(ui_head);
-
-    lv_obj_set_width(ui_title, 429);
-    lv_obj_set_height(ui_title, 30);
-    lv_obj_set_align(ui_title, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_title, "矿用本安型激光火情监控主机");
-    lv_obj_set_style_text_color(ui_title, lv_color_hex(0x00B2B2), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_title, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_title, &ui_font_heiti24, (lv_part_t)LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_event_send(ui_head, LV_EVENT_SET_TITLE, (void*)g_var_init.product_name);
 
     ui_TabView1 = lv_tabview_create(obj, LV_DIR_LEFT, 50);
     lv_obj_set_grid_cell(ui_TabView1, LV_GRID_ALIGN_START, 0, 1,

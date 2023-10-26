@@ -13,7 +13,7 @@ static void time_update(struct _lv_timer_t *ptime)
     time_t nTime = time(NULL);
     struct tm *curTime = localtime(&nTime);
     char buff[32];
-    rt_sprintf(buff, "%4d-%02d-%02d %02d:%02d:%02d", curTime->tm_year + 1900, curTime->tm_mon, curTime->tm_mday,
+    rt_sprintf(buff, "%4d-%02d-%02d %02d:%02d:%02d", curTime->tm_year + 1900, curTime->tm_mon + 1, curTime->tm_mday,
                curTime->tm_hour, curTime->tm_min, curTime->tm_sec);
     lv_label_set_text(ptime->user_data, buff);
 }
@@ -25,18 +25,18 @@ void del_component_timer_event_cb(lv_event_t *e)
 lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
 {
 
-    lv_obj_t *cui_stateBar;
-    cui_stateBar = lv_obj_create(comp_parent);
-    lv_obj_set_style_pad_top(cui_stateBar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(cui_stateBar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_left(cui_stateBar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(cui_stateBar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_t *obj;
+    obj = lv_obj_create(comp_parent);
+    lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     static lv_coord_t col_dsc[] = {LV_GRID_FR(50), LV_GRID_FR(50), LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    lv_obj_set_grid_dsc_array(cui_stateBar, col_dsc, row_dsc);
-    lv_obj_center(cui_stateBar);
+    lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
+    lv_obj_center(obj);
 
-    lv_obj_t *cui_tips = lv_label_create(cui_stateBar);
+    lv_obj_t *cui_tips = lv_label_create(obj);
     lv_obj_set_grid_cell(cui_tips, LV_GRID_ALIGN_START, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_label_set_text(cui_tips, "system tips");
@@ -45,7 +45,7 @@ lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_pad_left(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_t *cui_date = lv_label_create(cui_stateBar);
+    lv_obj_t *cui_date = lv_label_create(obj);
     lv_obj_set_grid_cell(cui_date, LV_GRID_ALIGN_END, 1, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
 
@@ -54,17 +54,16 @@ lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_pad_left(cui_date, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(cui_date, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_timer_t *time_data_update = lv_timer_create(time_update, 500, cui_date);
+    lv_timer_t *time_data_update = lv_timer_create(time_update, 1000, cui_date);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * STATE_BAR_NUM);
-    children[STATE_BAR_STATEBAR] = cui_stateBar;
     children[STATE_BAR_TIPS] = cui_tips;
-    children[STATE_BAR_NUM] = cui_date;
-    lv_obj_add_event_cb(cui_stateBar, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
-    lv_obj_add_event_cb(cui_stateBar, del_component_child_event_cb, LV_EVENT_DELETE, children);
+    children[STATE_BAR_DATE] = cui_date;
+    lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
+    lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
 
     /** add user event */
-    lv_obj_add_event_cb(cui_stateBar, del_component_timer_event_cb, LV_EVENT_DELETE, time_data_update);
+    lv_obj_add_event_cb(obj, del_component_timer_event_cb, LV_EVENT_DELETE, time_data_update);
 
-    return cui_stateBar;
+    return obj;
 }

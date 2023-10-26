@@ -292,7 +292,7 @@
                 <option>
                     <name>CMSISDAPResetList</name>
                     <version>1</version>
-                    <state>10</state>
+                    <state>7</state>
                 </option>
                 <option>
                     <name>CMSISDAPHWResetDuration</name>
@@ -312,7 +312,7 @@
                 </option>
                 <option>
                     <name>CMSISDAPInterfaceRadio</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CMSISDAPInterfaceCmdLine</name>
@@ -433,7 +433,7 @@
                 </option>
                 <option>
                     <name>CMSISDAPSelectedCPUBehaviour</name>
-                    <state>0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>ICpuName</name>
@@ -749,7 +749,7 @@
                 </option>
                 <option>
                     <name>JLinkInitialSpeed</name>
-                    <state>1000</state>
+                    <state>4000</state>
                 </option>
                 <option>
                     <name>CCDoJlinkMultiTarget</name>

@@ -37,7 +37,7 @@ extern "C"
     typedef struct _ROM_VAR_INIT
     {
         const uint32_t resv;
-
+        const char *product_name;
     } var_init_t;
 
 /*!< 设备的配置参数 flash中存储 */

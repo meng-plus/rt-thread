@@ -39,6 +39,7 @@ lv_obj_t *ui_startup_create(lv_obj_t *parent)
     lv_obj_set_pos(obj_bar, 94, -18);
     lv_obj_set_align(obj_bar, LV_ALIGN_CENTER);
 
+
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SCREEN_P00_NUM);
     children[SCREEN_P00_LOGO] = obj_logo;
     children[SCREEN_P00_BAR] = obj_bar;

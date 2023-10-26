@@ -10,6 +10,10 @@
  */
 #include "Session_DTS.h"
 
+#define LOG_TAG __FILE__
+#define LOG_LVL LOG_LVL_DBG
+#include "rtdbg.h"
+
 int32_t dts_sys_req(session_master_t *se_handle, uint8_t *buff, uint16_t len)
 {
     rt_thread_mdelay(1000);

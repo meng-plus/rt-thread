@@ -3418,6 +3418,9 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_tabview1.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_titlebar.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_heiti12.c</name>
         </file>
         <file>
