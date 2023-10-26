@@ -15,28 +15,7 @@ extern "C"
 
 #include "ui_helpers.h"
 #include "ui_events.h"
-    // SCREEN: ui_P00startup
-    void ui_P00startup_screen_init(void);
-    extern lv_obj_t *ui_P00startup;
-    extern lv_obj_t *ui_Image1;
-    extern lv_obj_t *ui_startBar;
-    // SCREEN: ui_P01main
-    void ui_P01main_screen_init(void);
-    extern lv_obj_t *ui_P01main;
-    extern lv_obj_t *ui_head;
-    extern lv_obj_t *ui_title;
-    extern lv_obj_t *ui_TabView1;
-    extern lv_obj_t *ui_TabPage1;
-    extern lv_obj_t *ui_TabPage2;
-    extern lv_obj_t *ui_TextArea1;
-    extern lv_obj_t *ui_TabPage3;
-    extern lv_obj_t *ui_Chart1;
-    extern lv_obj_t *ui_TabPage4;
-    extern lv_obj_t *ui_TabPage5;
-    extern lv_obj_t *ui_stateBar;
-    extern lv_obj_t *ui_tips;
-    extern lv_obj_t *ui_date;
-    extern lv_obj_t *ui____initial_actions0;
+#include "ui_comp.h"
 
     LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
 

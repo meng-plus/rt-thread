@@ -80,7 +80,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_led_set_brightness(led_y, 255);
     lv_obj_set_style_shadow_spread(led_y, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_led_set_color(led_y, lv_color_hex(0xffff00));
+    lv_led_set_color(led_y, lv_palette_main(LV_PALETTE_YELLOW));
     lv_obj_set_size(led_y, 16, 16);
 
     lv_obj_t *led_g = lv_led_create(obj);
@@ -88,7 +88,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_led_set_brightness(led_g, 255);
     lv_obj_set_style_shadow_spread(led_g, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_led_set_color(led_g, lv_color_hex(0x00ff00));
+    lv_led_set_color(led_g, lv_palette_main(LV_PALETTE_GREEN));
     lv_obj_set_size(led_g, 16, 16);
 
     lv_obj_t *led_r = lv_led_create(obj);
@@ -96,7 +96,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_led_set_brightness(led_r, 255);
     lv_obj_set_style_shadow_spread(led_r, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_led_set_color(led_r, lv_color_hex(0xff0000));
+    lv_led_set_color(led_r, lv_palette_main(LV_PALETTE_RED));
     lv_obj_set_size(led_r, 16, 16);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * TITLE_BAR_NUM);

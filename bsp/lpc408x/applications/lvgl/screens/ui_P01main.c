@@ -9,6 +9,8 @@
 #include "ui_comp_statebar.h"
 #include "ui_comp_titlebar.h"
 #include "system_var.h"
+#include "ui_comp_tabview_main.h"
+
 lv_obj_t *ui_main_create(lv_obj_t *parent)
 {
     static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -26,56 +28,58 @@ lv_obj_t *ui_main_create(lv_obj_t *parent)
 
     lv_obj_t *ui_head = ui_titleBar_create(obj);
     lv_obj_set_grid_cell(ui_head, LV_GRID_ALIGN_STRETCH, 0, 1,
-                         LV_GRID_ALIGN_CENTER, 0, 1);
-    lv_event_send(ui_head, LV_EVENT_SET_TITLE, (void*)g_var_init.product_name);
+                         LV_GRID_ALIGN_STRETCH, 0, 1);
+    lv_event_send(ui_head, LV_EVENT_SET_TITLE, (void *)g_var_init.product_name);
 
-    ui_TabView1 = lv_tabview_create(obj, LV_DIR_LEFT, 50);
-    lv_obj_set_grid_cell(ui_TabView1, LV_GRID_ALIGN_START, 0, 1,
-                         LV_GRID_ALIGN_CENTER, 1, 1);
-    lv_obj_set_width(ui_TabView1, lv_pct(100));
-    lv_obj_set_height(ui_TabView1, lv_pct(84));
-    lv_obj_set_x(ui_TabView1, 1);
-    lv_obj_set_y(ui_TabView1, 40);
-    lv_obj_set_flex_flow(ui_TabView1, LV_FLEX_FLOW_ROW_WRAP);
-    lv_obj_set_flex_align(ui_TabView1, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
-    lv_obj_clear_flag(ui_TabView1, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_obj_set_style_bg_color(ui_TabView1, lv_color_hex(0xDBDBEA), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_TabView1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_TabView1, &ui_font_heiti16, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_t *ui_TabView1 = ui_TabView_main_create(obj);
+    lv_obj_set_grid_cell(ui_TabView1, LV_GRID_ALIGN_STRETCH, 0, 1,
+                         LV_GRID_ALIGN_STRETCH, 1, 1);
+    // ui_TabView1 = lv_tabview_create(obj, LV_DIR_LEFT, 50);
+    //
+    // lv_obj_set_width(ui_TabView1, lv_pct(100));
+    // lv_obj_set_height(ui_TabView1, lv_pct(84));
+    // lv_obj_set_x(ui_TabView1, 1);
+    // lv_obj_set_y(ui_TabView1, 40);
+    // lv_obj_set_flex_flow(ui_TabView1, LV_FLEX_FLOW_ROW_WRAP);
+    // lv_obj_set_flex_align(ui_TabView1, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    // lv_obj_clear_flag(ui_TabView1, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    // lv_obj_set_style_bg_color(ui_TabView1, lv_color_hex(0xDBDBEA), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_opa(ui_TabView1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(ui_TabView1, &ui_font_heiti16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_TabPage1 = lv_tabview_add_tab(ui_TabView1, "首页");
+    // ui_TabPage1 = lv_tabview_add_tab(ui_TabView1, "首页");
 
-    ui_TabPage2 = lv_tabview_add_tab(ui_TabView1, "系统");
-    lv_obj_set_flex_flow(ui_TabPage2, LV_FLEX_FLOW_ROW_WRAP_REVERSE);
-    lv_obj_set_flex_align(ui_TabPage2, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    // ui_TabPage2 = lv_tabview_add_tab(ui_TabView1, "系统");
+    // lv_obj_set_flex_flow(ui_TabPage2, LV_FLEX_FLOW_ROW_WRAP_REVERSE);
+    // lv_obj_set_flex_align(ui_TabPage2, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 
-    ui_TextArea1 = lv_textarea_create(ui_TabPage2);
-    lv_obj_set_width(ui_TextArea1, lv_pct(100));
-    lv_obj_set_height(ui_TextArea1, lv_pct(60));
-    lv_obj_set_x(ui_TextArea1, -205);
-    lv_obj_set_y(ui_TextArea1, -23);
-    lv_textarea_set_placeholder_text(ui_TextArea1, "Placeholder...");
-    lv_obj_add_state(ui_TextArea1, LV_STATE_FOCUSED); /// States
+    // ui_TextArea1 = lv_textarea_create(ui_TabPage2);
+    // lv_obj_set_width(ui_TextArea1, lv_pct(100));
+    // lv_obj_set_height(ui_TextArea1, lv_pct(60));
+    // lv_obj_set_x(ui_TextArea1, -205);
+    // lv_obj_set_y(ui_TextArea1, -23);
+    // lv_textarea_set_placeholder_text(ui_TextArea1, "Placeholder...");
+    // lv_obj_add_state(ui_TextArea1, LV_STATE_FOCUSED); /// States
 
-    ui_TabPage3 = lv_tabview_add_tab(ui_TabView1, "模块");
-    lv_obj_set_flex_flow(ui_TabPage3, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(ui_TabPage3, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    // ui_TabPage3 = lv_tabview_add_tab(ui_TabView1, "模块");
+    // lv_obj_set_flex_flow(ui_TabPage3, LV_FLEX_FLOW_ROW);
+    // lv_obj_set_flex_align(ui_TabPage3, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 
-    ui_Chart1 = lv_chart_create(ui_TabPage3);
-    lv_obj_set_width(ui_Chart1, lv_pct(100));
-    lv_obj_set_height(ui_Chart1, lv_pct(60));
-    lv_obj_set_align(ui_Chart1, LV_ALIGN_CENTER);
-    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
-    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 5, 2, true, 50);
-    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 5, 2, true, 50);
-    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_SECONDARY_Y, 10, 5, 5, 2, true, 25);
-    lv_chart_series_t *ui_Chart1_series_1 = lv_chart_add_series(ui_Chart1, lv_color_hex(0x808080), LV_CHART_AXIS_PRIMARY_Y);
-    static lv_coord_t ui_Chart1_series_1_array[] = {0, 10, 20, 40, 80, 80, 40, 20, 10, 0};
-    lv_chart_set_ext_y_array(ui_Chart1, ui_Chart1_series_1, ui_Chart1_series_1_array);
+    // ui_Chart1 = lv_chart_create(ui_TabPage3);
+    // lv_obj_set_width(ui_Chart1, lv_pct(100));
+    // lv_obj_set_height(ui_Chart1, lv_pct(60));
+    // lv_obj_set_align(ui_Chart1, LV_ALIGN_CENTER);
+    // lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
+    // lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 5, 2, true, 50);
+    // lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 5, 2, true, 50);
+    // lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_SECONDARY_Y, 10, 5, 5, 2, true, 25);
+    // lv_chart_series_t *ui_Chart1_series_1 = lv_chart_add_series(ui_Chart1, lv_color_hex(0x808080), LV_CHART_AXIS_PRIMARY_Y);
+    // static lv_coord_t ui_Chart1_series_1_array[] = {0, 10, 20, 40, 80, 80, 40, 20, 10, 0};
+    // lv_chart_set_ext_y_array(ui_Chart1, ui_Chart1_series_1, ui_Chart1_series_1_array);
 
-    ui_TabPage4 = lv_tabview_add_tab(ui_TabView1, "高级");
+    // ui_TabPage4 = lv_tabview_add_tab(ui_TabView1, "高级");
 
-    ui_TabPage5 = lv_tabview_add_tab(ui_TabView1, "关于");
+    // ui_TabPage5 = lv_tabview_add_tab(ui_TabView1, "关于");
 
     lv_obj_t *ui_stateBar = ui_stateBar_create(obj);
     lv_obj_set_grid_cell(ui_stateBar, LV_GRID_ALIGN_STRETCH, 0, 1,

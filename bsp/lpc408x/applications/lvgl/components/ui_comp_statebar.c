@@ -17,7 +17,7 @@ static void time_update(struct _lv_timer_t *ptime)
                curTime->tm_hour, curTime->tm_min, curTime->tm_sec);
     lv_label_set_text(ptime->user_data, buff);
 }
-void del_component_timer_event_cb(lv_event_t *e)
+static void del_component_timer_event_cb(lv_event_t *e)
 {
     lv_timer_t *time_data_update = lv_event_get_user_data(e);
     lv_timer_del(time_data_update);
