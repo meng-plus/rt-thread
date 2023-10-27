@@ -2370,6 +2370,15 @@
         </settings>
     </configuration>
     <group>
+        <name>ad7843</name>
+        <file>
+            <name>$PROJ_DIR$\drivers\ad7843\src\ad7843.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\ad7843\rt_hw_ad7843_init.c</name>
+        </file>
+    </group>
+    <group>
         <name>ADXL345</name>
         <file>
             <name>$PROJ_DIR$\drivers\ADXL345\src\adxl345.c</name>
@@ -2522,6 +2531,18 @@
             <name>$PROJ_DIR$\..\..\components\drivers\i2c\soft_i2c.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi-bit-ops.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_core.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\spi\spi_dev.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\touch\touch.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\waitqueue.c</name>
         </file>
         <file>
@@ -2556,6 +2577,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_sdram.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\drivers\drv_soft_spi.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_uart.c</name>
@@ -3443,9 +3467,6 @@
             <name>$PROJ_DIR$\packages\LVGL-v8.3.9\env_support\rt-thread\squareline\lv_ui_entry.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\lvgl\lvgl_user_cmd.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\applications\lvgl\ui.c</name>
         </file>
         <file>
@@ -3531,6 +3552,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\components\utilities\ulog\ulog.c</name>
+        </file>
+    </group>
+    <group>
+        <name>xpt2046_touch</name>
+        <file>
+            <name>$PROJ_DIR$\packages\xpt2046-latest\drv_xpt2046.c</name>
         </file>
     </group>
 </project>

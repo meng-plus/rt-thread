@@ -13,7 +13,7 @@
 
 #define LOG_TAG              __FILE__
 #define LOG_LVL              LOG_LVL_DBG
-#include "ulog.h"
+#include "rtdbg.h"
 int main(void)
 {
     LOG_I("Hello RT-Thread!");

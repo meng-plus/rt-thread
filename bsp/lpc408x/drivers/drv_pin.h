@@ -21,6 +21,12 @@ extern "C"
 #endif
     /* Exported types ------------------------------------------------------------*/
 #define GET_PIN(PORTx, PIN) (rt_base_t)((32 * PORTx) + PIN)
+    typedef struct drv_lpc_pin
+    {
+        uint8_t port;
+        uint8_t pin;
+        uint8_t nFunc;
+    } drv_pin_cfg_t;
     /* Exported constants --------------------------------------------------------*/
     /* Exported macro ------------------------------------------------------------*/
     /* Exported functions prototypes ---------------------------------------------*/

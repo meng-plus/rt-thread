@@ -1,0 +1,23 @@
+from building import *
+Import('rtconfig')
+
+src   = []
+cwd   = GetCurrentDir()
+src  = Split("""
+src/ad7843.c
+rt_hw_ad7843_init.c
+""")
+# add ad7843 src files.
+# if GetDepend('PKG_USING_GT9147'):
+#     src += Glob('src/ad7843.c')
+
+# if GetDepend('PKG_USING_GT9147_SAMPLE'):
+#     src += Glob('samples/ad7843_sample.c')
+
+# add ad7843 include path.
+path  = [cwd + '/inc']
+
+# add src and include to group.
+group = DefineGroup('ad7843', src, depend = [''], CPPPATH = path)
+
+Return('group')

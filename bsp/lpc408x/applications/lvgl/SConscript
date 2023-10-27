@@ -7,7 +7,6 @@ CPPPATH = [cwd]
 src = Split("""
 ui_helpers.c
 ui.c
-lvgl_user_cmd.c
 """)
 CPPPATH += [cwd+"/screens"]
 CPPPATH += [cwd+"/components"]

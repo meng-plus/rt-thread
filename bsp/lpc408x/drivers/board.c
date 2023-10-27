@@ -74,6 +74,15 @@ void rt_hw_board_init()
     rt_hw_jlink_console_init();
 #endif
 }
+
+#ifdef RT_USING_FINSH
+#include <finsh.h>
+static void reboot(uint8_t argc, char **argv)
+{
+    rt_hw_cpu_reset();
+}
+MSH_CMD_EXPORT(reboot, Reboot System);
+#endif /* RT_USING_FINSH */
 /**
  * The time delay function.
  *

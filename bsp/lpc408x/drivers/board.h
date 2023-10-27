@@ -17,31 +17,32 @@
 #include <rtthread.h>
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* SRAM allocation for Peripherals */
-#define USB_RAM_BASE        0x20000000
-#define MCI_RAM_BASE        0x20002000
-#define ETH_RAM_BASE        0x20004000
+#define USB_RAM_BASE 0x20000000
+#define MCI_RAM_BASE 0x20002000
+#define ETH_RAM_BASE 0x20004000
 
 /* Internal SRAM memory size[Kbytes] <16-256>, Default: 64*/
-#define SRAM_SIZE      64 * 1024
-#define SRAM_END       (0x10000000 + SRAM_SIZE)
+#define SRAM_SIZE 64 * 1024
+#define SRAM_END (0x10000000 + SRAM_SIZE)
 
 #ifdef __CC_ARM
     extern int Image$$RW_IRAM1$$ZI$$Limit;
-    #define HEAP_BEGIN  ((void *)&Image$$RW_IRAM1$$ZI$$Limit)
+#define HEAP_BEGIN ((void *)&Image$$RW_IRAM1$$ZI$$Limit)
 #elif __ICCARM__
-    #pragma section="HEAP"
-    #define HEAP_BEGIN  (__segment_end("HEAP"))
+#pragma section = "HEAP"
+#define HEAP_BEGIN (__segment_end("HEAP"))
 #else
-    extern int __bss_end;
-    #define HEAP_BEGIN  ((void *)&__bss_end)
+extern int __bss_end;
+#define HEAP_BEGIN ((void *)&__bss_end)
 #endif
-#define HEAP_END    SRAM_END
+#define HEAP_END SRAM_END
 
-void rt_hw_board_init(void);
+    void rt_hw_board_init(void);
 
 #ifdef __cplusplus
 }

@@ -18,7 +18,57 @@ menu "Hardware Drivers Config"
             bool "Using ADC"
             select RT_USING_ADC
             default n
+        menu "SPI config"
+            config BSP_USING_SPI
+            bool "Enable SPI"
+            select RT_USING_SPI
+            default n
+            if BSP_USING_SPI
+                config BSP_USING_SPI1
+                bool "Enable SPI1"
+                default n
+                config BSP_USING_SPI2
+                bool "Enable SPI2"
+                default n
+            endif
+            config BSP_USING_SOFT_SPI
+            bool "Enable SOFT SPI"
+            select RT_USING_SPI
+            select RT_USING_SPI_BITOPS
+            select RT_USING_PIN
+            default n
+            if BSP_USING_SOFT_SPI
+                config BSP_USING_SOFT_SPI1
+                bool "Enable sspi1"
+                default n
+                if BSP_USING_SOFT_SPI1
+                    config BSP_S_SPI1_SCK_PIN
+                    int "Select sck"
+                    default 86
+                    config BSP_S_SPI1_MOSI_PIN
+                    int "Select mosi"
+                    default 91
+                    config BSP_S_SPI1_MISO_PIN
+                    int "Select miso"
+                    default 90
+                endif
 
+                config BSP_USING_SOFT_SPI2
+                bool "Enable sspi2"
+                default n
+                if BSP_USING_SOFT_SPI2
+                    config BSP_S_SPI2_SCK_PIN
+                    int "Select sck"
+                    default 7
+                    config BSP_S_SPI2_MOSI_PIN
+                    int "Select mosi"
+                    default 9
+                    config BSP_S_SPI2_MISO_PIN
+                    int "Select miso"
+                    default 8
+                endif
+            endif
+        endmenu
         config BSP_USING_UART
             bool "Enable UART"
             select RT_USING_SERIAL
