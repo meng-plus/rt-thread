@@ -207,13 +207,25 @@ void lv_port_indev_init(void)
 /*------------------
  * Touchpad
  * -----------------*/
-
+#include "ad7843.h"
+#include "system_var.h"
+struct rt_touch_device *touch = NULL;
 /*Initialize your touchpad*/
 static void touchpad_init(void)
 {
     /*Your code comes here*/
+    if (touch == NULL)
+    {
+        touch = (struct rt_touch_device *)rt_device_find("tp0");
+        if (rt_device_open((rt_device_t)(touch), RT_DEVICE_FLAG_INT_RX) != RT_EOK)
+        {
+            return;
+        }
+        hw_ad7843_calibration(g_screen_param.min_raw_x,
+                                   g_screen_param.min_raw_y,
+                                   g_screen_param.max_raw_x, g_screen_param.max_raw_y);
+    }
 }
-
 /*Will be called by the library to read the touchpad*/
 static void touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 {
@@ -240,7 +252,10 @@ static void touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 static bool touchpad_is_pressed(void)
 {
     /*Your code comes here*/
-
+    if (hw_ad7843_touchpad_is_pressed(touch))
+    {
+        return true;
+    }
     return false;
 }
 
@@ -249,8 +264,13 @@ static void touchpad_get_xy(lv_coord_t *x, lv_coord_t *y)
 {
     /*Your code comes here*/
 
-    (*x) = 0;
-    (*y) = 0;
+    struct rt_touch_data read_data;
+    rt_memset(&read_data, 0, sizeof(struct rt_touch_data));
+    if (touch && rt_device_read((rt_device_t)(touch), 0, &read_data, 1) == 1)
+    {
+        *x = read_data.x_coordinate;
+        *y = read_data.y_coordinate;
+    }
 }
 
 /*------------------
@@ -574,7 +594,7 @@ void lv_add_all_input_devices_to_group(lv_group_t *group)
 
     LV_ASSERT_MSG(group, "Cannot obtain an available group object.");
 
-        lv_indev_t *cur_drv = NULL;
+    lv_indev_t *cur_drv = NULL;
     for (;;)
     {
         cur_drv = lv_indev_get_next(cur_drv);
@@ -592,5 +612,5 @@ void lv_add_all_input_devices_to_group(lv_group_t *group)
         {
             lv_indev_set_group(cur_drv, group);
         }
-    }  
+    }
 }

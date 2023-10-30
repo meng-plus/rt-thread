@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include "ad7843.h"
 #define DBG_TAG "drv.ad7843"
-#define DBG_LVL DBG_LOG
+#define DBG_LVL DBG_WARNING
 #include <rtdbg.h>
 
 /* hardware section */
@@ -25,24 +25,20 @@ static rt_err_t ad7843_control(struct rt_touch_device *device, int cmd, void *da
 {
     if (cmd == RT_TOUCH_CTRL_GET_ID)
     {
-        // return ad7843_get_product_id(ad7843_client, 6, data);
     }
 
     if (cmd == RT_TOUCH_CTRL_GET_INFO)
     {
-        // return ad7843_get_info(ad7843_client, data);
     }
 
     switch (cmd)
     {
     case RT_TOUCH_CTRL_SET_X_RANGE: /* set x range */
     {
-
         break;
     }
     case RT_TOUCH_CTRL_SET_Y_RANGE: /* set y range */
     {
-
         break;
     }
     case RT_TOUCH_CTRL_SET_X_TO_Y: /* change x y */
@@ -76,49 +72,68 @@ static rt_err_t ad7843_control(struct rt_touch_device *device, int cmd, void *da
     return RT_EOK;
 }
 static const rt_uint8_t ad7843_tx_data[] = {
-    0x80 | 0x10,
-    0,
-    0,
     0x80 | 0x50,
     0,
     0,
+    0x80 | 0x10,
     0,
     0,
 };
+rt_bool_t hw_ad7843_touchpad_is_pressed(struct rt_touch_device *touch)
+{
+    if (touch && rt_pin_read(touch->config.irq_pin.pin) == 0)
+    {
+        return 1;
+    }
+    return 0;
+}
+void hw_ad7843_calibration(rt_uint16_t min_raw_x, rt_uint16_t min_raw_y, rt_uint16_t max_raw_x, rt_uint16_t max_raw_y)
+{
+    rt_touch_ad7843_t dev_obj = NULL;
 
+    /*Your code comes here*/
+
+    dev_obj = (rt_touch_ad7843_t)rt_device_find("tp0");
+    if (dev_obj != NULL)
+    {
+        dev_obj->min_raw_x = min_raw_x;
+        dev_obj->min_raw_y = min_raw_y;
+        dev_obj->max_raw_x = max_raw_x;
+        dev_obj->max_raw_y = max_raw_y;
+    }
+}
 static rt_size_t ad7843_readpoint(struct rt_touch_device *touch, void *buf, rt_size_t touch_num)
 {
     if (touch_num == 0)
     {
         return 0;
     }
-    rt_ad7843_t dev = (rt_ad7843_t)touch;
+    rt_touch_ad7843_t dev = (rt_touch_ad7843_t)touch;
     struct rt_touch_data *touch_data = (struct rt_touch_data *)buf;
     rt_uint8_t rx_data[sizeof(ad7843_tx_data)];
     rt_spi_transfer(&dev->spi, ad7843_tx_data, rx_data, sizeof(rx_data));
-    //    rt_uint8_t x_count = 0;
-    //    rt_uint8_t y_count = 0;
-    //    rt_uint32_t x_cum = 0;
-    //    rt_uint32_t y_cum = 0;
+    rt_uint8_t x_count = 1;
+    rt_uint8_t y_count = 1;
+    rt_uint32_t x_cum = 0;
+    rt_uint32_t y_cum = 0;
 
-    LOG_HEX("touch_data", 8, rx_data, sizeof(rx_data));
+    // LOG_HEX("touch_data", 8, rx_data, sizeof(rx_data));
     uint16_t x = rx_data[1];
     uint16_t y = rx_data[4];
     x = (x << 5) | (rx_data[2] & 0x1F);
     y = (y << 5) | (rx_data[5] & 0x1F);
-    LOG_D("raw [%d,%d]  %X %X", x, y, x, y);
-    if (rt_pin_read(dev->parent.config.irq_pin.pin))
+    if (!hw_ad7843_touchpad_is_pressed(touch))
     {
         touch_data->event = RT_TOUCH_EVENT_NONE;
         return 0;
     }
     touch_data->event = RT_TOUCH_EVENT_DOWN;
 
-    touch_data->x_coordinate = x;
-    touch_data->y_coordinate = y;
-    // result->x_coordinate = ((float)x_cum / x_count - dev->min_raw_x) / (dev->max_raw_x - dev->min_raw_x) * dev->parent.info.range_x;
-    // result->y_coordinate = ((float)y_cum / y_count - dev->min_raw_y) / (dev->max_raw_y - dev->min_raw_y) * dev->parent.info.range_y;
-
+    x_cum = x;
+    y_cum = y;
+    touch_data->x_coordinate = (rt_uint16_t)(((float)x_cum / x_count - dev->min_raw_x) / (dev->max_raw_x - dev->min_raw_x) * dev->parent.info.range_x);
+    touch_data->y_coordinate = (rt_uint16_t)(((float)y_cum / y_count - dev->min_raw_y) / (dev->max_raw_y - dev->min_raw_y) * dev->parent.info.range_y);
+    LOG_D("point[%d,%d]  raw(%d %d)", touch_data->x_coordinate, touch_data->y_coordinate, x_cum, y_cum);
     return 1;
 }
 
@@ -128,13 +143,13 @@ static struct rt_touch_ops touch_ops =
         .touch_control = ad7843_control,
 };
 
-rt_ad7843_t hw_ad7843_init(char *spi_bus_name, rt_base_t cs_pin, rt_base_t irq_pin,
-                           rt_int32_t range_x, rt_int32_t range_y,
-                           rt_uint16_t min_raw_x, rt_uint16_t min_raw_y,
-                           rt_uint16_t max_raw_x, rt_uint16_t max_raw_y)
+rt_touch_ad7843_t hw_ad7843_init(char *spi_bus_name, rt_base_t cs_pin, rt_base_t irq_pin,
+                                 rt_int32_t range_x, rt_int32_t range_y,
+                                 rt_uint16_t min_raw_x, rt_uint16_t min_raw_y,
+                                 rt_uint16_t max_raw_x, rt_uint16_t max_raw_y)
 {
 
-    rt_ad7843_t dev_obj = (rt_ad7843_t)rt_calloc(1, sizeof(struct rt_ad7843));
+    rt_touch_ad7843_t dev_obj = (rt_touch_ad7843_t)rt_calloc(1, sizeof(struct rt_touch_ad7843));
 
     if (dev_obj == RT_NULL)
         return 0;

@@ -13,7 +13,7 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
-struct rt_ad7843
+struct rt_touch_ad7843
 {
     struct rt_touch_device parent;
     struct rt_spi_device spi;
@@ -23,11 +23,15 @@ struct rt_ad7843
     rt_uint16_t max_raw_y;
 };
 
-typedef struct rt_ad7843 *rt_ad7843_t;
+typedef struct rt_touch_ad7843 *rt_touch_ad7843_t;
 
-//int rt_hw_ad7843_init(const char *name, struct rt_touch_config *cfg);
-rt_ad7843_t hw_ad7843_init(char *spi_bus_name, rt_base_t cs_pin, rt_base_t irq_pin,
-                              rt_int32_t range_x, rt_int32_t range_y,
-                              rt_uint16_t min_raw_x, rt_uint16_t min_raw_y,
-                              rt_uint16_t max_raw_x, rt_uint16_t max_raw_y);
+// int rt_hw_ad7843_init(const char *name, struct rt_touch_config *cfg);
+rt_touch_ad7843_t hw_ad7843_init(char *spi_bus_name, rt_base_t cs_pin, rt_base_t irq_pin,
+                           rt_int32_t range_x, rt_int32_t range_y,
+                           rt_uint16_t min_raw_x, rt_uint16_t min_raw_y,
+                           rt_uint16_t max_raw_x, rt_uint16_t max_raw_y);
+rt_bool_t hw_ad7843_touchpad_is_pressed(struct rt_touch_device *touch);
+void hw_ad7843_calibration(rt_uint16_t min_raw_x, rt_uint16_t min_raw_y,
+                           rt_uint16_t max_raw_x, rt_uint16_t max_raw_y);
+
 #endif

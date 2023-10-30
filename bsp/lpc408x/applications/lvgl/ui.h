@@ -19,8 +19,9 @@ extern "C"
 
     LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
 
-    LV_FONT_DECLARE(ui_font_heiti12);
-    LV_FONT_DECLARE(ui_font_heiti16);
+    LV_FONT_DECLARE(lv_font_simhei_14);
+    LV_FONT_DECLARE(lv_font_simhei_16);
+    LV_FONT_DECLARE(lv_font_simhei_20);
     LV_FONT_DECLARE(ui_font_heiti24);
 
     void ui_init(void);

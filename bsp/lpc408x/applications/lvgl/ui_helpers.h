@@ -113,7 +113,9 @@ void _ui_slider_set_text_value( lv_obj_t *trg, lv_obj_t *src, const char *prefix
 
 void _ui_checked_set_text_value( lv_obj_t *trg, lv_obj_t *src, const char *txt_on, const char *txt_off);
 
-void _ui_spinbox_step(lv_obj_t * target, int val);
+void _ui_spinbox_step(lv_obj_t * target, int val);
+
+void _lv_event_child_notify(lv_obj_t *target, uint32_t event_id, void *param);
 
 #ifdef __cplusplus
 } /*extern "C"*/

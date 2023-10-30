@@ -17,7 +17,16 @@
 extern "C"
 {
 #endif
+    enum UI_COMP_DASHBOARD
+    {
+        DASHBOARD_CHART,
+        DASHBOARD_SLIDER_X,
+        DASHBOARD_SLIDER_Y,
+        DASHBOARD_CTL,
+        DASHBOARD_SEN_VAL,
 
+        DASHBOARD_NUM,
+    };
     lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview);
 #ifdef __cplusplus
 }

@@ -17,7 +17,7 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
     lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_bg_color(obj, lv_color_hex(0xDBDBEA), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(obj, &ui_font_heiti16, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(obj, &lv_font_simhei_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *dashboard = ui_tabview_page_dashboard_create(obj);
 

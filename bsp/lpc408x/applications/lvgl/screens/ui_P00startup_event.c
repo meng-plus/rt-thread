@@ -7,15 +7,22 @@
 #include "ui_P00startup.h"
 #include "ui_comp.h"
 #include "ui_P01main.h"
-
+#include "ui_calibration.h"
+#include "system_var.h"
 static void set_bar(void *bar, int32_t bar_value)
 {
     lv_bar_set_value(bar, bar_value, LV_ANIM_ON);
     int32_t max = lv_bar_get_max_value(bar);
     if (bar_value == max)
     {
-        //_ui_screen_change(&ui_P01main, LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, ui_P01main_screen_init);
-        lv_scr_load_anim(ui_main_create(NULL), LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, true); /*!< 切换页面并删除启动页 */
+        // if (g_screen_param.touch == 0)
+        // {
+        //     lv_scr_load_anim(ui_calibration_create(NULL), LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, true); /*!< 切换页面并删除启动页 */
+        // }
+        // else
+        {
+            lv_scr_load_anim(ui_main_create(NULL), LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, true); /*!< 切换页面并删除启动页 */
+        }
     }
 }
 

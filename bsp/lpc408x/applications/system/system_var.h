@@ -17,7 +17,7 @@
 extern "C"
 {
 #endif
-
+    extern screen_param_t g_screen_param;
     extern product_param_t g_prod_param;
     extern const var_init_t g_var_init;
     extern varWork_t g_var_work;

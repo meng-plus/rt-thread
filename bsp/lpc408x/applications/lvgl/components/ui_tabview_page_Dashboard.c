@@ -1,5 +1,6 @@
 #include "ui_tabview_page_Dashboard.h"
-
+#include "ui_comp_page_Dashboard_ctl.h"
+#include "ui_comp.h"
 static void slider_x_event_cb(lv_event_t *e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
@@ -21,8 +22,8 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     lv_obj_t *obj;
     obj = lv_tabview_add_tab(tableview, "dashboard");
 
-    static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), 16, 50, 50, LV_GRID_TEMPLATE_LAST};
-    static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), 16, 25, 25, LV_GRID_TEMPLATE_LAST};
+    static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), 16, 100, LV_GRID_TEMPLATE_LAST};
+    static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), 16, 50, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
 
@@ -61,9 +62,19 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     lv_obj_set_grid_cell(label_obj, LV_GRID_ALIGN_START, 2, 1,
                          LV_GRID_ALIGN_STRETCH, 0, 1);
     lv_label_set_text_fmt(label_obj, "hello word");
-    lv_obj_t *label_obj2 = lv_label_create(obj);
-    lv_obj_set_grid_cell(label_obj2, LV_GRID_ALIGN_START, 0, 1,
+    lv_obj_t *dashboard_ctl = ui_Dashboard_ctl_create(obj);
+    lv_obj_set_grid_cell(dashboard_ctl, LV_GRID_ALIGN_START, 0, 1,
                          LV_GRID_ALIGN_STRETCH, 2, 1);
-    lv_label_set_text_fmt(label_obj2, "hello word2");
+
+    lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * DASHBOARD_NUM);
+    children[DASHBOARD_CHART] = ui_Chart1;
+    children[DASHBOARD_SLIDER_X] = slider_x;
+    children[DASHBOARD_SLIDER_Y] = slider_y;
+    children[DASHBOARD_CTL] = dashboard_ctl;
+
+    lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
+    lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
+
+    _lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, NULL);
     return obj;
 }

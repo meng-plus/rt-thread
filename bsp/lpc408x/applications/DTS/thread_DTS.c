@@ -11,6 +11,7 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 #include "Session_DTS.h"
+#include "system_var.h"
 thread_dts_t *pthread_dts;
 
 static rt_err_t finsh_rx_ind(rt_device_t dev, rt_size_t size)
@@ -85,7 +86,8 @@ void thread_dts_entry(void *param)
     {
         session_dts_tick(pSession);
         rt_thread_yield();
-        rt_thread_mdelay(pthread_dts->delayms);
+        if (pthread_dts->delayms)
+            rt_thread_mdelay(pthread_dts->delayms);
     }
 }
 int thread_DTS_init()
@@ -96,6 +98,8 @@ int thread_DTS_init()
         LOG_E("pdts_data == NULL,need %d Byte", sizeof(dts_data_t));
         return -1;
     }
+    g_var_work.dts = pthread_dts;
+
     pthread_dts->tid = rt_thread_create("th_dts", thread_dts_entry, RT_NULL,
                                         4096, RT_MAIN_THREAD_PRIORITY, 20);
     RT_ASSERT(pthread_dts->tid != RT_NULL);

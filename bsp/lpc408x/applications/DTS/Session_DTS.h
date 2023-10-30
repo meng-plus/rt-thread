@@ -41,11 +41,13 @@ extern "C"
         uint8_t status; /*!< 0: stop 1:init 2:read 3:error */
         uint8_t target;
         uint8_t repeat;
+
+        uint8_t sel_chn; //[DTS_CHANNEL_NUM]; /*!< 刷新通道选择 */
         /** modbus config */
         uint8_t ctx_send_buf[AGILE_MODBUS_MAX_ADU_LENGTH];
         uint8_t ctx_read_buf[AGILE_MODBUS_MAX_ADU_LENGTH];
         agile_modbus_rtu_t ctx_rtu;
-        uint32_t delayms;
+        uint32_t delayms; /*!< 刷新周期 0为最快 */
         dts_data_t data;
     } thread_dts_t;
 

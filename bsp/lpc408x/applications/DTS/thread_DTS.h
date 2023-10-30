@@ -29,11 +29,6 @@ extern "C"
 
     } TH_DTH_CMD_E;
 
-    typedef struct _DTS_CHN_RANGE
-    {
-        uint8_t sel_chn[DTS_CHANNEL_NUM]; /*!< 1:sel */
-    } dts_chn_range_t;
-
     void thread_DTS_control(TH_DTH_CMD_E cmd, void *param);
 #ifdef __cplusplus
 }
