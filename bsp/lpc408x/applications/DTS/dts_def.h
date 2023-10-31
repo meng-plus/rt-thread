@@ -52,7 +52,7 @@ extern "C"
     {
         dts_sys_t system;                                             /*!< 设备信息 */
         dts_channel_t channel[DTS_CHANNEL_NUM];                       /*!< 通道信息 */
-        dts_chn_Data_t partition[DTS_PARTITION_NUM][DTS_CHANNEL_NUM]; /*!< 通道数据 */
+        dts_chn_Data_t partition[DTS_CHANNEL_NUM][DTS_PARTITION_NUM]; /*!< 通道数据 */
     } dts_data_t;
 
 #ifdef __cplusplus

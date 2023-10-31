@@ -130,7 +130,6 @@ void thread_DTS_control(TH_DTH_CMD_E cmd, void *param)
             if (sel_chn < pthread_dts->data.system.chn_num)
             {
                 pthread_dts->sel_chn = sel_chn;
-                pthread_dts->m_session.msg_id = DTS_CHN;
             }
         }
         break;
@@ -167,7 +166,7 @@ void thread_DTS_control(TH_DTH_CMD_E cmd, void *param)
         if (pthread_dts && param)
         {
             pthread_dts->update_flag = 0;
-           (* (void**)param) = (void*)&pthread_dts->data;
+            (void*)(*param) = (void*)&pthread_dts->data;
         }
         break;
     case TH_DTH_GET_SYS_INFO:

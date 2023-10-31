@@ -38,8 +38,12 @@ extern "C"
         rt_device_t device;
 #endif
         rt_thread_t tid;
-        uint8_t status; /*!< 0: stop 1:init 2:read 3:error */
+        uint8_t status;          /*!< 0: stop 1:init 2:read 3:error */
+        uint8_t offline : 1;     /*!< 1: 掉线*/
+        uint8_t update_flag : 1; /*!< 1: 数据有刷新通知*/
         uint8_t target;
+        uint8_t part_idx;
+        uint8_t part_num; /*!< 本轮扫描的数量 */
         uint8_t repeat;
 
         uint8_t sel_chn; //[DTS_CHANNEL_NUM]; /*!< 刷新通道选择 */

@@ -23,7 +23,7 @@ int32_t dts_sys_req(session_master_t *se_handle, uint8_t *buff, uint16_t len)
     return 0;
 }
 int32_t dts_sys_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
-{    
+{
     thread_dts_t *pDts = (thread_dts_t *)se_handle;
     agile_modbus_t *ctx = &((thread_dts_t *)se_handle)->ctx_rtu._ctx;
     int32_t rc = agile_modbus_deserialize_read_registers(ctx, len, (uint16_t *)&pthread_dts->data.system);
@@ -40,7 +40,7 @@ int32_t dts_sys_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
     return 0;
 }
 int32_t dts_chn_req(session_master_t *se_handle, uint8_t *buff, uint16_t len)
-{    
+{
     thread_dts_t *pdts = (thread_dts_t *)se_handle;
     agile_modbus_t *ctx = &pdts->ctx_rtu._ctx;
     if (pdts->sel_chn < pdts->data.system.chn_num && pdts->sel_chn < DTS_CHANNEL_NUM)
@@ -75,7 +75,23 @@ int32_t dts_part_req(session_master_t *se_handle, uint8_t *buff, uint16_t len)
     agile_modbus_t *ctx = &pdts->ctx_rtu._ctx;
     if (pdts->sel_chn < pdts->data.system.chn_num && pdts->sel_chn < DTS_CHANNEL_NUM)
     {
-        int32_t send_len = agile_modbus_serialize_read_registers(ctx, 200 + (pdts->sel_chn * 1000), sizeof(dts_chn_Data_t) / 2);
+        uint16_t part_all = pdts->data.channel[pdts->sel_chn].partition; /*!< 当前分区的总分区数 */
+        uint16_t part_st = pdts->part_idx;                               /*!< 分区太多分块读取 */
+        uint16_t part_num = 0;
+        if (part_st >= part_all)
+        {
+            pdts->part_idx = 0;
+            part_st = 0;
+        }
+        part_num = 125 * 2 / sizeof(dts_chn_Data_t);
+
+        if (part_st + part_num > part_all)
+        {
+            part_num = part_all - part_st;
+        }
+        pdts->part_num = part_num;
+        uint32_t offset = part_st * (sizeof(dts_chn_Data_t) / 2);
+        int32_t send_len = agile_modbus_serialize_read_registers(ctx, 200 + (pdts->sel_chn * 1000) + offset, part_num * sizeof(dts_chn_Data_t) / 2);
         rt_device_write(pdts->device, 0, ctx->send_buf, send_len);
     }
     return 0;
@@ -86,14 +102,16 @@ int32_t dts_part_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
     agile_modbus_t *ctx = &pdts->ctx_rtu._ctx;
     if (pdts->sel_chn < pdts->data.system.chn_num && pdts->sel_chn < DTS_CHANNEL_NUM)
     {
-        int32_t rc = agile_modbus_deserialize_read_registers(ctx, len, (uint16_t *)&pdts->data.partition[pdts->sel_chn]);
+        int32_t rc = agile_modbus_deserialize_read_registers(ctx, len, (uint16_t *)&pdts->data.partition[pdts->sel_chn][pdts->part_idx]);
         if (rc < 0)
         {
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
             se_handle->msg_id = DTS_SYS;
+            return rc;
         }
+        pdts->part_idx += pdts->part_num;
     }
     return 0;
 }
@@ -122,7 +140,16 @@ int32_t session_dts_tick(session_master_t *se_handle)
     TR_CHECK_RES_E res = se_handle->transport.waiting_response(&se_handle->transport);
     if (res == TR_CHECK_FRAME)
     {
-        session_dts_response(se_handle, se_handle->msg_id);
+        thread_dts_t *pdts = (thread_dts_t *)se_handle;
+        if (0 == session_dts_response(se_handle, se_handle->msg_id))
+        {
+            pdts->update_flag = 1;
+            pdts->offline = 0;
+        }
+        else
+        {
+            pdts->offline = 1;
+        }
     }
     return res;
 }
@@ -133,6 +160,5 @@ int32_t session_dts_request(session_master_t *se_handle, DTS_MSG_ID_E id)
 }
 int32_t session_dts_response(session_master_t *se_handle, DTS_MSG_ID_E id)
 {
-    dts_msg_array[id].response(se_handle, NULL, se_handle->transport.read_len);
-    return 0;
+    return dts_msg_array[id].response(se_handle, NULL, se_handle->transport.read_len);
 }

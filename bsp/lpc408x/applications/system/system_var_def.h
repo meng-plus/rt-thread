@@ -40,6 +40,7 @@ extern "C"
     {
         const uint32_t resv;
         const char *product_name;
+        uint16_t dts_delayms_max;
     } var_init_t;
 
 /*!< 设备的配置参数 flash中存储 */
@@ -54,7 +55,8 @@ extern "C"
      */
     typedef struct __FLASH_PRODUCT_PARAMETER
     {
-        uint32_t ver; /*!<版本标识*/
+        uint32_t ver;         /*!<版本标识*/
+        uint16_t dts_delayms; /*!< 测温主机数据扫描周期 range[0,10000] */
 
     } product_param_t;
 

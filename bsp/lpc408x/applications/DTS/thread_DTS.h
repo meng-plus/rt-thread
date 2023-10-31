@@ -21,11 +21,14 @@ extern "C"
     {
         TH_DTH_STOP = 0,
         TH_DTH_START,
-        TH_DTH_SET_DELAY,
-        TH_DTH_SET_CHN_RANGE,
+        TH_DTH_SYNC,          /*!< NULL */
+        TH_DTH_SET_DELAY,     /*!< uint32_t */
+        TH_DTH_GET_DELAY,     /*!< uint32_t */
+        TH_DTH_SET_CHN_RANGE, /*!< uint32_t */
+        TH_DTH_GET_DATA,      /*!< dts_data_t* */
         TH_DTH_GET_SYS_INFO,
-        TH_DTH_GET_CHN,
-        TH_DTH_GET_PART,
+        TH_DTH_GET_CHN_INFO,
+        TH_DTH_GET_PART_INFO,
 
     } TH_DTH_CMD_E;
 
