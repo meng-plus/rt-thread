@@ -59,7 +59,7 @@ extern "C"
     extern const session_msg_t dts_msg_array[DTS_MSG_NUM];
     void session_dts_init(session_master_t *pSession);
     int session_dts_tick(session_master_t *pSession);
-
+    void session_dts_change(session_master_t *pSession, DTS_MSG_ID_E id);
     int32_t session_dts_request(session_master_t *se_handle, DTS_MSG_ID_E id);
     int32_t session_dts_response(session_master_t *se_handle, DTS_MSG_ID_E id);
 #ifdef __cplusplus

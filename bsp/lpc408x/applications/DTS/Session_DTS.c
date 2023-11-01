@@ -35,7 +35,7 @@ int32_t dts_sys_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
     }
     if (pDts->data.system.status)
     {
-        se_handle->msg_id = DTS_CHN;
+        session_dts_change(se_handle, DTS_CHN);
     }
     return 0;
 }
@@ -62,11 +62,10 @@ int32_t dts_chn_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
-            se_handle->msg_id = DTS_SYS;
+            session_dts_change(se_handle, DTS_SYS);
         }
     }
-
-    se_handle->msg_id = DTS_PART;
+    session_dts_change(se_handle, DTS_PART);
     return 0;
 }
 int32_t dts_part_req(session_master_t *se_handle, uint8_t *buff, uint16_t len)
@@ -108,7 +107,7 @@ int32_t dts_part_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
-            se_handle->msg_id = DTS_SYS;
+            session_dts_change(se_handle, DTS_SYS);
             return rc;
         }
         pdts->part_idx += pdts->part_num;
@@ -135,12 +134,12 @@ void session_dts_init(session_master_t *se_handle)
     tr_control(&se_handle->transport, TR_SET_WAITING_RESPONSE, (void *)waiting_response);
 }
 int32_t session_dts_tick(session_master_t *se_handle)
-{
+{   
+    thread_dts_t *pdts = (thread_dts_t *)se_handle;
     session_dts_request(se_handle, se_handle->msg_id);
     TR_CHECK_RES_E res = se_handle->transport.waiting_response(&se_handle->transport);
     if (res == TR_CHECK_FRAME)
     {
-        thread_dts_t *pdts = (thread_dts_t *)se_handle;
         if (0 == session_dts_response(se_handle, se_handle->msg_id))
         {
             pdts->update_flag = 1;
@@ -148,10 +147,39 @@ int32_t session_dts_tick(session_master_t *se_handle)
         }
         else
         {
+            session_dts_change(se_handle, DTS_SYS);
             pdts->offline = 1;
         }
+    }       
+    else
+    {
+        session_dts_change(se_handle, DTS_SYS);
+        pdts->offline = 1;
     }
     return res;
+}
+void session_dts_change(session_master_t *se_handle, DTS_MSG_ID_E id)
+{
+    se_handle->msg_id = id;
+    thread_dts_t *pdts = (thread_dts_t *)se_handle;
+    switch (id)
+    {
+    case DTS_SYS: /*!< 获取设备信息 */
+        if (pdts)
+            memset(&pdts->data.system, 0, sizeof(pdts->data.system));
+        break;
+    case DTS_CHN: /*!< 读取通道信息 */
+        if (pdts)
+            memset(pdts->data.channel, 0, sizeof(pdts->data.channel));
+        break;
+    case DTS_PART: /*!< 读取分区数据 */
+        if (pdts)
+            memset(pdts->data.partition, 0, sizeof(pdts->data.partition));
+        break;
+
+    default:
+        break;
+    }
 }
 int32_t session_dts_request(session_master_t *se_handle, DTS_MSG_ID_E id)
 {

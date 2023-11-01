@@ -21,14 +21,14 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
 
     lv_obj_t *dashboard = ui_tabview_page_dashboard_create(obj);
 
-    lv_obj_t *cui_TabPage3;
-    cui_TabPage3 = lv_tabview_add_tab(obj, "模块");
-
-    lv_obj_t *cui_TabPage4;
-    cui_TabPage4 = lv_tabview_add_tab(obj, "高级");
-
-    lv_obj_t *cui_TabPage5;
-    cui_TabPage5 = lv_tabview_add_tab(obj, "关于");
+//    lv_obj_t *cui_TabPage3;
+//    cui_TabPage3 = lv_tabview_add_tab(obj, "模块");
+//
+//    lv_obj_t *cui_TabPage4;
+//    cui_TabPage4 = lv_tabview_add_tab(obj, "高级");
+//
+//    lv_obj_t *cui_TabPage5;
+//    cui_TabPage5 = lv_tabview_add_tab(obj, "关于");
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * UI_COMP_TABVIEW_MAIN_NUM);
     children[UI_COMP_TABVIEW_MAIN_DASHBOARD] = dashboard;
