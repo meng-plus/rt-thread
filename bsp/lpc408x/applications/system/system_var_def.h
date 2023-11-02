@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "Session_DTS.h"
+#include "thread_DTS.h"
 #ifdef __cplusplus
 extern "C"
 {

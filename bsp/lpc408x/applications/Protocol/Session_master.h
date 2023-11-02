@@ -28,13 +28,13 @@ extern "C"
         int32_t (*response)(session_master_t *se_handle, uint8_t *buff, uint16_t len); /*!< 响应报文 */
     } session_msg_t;
 
-   struct __SESSION_MASTER
+    struct __SESSION_MASTER
     {
         transport_t transport;
+        session_msg_t msgTab;
         uint32_t msg_id;
-
-    } ;
-
+    };
+    void session_master_init(session_master_t *se_handle);
 #ifdef __cplusplus
 }
 #endif

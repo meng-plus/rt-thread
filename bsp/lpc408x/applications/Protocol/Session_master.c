@@ -14,6 +14,7 @@
 #define LOG_LVL LOG_LVL_DBG
 #include "rtdbg.h"
 #include "thread_DTS.h"
+#include "Session_master.h"
 int32_t dts_sys_req(session_master_t *se_handle, uint8_t *buff, uint16_t len)
 {
     rt_thread_mdelay(1000);
@@ -189,4 +190,14 @@ int32_t session_dts_request(session_master_t *se_handle, DTS_MSG_ID_E id)
 int32_t session_dts_response(session_master_t *se_handle, DTS_MSG_ID_E id)
 {
     return dts_msg_array[id].response(se_handle, NULL, se_handle->transport.read_len);
+}
+void session_master_init(session_master_t *se_handle)
+{
+    if (NULL == se_handle)
+    {
+        return;
+    }
+    memset(se_handle, 0, sizeof(session_master_t));
+    tr_init(&se_handle->transport, ctx->read_buf, ctx->read_bufsz);
+    tr_control(&se_handle->transport, TR_SET_WAITING_RESPONSE, (void *)waiting_response);
 }

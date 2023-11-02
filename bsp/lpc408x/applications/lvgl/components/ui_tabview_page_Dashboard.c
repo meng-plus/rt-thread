@@ -38,7 +38,7 @@ static void time_update(lv_timer_t *ptime)
             return;
 
         dts_data_t *pdata = NULL;
-        thread_DTS_control(TH_DTH_GET_DATA, &pdata);
+        thread_DTS_control(TH_DTS_GET_DATA, &pdata);
         if (NULL == pdata)
             return;
 

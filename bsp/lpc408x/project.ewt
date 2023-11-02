@@ -2553,6 +2553,18 @@
         </file>
     </group>
     <group>
+        <name>DOIC_protocol</name>
+        <file>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\DOIC_protocol.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\thread_DOIC.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\transport_DOIC.c</name>
+        </file>
+    </group>
+    <group>
         <name>drivers</name>
         <file>
             <name>$PROJ_DIR$\drivers\board.c</name>
@@ -3167,9 +3179,6 @@
             <name>$PROJ_DIR$\packages\LVGL-v8.3.9\src\font\lv_font_montserrat_8.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_simhei_16.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.9\src\font\lv_font_simsun_16_cjk.c</name>
         </file>
         <file>
@@ -3467,6 +3476,24 @@
     <group>
         <name>LVGL-SquareLine</name>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_montserratMedium_12.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_montserratMedium_16.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_simhei_12.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_simhei_14.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_simhei_16.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_simhei_20.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.9\env_support\rt-thread\squareline\lv_ui_entry.c</name>
         </file>
         <file>
@@ -3529,6 +3556,9 @@
     </group>
     <group>
         <name>Protocol</name>
+        <file>
+            <name>$PROJ_DIR$\applications\Protocol\Session_master.c</name>
+        </file>
         <file>
             <name>$PROJ_DIR$\applications\Protocol\Transport.c</name>
         </file>

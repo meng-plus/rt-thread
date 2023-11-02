@@ -30,33 +30,7 @@ extern "C"
         DTS_PART, /*!< 读取分区数据 */
         DTS_MSG_NUM,
     } DTS_MSG_ID_E;
-    typedef struct _THREAD_DTS
-    {
-        session_master_t m_session;
-        struct rt_semaphore rx_sem;
-#if !defined(RT_USING_POSIX_STDIO) && defined(RT_USING_DEVICE)
-        rt_device_t device;
-#endif
-        rt_thread_t tid;
-        uint8_t status;          /*!< 0: stop 1:init 2:read 3:error */
-        uint8_t offline : 1;     /*!< 1: 掉线*/
-        uint8_t update_flag : 1; /*!< 1: 数据有刷新通知*/
-        uint8_t target;
-        uint8_t part_idx;
-        uint8_t part_num; /*!< 本轮扫描的数量 */
-        uint8_t repeat;
 
-        uint8_t sel_chn; //[DTS_CHANNEL_NUM]; /*!< 刷新通道选择 */
-        /** modbus config */
-        uint8_t ctx_send_buf[AGILE_MODBUS_MAX_ADU_LENGTH];
-        uint8_t ctx_read_buf[AGILE_MODBUS_MAX_ADU_LENGTH];
-        agile_modbus_rtu_t ctx_rtu;
-        uint32_t delayms; /*!< 刷新周期 0为最快 */
-        dts_data_t data;
-    } thread_dts_t;
-
-    extern thread_dts_t *pthread_dts;
-    extern const session_msg_t dts_msg_array[DTS_MSG_NUM];
     void session_dts_init(session_master_t *pSession);
     int session_dts_tick(session_master_t *pSession);
     void session_dts_change(session_master_t *pSession, DTS_MSG_ID_E id);

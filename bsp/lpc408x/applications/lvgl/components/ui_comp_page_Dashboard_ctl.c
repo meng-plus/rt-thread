@@ -47,7 +47,7 @@ static void dd_event_handler(lv_event_t *e)
         chn_sel = lv_dropdown_get_selected(obj);
         if (g_var_work.dts)
         {
-            thread_DTS_control(TH_DTH_SET_CHN_RANGE, &chn_sel);
+            thread_DTS_control(TH_DTS_SET_CHN_RANGE, &chn_sel);
         }
     }
 }

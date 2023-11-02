@@ -10,6 +10,7 @@
  */
 
 #include "Session_DTS.h"
+#include "thread_DTS.h"
 TR_CHECK_RES_E waiting_response(transport_t *pTr) /*!< 等待帧数据 */
 {
     thread_dts_t *pDts = (thread_dts_t *)pTr;

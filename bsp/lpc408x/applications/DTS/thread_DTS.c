@@ -108,22 +108,22 @@ int thread_DTS_init()
     {
         rt_sem_init(&pthread_dts->rx_sem, "dtsrx", 0, 0);
         rt_thread_startup(pthread_dts->tid);
-        thread_DTS_control(TH_DTH_SYNC, NULL);
+        thread_DTS_control(TH_DTS_SYNC, NULL);
     }
     return 0;
 }
 INIT_APP_EXPORT(thread_DTS_init);
-void thread_DTS_control(TH_DTH_CMD_E cmd, void *param)
+void thread_DTS_control(TH_DTS_CMD_E cmd, void *param)
 {
     switch (cmd)
     {
-    case TH_DTH_SYNC:
+    case TH_DTS_SYNC:
         if (pthread_dts)
         {
             pthread_dts->delayms = g_prod_param.dts_delayms;
         }
         break;
-    case TH_DTH_SET_CHN_RANGE:
+    case TH_DTS_SET_CHN_RANGE:
         if (pthread_dts && param)
         {
             uint32_t sel_chn = *(uint32_t *)param;
@@ -134,7 +134,7 @@ void thread_DTS_control(TH_DTH_CMD_E cmd, void *param)
             }
         }
         break;
-    case TH_DTH_SET_DELAY:
+    case TH_DTS_SET_DELAY:
     {
         if (param != NULL)
         {
@@ -151,7 +151,7 @@ void thread_DTS_control(TH_DTH_CMD_E cmd, void *param)
         }
     }
     break;
-    case TH_DTH_GET_DELAY:
+    case TH_DTS_GET_DELAY:
     {
         if (param != NULL)
         {
@@ -163,22 +163,22 @@ void thread_DTS_control(TH_DTH_CMD_E cmd, void *param)
         }
     }
     break;
-    case TH_DTH_GET_DATA:
+    case TH_DTS_GET_DATA:
         if (pthread_dts && param)
         {
             pthread_dts->update_flag = 0;
-           (* (void**)param) = (void*)&pthread_dts->data;
+            (*(void **)param) = (void *)&pthread_dts->data;
         }
         break;
-    case TH_DTH_GET_SYS_INFO:
+    case TH_DTS_GET_SYS_INFO:
         pthread_dts->update_flag = 0;
 
         break;
-    case TH_DTH_GET_CHN_INFO:
+    case TH_DTS_GET_CHN_INFO:
         pthread_dts->update_flag = 0;
 
         break;
-    case TH_DTH_GET_PART_INFO:
+    case TH_DTS_GET_PART_INFO:
 
         break;
     default:
