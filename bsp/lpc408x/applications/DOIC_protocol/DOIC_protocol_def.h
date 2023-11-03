@@ -27,9 +27,10 @@ extern "C"
     };
     typedef struct DOIC_PROTOCOL_DEF
     {
-        uint8_t hd1;     /*!< 起始符1 固定值0xFB */
-        uint8_t hd2;     /*!< 起始符2 固定值0x04 */
-                         /*!< 校验部分 */
+        uint8_t hd1; /*!< 起始符1 固定值0xFB */
+        uint8_t hd2; /*!< 起始符2 固定值0x04 */
+
+        /*!< 校验部分 */
         uint8_t dst;     /*!< 目标地址 0：广播  1~254表示设备地址*/
         uint8_t src;     /*!< 源地址 1：广播  1~254设备地址 255未定义*/
         uint8_t cmd;     /*!< [0x01,0x9f]为产品的通用命令(0x50\0x61除外)，{0xa0~0xFF,0x50,0x61}为产品的专用命令*/

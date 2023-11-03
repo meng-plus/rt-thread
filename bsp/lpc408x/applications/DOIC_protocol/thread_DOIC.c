@@ -12,6 +12,7 @@
 #include <rtdevice.h>
 #include "system_var.h"
 #include "thread_DOIC.h"
+
 thread_doic_t *pthread_doic;
 
 static rt_err_t finsh_rx_ind(rt_device_t dev, rt_size_t size)
@@ -66,19 +67,35 @@ void thread_doic_entry(void *param)
     }
     LOG_I("Running.");
     session_master_t *pSession = &pthread_doic->m_session;
-    //session_doic_init(&pthread_doic->m_session);
+
+    // session_doic_init(&pthread_doic->m_session);
     tr_init(&pSession->transport, pthread_doic->read_buf, pthread_doic->rx_len);
-    DOIC_master_t *phander = &pthread_doic->m_DOIC_master;
-    DOIC_master_init(phander, NULL, 0);
+    doic_master_t *phander_doic = &pthread_doic->m_DOIC_master;
+    DOIC_master_init(phander_doic, NULL, 0);
+    phander_doic->pdata = (doic_data_t *)pthread_doic->send_buf;
     TR_CHECK_RES_E DOIC_waiting_response(transport_t * pTr);
+
+    sdc_master_t *phander_sdc = &pthread_doic->m_SDC_master;
+    SDC_master_init(phander_sdc, NULL, 0);
+    phander_sdc->pdata = (sdc_data_t *)pthread_doic->sdc_read_buf;
     while (1)
     {
         // session_doic_tick(pSession);
+        const enum SENSOR_DEF table[] = {SEN_ENVI_TEMP, SEN_CO, SEN_SMOG, SOUND_LIGHT_ALARM};
+        uint16_t sdc_len = 0;
+        static uint8_t sen_idx = 0;
+
+        sdc_len = SDC_master_0x10(phander_sdc, sen_idx + 1, table[sen_idx], 0);
+        sen_idx = (sen_idx + 1) % sizeof(table) / sizeof(table[0]);
+
         TR_CHECK_RES_E res = DOIC_waiting_response(&pSession->transport);
         if (TR_CHECK_FRAME == res)
         {
-            DOIC_deal(phander, (doic_data_t *)pthread_doic->read_buf);
+            DOIC_deal(phander_doic, (doic_data_t *)pthread_doic->read_buf);
         }
+
+        uint16_t len = DOIC_master_0x4181(phander_doic, 12, 1, (uint8_t *)phander_sdc->pdata, sdc_len);
+        rt_device_write(pthread_doic->device, 0, phander_doic->pdata, len);
         rt_thread_yield();
         if (pthread_doic->delayms)
             rt_thread_mdelay(pthread_doic->delayms);

@@ -19,17 +19,20 @@ TR_CHECK_RES_E waiting_response(transport_t *pTr) /*!< 等待帧数据 */
     uint8_t repeat = 0;
     while (1)
     {
-        if (RT_EOK != rt_sem_take(&pDts->rx_sem, 1000)) // RT_WAITING_FOREVER
-        {
-            repeat = 1;
-            break;
-        }
 
         uint16_t offset = rt_device_read(pDts->device, -1, read_len + pTr->rxBuff, pTr->len - read_len);
         read_len += offset;
         if (read_len > 3 && ctx->read_buf[2] + 5 <= read_len)
         {
             repeat = 0;
+            break;
+        }
+        if (offset)
+            continue;
+
+        if (RT_EOK != rt_sem_take(&pDts->rx_sem, 1000)) // RT_WAITING_FOREVER
+        {
+            repeat = 1;
             break;
         }
     }

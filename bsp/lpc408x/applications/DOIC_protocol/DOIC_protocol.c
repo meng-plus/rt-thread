@@ -1,6 +1,6 @@
 #include "DOIC_protocol.h"
 #include <string.h>
-void DOIC_master_init(DOIC_master_t *phander, doic_map_t *pmap, uint16_t map_num)
+void DOIC_master_init(doic_master_t *phander, doic_map_t *pmap, uint16_t map_num)
 {
     if (phander && pmap)
     {
@@ -9,7 +9,7 @@ void DOIC_master_init(DOIC_master_t *phander, doic_map_t *pmap, uint16_t map_num
     }
 }
 
-uint16_t DOIC_master_0x4181(DOIC_master_t *phander, uint8_t slave_addr, uint8_t *buff, uint8_t len)
+uint16_t DOIC_master_0x4181(doic_master_t *phander, uint8_t slave_addr, uint8_t sub_addr, uint8_t *buff, uint8_t len)
 {
     doic_data_t *pdata = phander->pdata;
     const uint8_t cmd_pre[] = {0xFB, 0x04, 00, 00, 0x41, 0x81, 0};
@@ -20,19 +20,20 @@ uint16_t DOIC_master_0x4181(DOIC_master_t *phander, uint8_t slave_addr, uint8_t 
     memcpy(pdata, cmd_pre, sizeof(cmd_pre));
     pdata->dst = slave_addr;
     pdata->src = phander->addr;
-    pdata->len = len;
-    memcpy(pdata->data, buff, len);
+    pdata->len = len + 1;
+    pdata->data[0] = sub_addr;
+    memcpy(pdata->data + 1, buff, len);
     return DOIC_addCrc(pdata);
 }
 
-int8_t DOIC_deal(DOIC_master_t *phander, doic_data_t *pdst)
+int8_t DOIC_deal(doic_master_t *phander, doic_data_t *pdst)
 {
     if (0 == phander || 0 == phander->map)
     {
         return -1;
     }
     doic_data_t *pdata = phander->pdata;
-   const doic_map_t *pmap;
+    const doic_map_t *pmap;
     for (size_t i = 0; i < phander->map_num; i++)
     {
         pmap = &phander->map[i];
@@ -85,7 +86,7 @@ uint16_t DOIC_checkCrc(doic_data_t *pdoic)
         }
         pnt++;
     }
-    return 0;
+    return crc;
 }
 
 uint16_t DOIC_addCrc(doic_data_t *pdata)
@@ -93,5 +94,5 @@ uint16_t DOIC_addCrc(doic_data_t *pdata)
     uint16_t crc = DOIC_checkCrc(pdata);
     pdata->data[pdata->len] = crc >> 8;
     pdata->data[pdata->len + 1] = crc & 0xFF;
-    return (uint32_t)(&pdata->data[pdata->len + 1]) - (uint32_t)pdata;
+    return (uint32_t)(&pdata->data[pdata->len + 2]) - (uint32_t)pdata;
 }

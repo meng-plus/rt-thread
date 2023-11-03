@@ -34,7 +34,7 @@ extern "C"
         const doic_map_t *map;
         uint16_t map_num;
         uint8_t addr; /*!< 本机地址 */
-    } DOIC_master_t;
+    } doic_master_t;
 
     /**
      * @brief 解析回应的报文
@@ -42,7 +42,7 @@ extern "C"
      * @param pdoic
      * @return int8_t
      */
-    void DOIC_master_init(DOIC_master_t *phander, doic_map_t *pmap, uint16_t map_num);
+    void DOIC_master_init(doic_master_t *phander, doic_map_t *pmap, uint16_t map_num);
     /**
      * @brief 数据透传——0x41  0x01 查询下位机上传的透
      *
@@ -52,7 +52,7 @@ extern "C"
      * @param len 透传长度
      * @return 报文长度
      */
-    uint16_t DOIC_master_0x4181(DOIC_master_t *phander, uint8_t slave_addr, uint8_t *buff, uint8_t len);
+    uint16_t DOIC_master_0x4181(doic_master_t *phander, uint8_t slave_addr, uint8_t sub_addr, uint8_t *buff, uint8_t len);
     /**
      * @brief 报文解析
      *
@@ -60,7 +60,7 @@ extern "C"
      * @param pdst  回应报文句柄
      * @return int8_t 0正常
      */
-    int8_t DOIC_deal(DOIC_master_t *phander, doic_data_t *pdst);
+    int8_t DOIC_deal(doic_master_t *phander, doic_data_t *pdst);
     uint16_t DOIC_getCrc(doic_data_t *pdata);
     uint16_t DOIC_checkCrc(doic_data_t *pdata);
     /**

@@ -18,11 +18,6 @@ TR_CHECK_RES_E DOIC_waiting_response(transport_t *pTr) /*!< 等待帧数据 */
     uint16_t data_len = 0;
     while (1)
     {
-        if (RT_EOK != rt_sem_take(&pDts->rx_sem, 1000)) // RT_WAITING_FOREVER
-        {
-            repeat = 1;
-            break;
-        }
         uint16_t offset = 0;
         if (read_len == 0)
         {
@@ -51,8 +46,9 @@ TR_CHECK_RES_E DOIC_waiting_response(transport_t *pTr) /*!< 等待帧数据 */
         }
         else
         {
-            offset = rt_device_read(pDts->device, -1, read_len + pTr->rxBuff, data_len + 8 - read_len);
+            offset = rt_device_read(pDts->device, -1, read_len + pTr->rxBuff, data_len + 8+2 - read_len);
         }
+
         read_len += offset;
         if (read_len > 8 && data_len + 8 <= read_len)
         {
@@ -67,6 +63,14 @@ TR_CHECK_RES_E DOIC_waiting_response(transport_t *pTr) /*!< 等待帧数据 */
             {
                 read_len = 0;
             }
+        }
+        if (offset)
+            continue;
+
+        if (RT_EOK != rt_sem_take(&pDts->rx_sem, 1000)) // RT_WAITING_FOREVER
+        {
+            repeat = 1;
+            break;
         }
     }
     pTr->read_len = read_len;

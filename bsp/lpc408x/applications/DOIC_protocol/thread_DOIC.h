@@ -15,6 +15,7 @@
 #include "Session_master.h"
 #include <rtdevice.h>
 #include "DOIC_protocol.h"
+#include "SDC_protocol.h"
 #ifdef __cplusplus
 extern "C"
 {
@@ -41,7 +42,10 @@ extern "C"
         uint8_t tx_len;
         uint8_t read_buf[512];
         uint8_t rx_len;
-        DOIC_master_t m_DOIC_master;
+        doic_master_t m_DOIC_master;
+        sdc_master_t m_SDC_master;
+        uint8_t sdc_read_buf[512];
+        uint8_t sdc_rx_len;
     } thread_doic_t;
 
     void thread_DOIC_control(TH_DOIC_CMD_E cmd, void *param);
