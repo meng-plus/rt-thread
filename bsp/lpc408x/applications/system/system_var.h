@@ -17,10 +17,17 @@
 extern "C"
 {
 #endif
+    extern varWork_t g_var_work;
+
     extern screen_param_t g_screen_param;
     extern product_param_t g_prod_param;
+    extern sensor_param_t g_sensor_param;
+
     extern const var_init_t g_var_init;
-    extern varWork_t g_var_work;
+
+    uint8_t var_save(void *param);
+    uint8_t var_reload(void *param);
+    uint8_t var_resetting(void *param);
 #ifdef __cplusplus
 }
 #endif

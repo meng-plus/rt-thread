@@ -44,6 +44,13 @@ extern "C"
     } var_init_t;
 
 /*!< 设备的配置参数 flash中存储 */
+#define PARAMETER_VER 0x10
+    typedef struct _FLASH_HEADER_PARAMETER
+    {
+        uint16_t ver;
+        uint16_t reserve[3];
+    } header_param_t;
+
 /**
  * @brief  Do not modify it unless you want to reset the parameters
  **/
@@ -55,8 +62,8 @@ extern "C"
      */
     typedef struct __FLASH_PRODUCT_PARAMETER
     {
-        uint32_t ver;         /*!<版本标识*/
-        uint16_t dts_delayms; /*!< 测温主机数据扫描周期 range[0,10000] */
+        header_param_t header; /*!<版本标识*/
+        uint16_t dts_delayms;  /*!< 测温主机数据扫描周期 range[0,10000] */
 
     } product_param_t;
 
@@ -68,8 +75,8 @@ extern "C"
     typedef struct _FLASH_SCREEN_PARAMETER
     {
         /*!< touch  */
-        uint16_t ver;       /*!<版本标识*/
-        uint16_t touch : 1; /*!< 0:需要校准 1校准过 */
+        header_param_t header; /*!<版本标识*/
+        uint16_t touch : 1;    /*!< 0:需要校准 1校准过 */
 
         uint16_t min_raw_x;
         uint16_t min_raw_y;
@@ -78,6 +85,39 @@ extern "C"
         uint16_t range_x; /*!< 屏幕尺寸 */
         uint16_t range_y; /*!< 屏幕尺寸 */
     } screen_param_t;
+
+/**
+ * @brief  Do not modify it unless you want to reset the parameters
+ **/
+#define FLASH_SENSOR_PARAMETER_VER 0x100 /*!< 顺序增加 */
+    /*!< 透传设备配置 HK32支持两路 */
+    typedef struct device_config
+    {
+        uint8_t type;   /*!< 设备类型 */
+        uint8_t en : 1; /*!< 启用 */
+        uint8_t addr;   /*!< 设备地址 */
+        uint8_t baud;   /*!< 波特率 */
+
+    } device_config_t;
+
+    typedef struct _SENSOR_CONFIG
+    {
+        uint8_t type;     /*!< 传感器类型@ref enum SENSOR_DEF */
+        uint8_t chn;      /*!< 传感器通道 */
+        uint8_t addr;     /*!< 传感器所在通道地址 */
+        uint8_t dev_addr; /*!< 传感器所在设备地址 @ref device_config_t::addr */
+    } sensor_config_t;
+
+    typedef struct _FLASH_SENSOR_PARAMETER
+    {
+        header_param_t header; /*!<版本标识*/
+        uint8_t device_num;
+        uint8_t sensor_len;
+
+        device_config_t *pdev_config;
+        sensor_config_t *psen_config;
+
+    } sensor_param_t;
 
 #ifdef __cplusplus
 }

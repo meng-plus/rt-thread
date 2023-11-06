@@ -11,16 +11,26 @@
 
 #include "system_var.h"
 #include "flashdb.h"
-
+#include <stdlib.h>
 varWork_t g_var_work;
 product_param_t g_prod_param;
-extern const product_param_t l_prod_param_init;
+sensor_param_t g_sensor_param;
+const product_param_t l_prod_param_init =
+    {
+        .header = {
+            .ver = FLASH_PRO_PARAMETER_VER,
+        },
+};
+
 const var_init_t g_var_init = {
     .product_name = "矿用本安型激光火情监控主机",
     .dts_delayms_max = 10000,
 };
 
 screen_param_t g_screen_param = {
+    .header = {
+        .ver = FLASH_SCREEN_PARAMETER_VER,
+    },
     /*!< touch  */
     .min_raw_x = 200,
     .min_raw_y = 600,
@@ -35,11 +45,18 @@ typedef struct _FLASH_PARAMETER
     void *param;
     size_t len;
 } flash_parameter_t;
-
+enum FLASH_PARAM_ID
+{
+    PROD_PARAM_ID,
+    SCREEN_PARAM_ID,
+    SENSOR_PARAM_ID,
+};
 static const flash_parameter_t param_table[] = {
     {"kj428-Z_B", &g_prod_param, sizeof(g_prod_param)},
     {"screen", &g_screen_param, sizeof(g_screen_param)},
+    {"sensor", &g_sensor_param, sizeof(g_sensor_param)},
 };
+
 /**
  * @brief 升级参数配置
  *
@@ -57,12 +74,6 @@ static int32_t systeminfo_init()
         const flash_parameter_t *p_param = &param_table[i];
         size_t len = fdb_kv_get_blob(&kj428_kvdb, p_param->name,
                                      fdb_blob_make(&blob, p_param->param, p_param->len));
-        if (!len)
-        {
-            g_prod_param = l_prod_param_init;
-            return -1;
-        }
-
         SysArgUpdata(p_param->param);
     }
 
@@ -75,30 +86,152 @@ void SysArgUpdata(void *param)
     uint16_t currver;
     if (param == &g_prod_param)
     {
-        currver = g_prod_param.ver;
-        if (FLASH_PRO_PARAMETER_VER != g_prod_param.ver)
+        currver = g_prod_param.header.ver;
+        if (FLASH_PRO_PARAMETER_VER != g_prod_param.header.ver)
         {
             if (currver < 1)
             {
                 g_prod_param = l_prod_param_init;
             }
 
-            g_prod_param.ver = FLASH_PRO_PARAMETER_VER;
+            g_prod_param.header.ver = FLASH_PRO_PARAMETER_VER;
         }
     }
     if (param == &g_screen_param)
     {
-        if (FLASH_SCREEN_PARAMETER_VER != g_screen_param.ver)
+        currver = g_screen_param.header.ver;
+        if (FLASH_SCREEN_PARAMETER_VER != g_screen_param.header.ver)
         {
             if (currver < 1)
             {
                 g_screen_param.touch = 0;
             }
-            g_prod_param.ver = FLASH_PRO_PARAMETER_VER;
+            g_screen_param.header.ver = FLASH_PRO_PARAMETER_VER;
+        }
+    }
+    if (param == &g_sensor_param)
+    {
+        currver = g_sensor_param.header.ver;
+        if (FLASH_SENSOR_PARAMETER_VER != g_sensor_param.header.ver)
+        {
+            struct fdb_blob blob;
+            size_t len = fdb_kv_get_blob(&kj428_kvdb, "device",
+                                         fdb_blob_make(&blob, NULL, NULL));
+            if (blob.saved.len)
+            {
+                g_sensor_param.pdev_config = malloc(blob.saved.len);
+                len = fdb_kv_get_blob(&kj428_kvdb, "device",
+                                      fdb_blob_make(&blob, g_sensor_param.pdev_config, blob.saved.len));
+            }
+            else
+            {
+                g_sensor_param.device_num = 2;
+                g_sensor_param.pdev_config = calloc(sizeof(g_sensor_param.device_num), g_sensor_param.device_num);
+                if (g_sensor_param.pdev_config)
+                {
+                    device_config_t config_init = {
+                        .type = 1,
+                        .en = 1,
+                        .baud = 115200,
+                    };
+                    g_sensor_param.pdev_config[0] = config_init;
+                    g_sensor_param.pdev_config[1] = config_init;
+                }
+            }
+
+            /*!< read sensor config */
+            len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
+                                  fdb_blob_make(&blob, NULL, NULL));
+            if (blob.saved.len)
+            {
+                g_sensor_param.psen_config = malloc(blob.saved.len);
+                len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
+                                      fdb_blob_make(&blob, g_sensor_param.psen_config, blob.saved.len));
+            }
+            else
+            {
+                g_sensor_param.psen_config = 0;
+            }
+
+            if (currver < 1)
+            {
+            }
+            g_sensor_param.header.ver = FLASH_SENSOR_PARAMETER_VER;
         }
     }
 }
-const product_param_t l_prod_param_init =
+
+uint8_t var_save(void *param)
+{
+    fdb_err_t err;
+    struct fdb_blob blob;
+
+    if (param == &g_prod_param)
     {
-        .ver = FLASH_PRO_PARAMETER_VER,
-};
+        g_prod_param.header.ver = FLASH_PRO_PARAMETER_VER;
+        fdb_blob_make(&blob, &g_prod_param, sizeof(g_prod_param));
+        err = fdb_kv_set_blob(&kj428_kvdb, param_table[PROD_PARAM_ID].name, &blob);
+    }
+    else if (param == &g_screen_param)
+    {
+        g_screen_param.header.ver = FLASH_PRO_PARAMETER_VER;
+        fdb_blob_make(&blob, &g_screen_param, sizeof(g_prod_param));
+        err = fdb_kv_set_blob(&kj428_kvdb, param_table[SCREEN_PARAM_ID].name, &blob);
+    }
+    else if (param == &g_sensor_param)
+    {
+
+        struct fdb_blob blob;
+        fdb_blob_make(&blob, g_sensor_param.pdev_config, g_sensor_param.device_num * sizeof(device_config_t));
+        err = fdb_kv_set_blob(&kj428_kvdb, "device", &blob);
+        if (err != FDB_NO_ERR)
+            return err;
+
+        fdb_blob_make(&blob, g_sensor_param.psen_config, g_sensor_param.sensor_len * sizeof(sensor_config_t));
+        err = fdb_kv_set_blob(&kj428_kvdb, "sensor", &blob);
+        if (err != FDB_NO_ERR)
+            return err;
+
+        g_sensor_param.header.ver = FLASH_SENSOR_PARAMETER_VER;
+        fdb_blob_make(&blob, &g_sensor_param, sizeof(sensor_param_t));
+
+        err = fdb_kv_set_blob(&kj428_kvdb, param_table[SENSOR_PARAM_ID].name, &blob);
+    }
+
+    return err;
+}
+
+uint8_t var_reload(void *param)
+{
+    struct fdb_blob blob;
+    for (size_t i = 0; i < sizeof(param_table) / sizeof(param_table[0]); i++)
+    {
+        const flash_parameter_t *p_param = &param_table[i];
+        if (param == p_param->param)
+        {
+            size_t len = fdb_kv_get_blob(&kj428_kvdb, p_param->name,
+                                         fdb_blob_make(&blob, p_param->param, p_param->len));
+            SysArgUpdata(p_param->param);
+            return 0;
+        }
+    }
+    return 0;
+}
+
+uint8_t var_resetting(void *param)
+{
+    struct fdb_blob blob;
+    for (size_t i = 0; i < sizeof(param_table) / sizeof(param_table[0]); i++)
+    {
+        const flash_parameter_t *p_param = &param_table[i];
+        if (param == p_param->param)
+        {
+            size_t len = fdb_kv_set_blob(&kj428_kvdb, p_param->name,
+                                         fdb_blob_make(&blob, p_param->param, p_param->len));
+            memset(p_param->param, 0, p_param->len);
+            SysArgUpdata(p_param->param);
+            return 0;
+        }
+    }
+    return 0;
+}

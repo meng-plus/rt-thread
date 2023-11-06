@@ -74,7 +74,6 @@ static rt_err_t ad7843_control(struct rt_touch_device *device, int cmd, void *da
 static const rt_uint8_t ad7843_tx_data[] = {
     0x80 | 0x50,
     0,
-    0,
     0x80 | 0x10,
     0,
     0,
@@ -119,9 +118,9 @@ static rt_size_t ad7843_readpoint(struct rt_touch_device *touch, void *buf, rt_s
 
     // LOG_HEX("touch_data", 8, rx_data, sizeof(rx_data));
     uint16_t x = rx_data[1];
-    uint16_t y = rx_data[4];
+    uint16_t y = rx_data[3];
     x = (x << 5) | (rx_data[2] & 0x1F);
-    y = (y << 5) | (rx_data[5] & 0x1F);
+    y = (y << 5) | (rx_data[4] & 0x1F);
     if (!hw_ad7843_touchpad_is_pressed(touch))
     {
         touch_data->event = RT_TOUCH_EVENT_NONE;

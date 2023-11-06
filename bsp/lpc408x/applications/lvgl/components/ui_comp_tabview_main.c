@@ -7,6 +7,8 @@
 #include "ui_comp_tabview_main.h"
 // COMPONENT TabView1
 #include "ui_tabview_page_Dashboard.h"
+#include "ui_tabview_page_sen_config.h"
+
 lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
 {
 
@@ -14,26 +16,18 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
     obj = lv_tabview_create(comp_parent, LV_DIR_LEFT, 100);
     lv_obj_set_flex_flow(obj, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(obj, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
-    lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_clear_flag(lv_tabview_get_content(obj), LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_bg_color(obj, lv_color_hex(0xDBDBEA), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(obj, &lv_font_simhei_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *dashboard = ui_tabview_page_dashboard_create(obj);
-
-//    lv_obj_t *cui_TabPage3;
-//    cui_TabPage3 = lv_tabview_add_tab(obj, "模块");
-//
-//    lv_obj_t *cui_TabPage4;
-//    cui_TabPage4 = lv_tabview_add_tab(obj, "高级");
-//
-//    lv_obj_t *cui_TabPage5;
-//    cui_TabPage5 = lv_tabview_add_tab(obj, "关于");
+    lv_obj_t *sen_config = ui_tabview_page_sen_config_create(obj);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * UI_COMP_TABVIEW_MAIN_NUM);
     children[UI_COMP_TABVIEW_MAIN_DASHBOARD] = dashboard;
     children[UI_COMP_TABVIEW_MAIN_SETING] = obj;
-    children[UI_COMP_TABVIEW_MAIN_ABOUT] = dashboard;
+    children[UI_COMP_TABVIEW_MAIN_SEN_CONFIG] = sen_config;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
     return obj;
