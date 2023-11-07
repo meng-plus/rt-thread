@@ -54,7 +54,7 @@ enum FLASH_PARAM_ID
 static const flash_parameter_t param_table[] = {
     {"kj428-Z_B", &g_prod_param, sizeof(g_prod_param)},
     {"screen", &g_screen_param, sizeof(g_screen_param)},
-    {"sensor", &g_sensor_param, sizeof(g_sensor_param)},
+    {"device", &g_sensor_param, sizeof(g_sensor_param)},
 };
 
 /**
@@ -112,50 +112,33 @@ void SysArgUpdata(void *param)
     if (param == &g_sensor_param)
     {
         currver = g_sensor_param.header.ver;
+        struct fdb_blob blob;
+        /*!< read sensor config */
+        size_t len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
+                              fdb_blob_make(&blob, NULL, NULL));
+        if (blob.saved.len)
+        {
+            g_sensor_param.psen_config = malloc(blob.saved.len);
+            len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
+                                  fdb_blob_make(&blob, g_sensor_param.psen_config, blob.saved.len));
+        }
+        else
+        {
+            g_sensor_param.psen_config = 0;
+        }
         if (FLASH_SENSOR_PARAMETER_VER != g_sensor_param.header.ver)
         {
-            struct fdb_blob blob;
-            size_t len = fdb_kv_get_blob(&kj428_kvdb, "device",
-                                         fdb_blob_make(&blob, NULL, NULL));
-            if (blob.saved.len)
-            {
-                g_sensor_param.pdev_config = malloc(blob.saved.len);
-                len = fdb_kv_get_blob(&kj428_kvdb, "device",
-                                      fdb_blob_make(&blob, g_sensor_param.pdev_config, blob.saved.len));
-            }
-            else
-            {
-                g_sensor_param.device_num = 2;
-                g_sensor_param.pdev_config = calloc(sizeof(g_sensor_param.device_num), g_sensor_param.device_num);
-                if (g_sensor_param.pdev_config)
-                {
-                    device_config_t config_init = {
-                        .type = 1,
-                        .en = 1,
-                        .baud = 115200,
-                    };
-                    g_sensor_param.pdev_config[0] = config_init;
-                    g_sensor_param.pdev_config[1] = config_init;
-                }
-            }
-
-            /*!< read sensor config */
-            len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
-                                  fdb_blob_make(&blob, NULL, NULL));
-            if (blob.saved.len)
-            {
-                g_sensor_param.psen_config = malloc(blob.saved.len);
-                len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
-                                      fdb_blob_make(&blob, g_sensor_param.psen_config, blob.saved.len));
-            }
-            else
-            {
-                g_sensor_param.psen_config = 0;
-            }
-
             if (currver < 1)
             {
+                device_config_t config_init = {
+                    .type = 1,
+                    .en = 1,
+                    .baud = 115200,
+                };
+                g_sensor_param.dev_config[0] = config_init;
+                g_sensor_param.dev_config[1] = config_init;
             }
+
             g_sensor_param.header.ver = FLASH_SENSOR_PARAMETER_VER;
         }
     }
@@ -181,15 +164,9 @@ uint8_t var_save(void *param)
     else if (param == &g_sensor_param)
     {
 
-        struct fdb_blob blob;
-        fdb_blob_make(&blob, g_sensor_param.pdev_config, g_sensor_param.device_num * sizeof(device_config_t));
-        err = fdb_kv_set_blob(&kj428_kvdb, "device", &blob);
-        if (err != FDB_NO_ERR)
-            return err;
-
         fdb_blob_make(&blob, g_sensor_param.psen_config, g_sensor_param.sensor_len * sizeof(sensor_config_t));
         err = fdb_kv_set_blob(&kj428_kvdb, "sensor", &blob);
-        if (err != FDB_NO_ERR)
+        if (g_sensor_param.psen_config && err != FDB_NO_ERR)
             return err;
 
         g_sensor_param.header.ver = FLASH_SENSOR_PARAMETER_VER;

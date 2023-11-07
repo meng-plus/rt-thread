@@ -9,6 +9,17 @@
 #include "ui_tabview_page_Dashboard.h"
 #include "ui_tabview_page_sen_config.h"
 
+static void btns_value_changed_event_cb(lv_event_t *e)
+{ // char *param = lv_event_get_param(e);
+    lv_obj_t *obj = lv_event_get_target(e);
+    if (NULL == obj)
+    {
+        return;
+    }
+    //uint32_t id = lv_btnmatrix_get_selected_btn(obj);
+    //lv_event_send(lv_tabview_get_tab_act(lv_obj_get_parent(obj)), LV_EVENT_VALUE_CHANGED, NULL);
+}
+
 lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
 {
 
@@ -30,5 +41,9 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
     children[UI_COMP_TABVIEW_MAIN_SEN_CONFIG] = sen_config;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
+    
+    
+    lv_obj_add_event_cb(lv_tabview_get_tab_btns(obj), btns_value_changed_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+    _lv_event_child_notify(lv_tabview_get_content(obj), LV_EVENT_VALUE_CHANGED, NULL);
     return obj;
 }

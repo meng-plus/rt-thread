@@ -34,11 +34,24 @@ static int erase(long offset, size_t size)
 {
     uint8_t buff[256];
     rt_memset(buff, 0xFF, sizeof(buff));
-    for (long page_address = offset; page_address < size; page_address += 256)
+    if (offset + size > eeprom_onRTC_flash.len)
+    {
+        return 0;
+    }
+    for (long page_address = offset; size > 0; page_address += 256)
     {
         uint32_t addr = eeprom_onRTC_flash.addr + page_address;
 
-        E2PromWrite(addr, (void *)buff, sizeof(buff));
+        if (size >= 256)
+        {
+            E2PromWrite(addr, (void *)buff, 256);
+            size -= 256;
+        }
+        else
+        {
+            E2PromWrite(addr, (void *)buff, size);
+            size = 0;
+        }
     }
 
     return size;

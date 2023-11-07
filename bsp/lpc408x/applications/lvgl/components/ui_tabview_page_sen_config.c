@@ -15,7 +15,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
-
+    char *baud_str = "4800\n9600\n19200\n38400\n115200";
     static const char *btnm_map[] = {"1", "2", "3", "\n",
                                      "4", "5", "6", "\n",
                                      "7", "8", "9", "\n",
@@ -36,38 +36,93 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 
     /*!< addr set */
     /*Create the one-line mode text area*/
-    lv_obj_t *re485_2_addr_obj = lv_textarea_create(obj);
-    lv_obj_set_grid_cell(re485_2_addr_obj, LV_GRID_ALIGN_STRETCH, 1, 1,
+    lv_obj_t *rs485_2_addr_obj = lv_textarea_create(obj);
+    lv_obj_set_grid_cell(rs485_2_addr_obj, LV_GRID_ALIGN_STRETCH, 1, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
-    lv_textarea_set_one_line(re485_2_addr_obj, true);
-    lv_textarea_set_password_mode(re485_2_addr_obj, false);
-    lv_textarea_set_placeholder_text(re485_2_addr_obj, "slave addr");
-    lv_textarea_set_accepted_chars(re485_2_addr_obj, "0123456789");
-    lv_textarea_set_max_length(re485_2_addr_obj, 4);
-    lv_obj_clear_flag(re485_2_addr_obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    // lv_obj_add_event_cb(btnm, btnm_event_handler, LV_EVENT_VALUE_CHANGED, re485_2_addr_obj);
-    lv_obj_add_event_cb(re485_2_addr_obj, ta_event_cb, LV_EVENT_ALL, btnm);
+    lv_textarea_set_one_line(rs485_2_addr_obj, true);
+    lv_textarea_set_password_mode(rs485_2_addr_obj, false);
+    lv_textarea_set_placeholder_text(rs485_2_addr_obj, "slave addr");
+    lv_textarea_set_accepted_chars(rs485_2_addr_obj, "0123456789");
+    lv_textarea_set_max_length(rs485_2_addr_obj, 4);
+    lv_obj_clear_flag(rs485_2_addr_obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_add_event_cb(rs485_2_addr_obj, ta_event_cb, LV_EVENT_ALL, btnm);
     /*!< baud */
-    lv_obj_t *dd = lv_dropdown_create(obj);
-    lv_obj_set_grid_cell(dd, LV_GRID_ALIGN_STRETCH, 2, 1,
+    lv_obj_t *rs485_2_baud_obj = lv_dropdown_create(obj);
+    lv_obj_set_grid_cell(rs485_2_baud_obj, LV_GRID_ALIGN_STRETCH, 2, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
-    lv_obj_align(dd, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_align(rs485_2_baud_obj, LV_ALIGN_TOP_MID, 0, 20);
     {
-        char *baud_str = "4800\n9600\n19200\n38400\n115200";
-        lv_dropdown_set_options(dd, baud_str);
-    }
-    lv_obj_add_event_cb(dd, rs485_baud_event_handler, LV_EVENT_VALUE_CHANGED, NULL);
 
-    // lv_obj_add_event_cb(text_ta, ta_event_cb, LV_EVENT_ALL, NULL);
+        lv_dropdown_set_options(rs485_2_baud_obj, baud_str);
+    }
+
+    lv_obj_t *rs485_3_en_obj = lv_checkbox_create(obj);
+    lv_obj_set_grid_cell(rs485_3_en_obj, LV_GRID_ALIGN_STRETCH, 0, 1,
+                         LV_GRID_ALIGN_CENTER, 1, 1);
+    lv_checkbox_set_text(rs485_3_en_obj, "RS485_3");
+
+    /*!< addr set */
+    /*Create the one-line mode text area*/
+    lv_obj_t *rs485_3_addr_obj = lv_textarea_create(obj);
+    lv_obj_set_grid_cell(rs485_3_addr_obj, LV_GRID_ALIGN_STRETCH, 1, 1,
+                         LV_GRID_ALIGN_CENTER, 1, 1);
+    lv_textarea_set_one_line(rs485_3_addr_obj, true);
+    lv_textarea_set_password_mode(rs485_3_addr_obj, false);
+    lv_textarea_set_placeholder_text(rs485_3_addr_obj, "slave addr");
+    lv_textarea_set_accepted_chars(rs485_3_addr_obj, "0123456789");
+    lv_textarea_set_max_length(rs485_3_addr_obj, 4);
+    lv_obj_clear_flag(rs485_3_addr_obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_add_event_cb(rs485_3_addr_obj, ta_event_cb, LV_EVENT_ALL, btnm);
+    /*!< baud */
+    lv_obj_t *rs485_3_baud_obj = lv_dropdown_create(obj);
+    lv_obj_set_grid_cell(rs485_3_baud_obj, LV_GRID_ALIGN_STRETCH, 2, 1,
+                         LV_GRID_ALIGN_CENTER, 1, 1);
+    lv_obj_align(rs485_3_baud_obj, LV_ALIGN_TOP_MID, 0, 20);
+    {
+
+        lv_dropdown_set_options(rs485_3_baud_obj, baud_str);
+    }
+    lv_obj_t *btn_restore = lv_btn_create(obj);
+    lv_obj_add_event_cb(btn_restore, lv_event_clicked, LV_EVENT_CLICKED, (void *)SEN_CONFIG_RESTORE);
+    lv_obj_set_grid_cell(btn_restore, LV_GRID_ALIGN_STRETCH, 4, 1,
+                         LV_GRID_ALIGN_CENTER, 5, 1);
+    lv_obj_align(btn_restore, LV_ALIGN_CENTER, 0, 40);
+    // lv_obj_add_flag(btn_restore, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_height(btn_restore, LV_SIZE_CONTENT);
+    lv_obj_t *label = lv_label_create(btn_restore);
+    lv_label_set_text(label, "restore");
+    lv_obj_center(label);
+
+    lv_obj_t *btn_save = lv_btn_create(obj);
+    lv_obj_add_event_cb(btn_save, lv_event_clicked, LV_EVENT_CLICKED, (void *)SEN_CONFIG_SAVE);
+    lv_obj_set_grid_cell(btn_save, LV_GRID_ALIGN_STRETCH, 5, 1,
+                         LV_GRID_ALIGN_CENTER, 5, 1);
+    lv_obj_align(btn_save, LV_ALIGN_CENTER, 0, 40);
+    // lv_obj_add_flag(btn_save, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_height(btn_save, LV_SIZE_CONTENT);
+
+    label = lv_label_create(btn_save);
+    lv_label_set_text(label, "save");
+    lv_obj_center(label);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SEN_CONFIG_NUM);
     children[SEN_CONFIG_RS485_2] = rs485_2_en_obj;
-    children[SEN_CONFIG_RS485_2_ADDR] = re485_2_addr_obj;
-    children[SEN_CONFIG_RS485_2_BAUD] = dd;
-
+    children[SEN_CONFIG_RS485_2_ADDR] = rs485_2_addr_obj;
+    children[SEN_CONFIG_RS485_2_BAUD] = rs485_2_baud_obj;
+    children[SEN_CONFIG_RS485_3] = rs485_3_en_obj;
+    children[SEN_CONFIG_RS485_3_ADDR] = rs485_3_addr_obj;
+    children[SEN_CONFIG_RS485_3_BAUD] = rs485_3_baud_obj;
+    children[SEN_CONFIG_RESTORE] = btn_restore;
+    children[SEN_CONFIG_SAVE] = btn_save;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
-    lv_obj_add_event_cb(obj, lv_event_value_changed, LV_EVENT_VALUE_CHANGED, NULL);
+    lv_obj_add_event_cb(obj, lv_event_value_changed, LV_EVENT_VALUE_CHANGED, NULL); /*!< 通知刷新后，初始化所有控件 */
+
+    for (size_t i = 0; i < SEN_CONFIG_NUM; i++)
+    {
+        if (children[i])
+            lv_obj_add_event_cb(children[i], child_event_value_changed, LV_EVENT_VALUE_CHANGED, (void *)i);
+    }
 
     //_lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, NULL);
 

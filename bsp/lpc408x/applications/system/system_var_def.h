@@ -90,13 +90,14 @@ extern "C"
  * @brief  Do not modify it unless you want to reset the parameters
  **/
 #define FLASH_SENSOR_PARAMETER_VER 0x100 /*!< 顺序增加 */
+
     /*!< 透传设备配置 HK32支持两路 */
     typedef struct device_config
     {
         uint8_t type;   /*!< 设备类型 */
         uint8_t en : 1; /*!< 启用 */
         uint8_t addr;   /*!< 设备地址 */
-        uint8_t baud;   /*!< 波特率 */
+        uint32_t baud;  /*!< 波特率0:4800, 1:9600, 2:19200, 3:38400, 4:115200 */
 
     } device_config_t;
 
@@ -114,7 +115,7 @@ extern "C"
         uint8_t device_num;
         uint8_t sensor_len;
 
-        device_config_t *pdev_config;
+        device_config_t dev_config[2];
         sensor_config_t *psen_config;
 
     } sensor_param_t;

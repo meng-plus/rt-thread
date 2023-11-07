@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #define KV_PART_NAME BSP_USRING_FAL_NAME //"eeprom1"
-#define KV_NAME "KJ428_kv"
+#define KV_NAME BSP_USRING_FAL_NAME
 
 #if defined(FDB_USING_KVDB)
 
