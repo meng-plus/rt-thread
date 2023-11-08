@@ -71,18 +71,16 @@ static void lv_event_value_changed(lv_event_t *e)
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2_ADDR);
     if (sub_obj)
     {
-        lv_textarea_del_char(sub_obj);
         char strbuff[6];
-        rt_sprintf(strbuff, "%4d", g_sensor_param.dev_config[0].addr);
-        lv_textarea_add_text(sub_obj, strbuff);
+        rt_sprintf(strbuff, "%d", g_sensor_param.dev_config[0].addr);
+        lv_label_set_text(lv_textarea_get_label(sub_obj), strbuff);
     }
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_3_ADDR);
     if (sub_obj)
     {
-        lv_textarea_del_char(sub_obj);
         char strbuff[6];
-        rt_sprintf(strbuff, "%4d", g_sensor_param.dev_config[1].addr);
-        lv_textarea_add_text(sub_obj, strbuff);
+        rt_sprintf(strbuff, "%d", g_sensor_param.dev_config[1].addr);
+        lv_label_set_text(lv_textarea_get_label(sub_obj), strbuff);
     }
 }
 static void lv_event_clicked(lv_event_t *e)
@@ -97,10 +95,26 @@ static void lv_event_clicked(lv_event_t *e)
         case SEN_CONFIG_RESTORE:
             var_reload(&g_sensor_param);
             lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, NULL);
+            lv_obj_t *mbox1 = lv_msgbox_create(NULL, "restore", "Successfully restore", NULL, true);
+            lv_obj_center(mbox1);
             break;
         case SEN_CONFIG_SAVE:
-            var_save(&g_sensor_param);
-            break;
+        {
+            int8_t ret = var_save(&g_sensor_param);
+            if (ret == 0)
+            {
+                lv_obj_t *mbox1 = lv_msgbox_create(NULL, "save", "Successfully saved", NULL, true);
+                lv_obj_center(mbox1);
+            }
+            else
+            {
+                char buff[16];
+                rt_sprintf(buff, "Error code (0x%0X)", ret);
+                lv_obj_t *mbox1 = lv_msgbox_create(NULL, "save", buff, NULL, true);
+                lv_obj_center(mbox1);
+            }
+        }
+        break;
         default:
             break;
         }
@@ -118,46 +132,29 @@ static void child_event_value_changed(lv_event_t *e)
         switch (comp_id)
         {
         case SEN_CONFIG_RS485_2:
-            if (g_sensor_param.device_num > 0 &&
-                g_sensor_param.dev_config)
-            {
-                g_sensor_param.dev_config[0].en = NULL != (lv_obj_get_state(obj) & LV_STATE_CHECKED);
-            }
+            g_sensor_param.dev_config[0].en = NULL != (lv_obj_get_state(obj) & LV_STATE_CHECKED);
             break;
         case SEN_CONFIG_RS485_2_ADDR:
-            if (g_sensor_param.device_num > 0 &&
-                g_sensor_param.dev_config)
-            {
-                g_sensor_param.dev_config[0].addr = atoi(lv_textarea_get_text(obj));
-            }
+
+            g_sensor_param.dev_config[0].addr = atoi(lv_textarea_get_text(obj));
+
             break;
         case SEN_CONFIG_RS485_2_BAUD:
             chn_sel = lv_dropdown_get_selected(obj);
-            if (g_sensor_param.dev_config &&
-                chn_sel < sizeof(baud_array) / sizeof(baud_array[0]))
+            if (chn_sel < sizeof(baud_array) / sizeof(baud_array[0]))
             {
                 g_sensor_param.dev_config[0].baud = baud_array[chn_sel];
             }
             break;
         case SEN_CONFIG_RS485_3:
-            if (g_sensor_param.device_num > 1 &&
-                g_sensor_param.dev_config)
-            {
-                g_sensor_param.dev_config[1].en = NULL != (lv_obj_get_state(obj) & LV_STATE_CHECKED);
-            }
+            g_sensor_param.dev_config[1].en = NULL != (lv_obj_get_state(obj) & LV_STATE_CHECKED);
             break;
         case SEN_CONFIG_RS485_3_ADDR:
-            if (g_sensor_param.device_num > 1 &&
-                g_sensor_param.dev_config)
-            {
-                g_sensor_param.dev_config[1].addr = atoi(lv_textarea_get_text(obj));
-            }
+            g_sensor_param.dev_config[1].addr = atoi(lv_textarea_get_text(obj));
             break;
         case SEN_CONFIG_RS485_3_BAUD:
             chn_sel = lv_dropdown_get_selected(obj);
-            if (g_sensor_param.device_num > 1 &&
-                g_sensor_param.dev_config &&
-                chn_sel < sizeof(baud_array) / sizeof(baud_array[0]))
+            if (chn_sel < sizeof(baud_array) / sizeof(baud_array[0]))
             {
                 g_sensor_param.dev_config[1].baud = baud_array[chn_sel];
             }
@@ -189,8 +186,14 @@ static void ta_event_cb(lv_event_t *e)
     if (code == LV_EVENT_CLICKED &&
         (LV_INDEV_TYPE_POINTER == indev_type || indev_type == LV_INDEV_TYPE_ENCODER))
     {
-        lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
-        // lv_group_focus_obj(kb);
+        if (lv_obj_has_flag(kb, LV_OBJ_FLAG_HIDDEN))
+        {
+            lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
+        }
+        else
+        {
+            lv_obj_remove_event_cb(kb, btnm_event_handler);
+        }
         lv_obj_add_event_cb(kb, btnm_event_handler, LV_EVENT_VALUE_CHANGED, ta);
     }
 
@@ -198,7 +201,6 @@ static void ta_event_cb(lv_event_t *e)
     {
         lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_event_cb(kb, btnm_event_handler);
-        lv_obj_clear_flag(kb, LV_OBJ_FLAG_CLICK_FOCUSABLE); /*To keep the text area focused on button clicks*/
     }
 }
 static void btnm_event_handler(lv_event_t *e)
