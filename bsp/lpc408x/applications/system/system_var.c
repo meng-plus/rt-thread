@@ -164,7 +164,7 @@ uint8_t var_save(void *param)
     else if (param == &g_sensor_param)
     {
 
-        fdb_blob_make(&blob, g_sensor_param.psen_config, g_sensor_param.sensor_len * sizeof(sensor_config_t));
+        fdb_blob_make(&blob, g_sensor_param.psen_config, g_sensor_param.sensor_num * sizeof(sensor_config_t));
         err = fdb_kv_set_blob(&kj428_kvdb, "sensor", &blob);
         if (g_sensor_param.psen_config && err != FDB_NO_ERR)
             return err;

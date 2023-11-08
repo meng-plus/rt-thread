@@ -82,6 +82,28 @@ static void lv_event_value_changed(lv_event_t *e)
         rt_sprintf(strbuff, "%d", g_sensor_param.dev_config[1].addr);
         lv_label_set_text(lv_textarea_get_label(sub_obj), strbuff);
     }
+
+    /**
+     * @brief sensor table init
+     *
+     */
+
+    sub_obj = ui_comp_get_child(obj, SEN_CONFIG_TABLE);
+    if (sub_obj)
+    {
+        lv_table_set_col_cnt(sub_obj, 4);
+        if (g_sensor_param.sensor_num == 0 || g_sensor_param.psen_config == NULL)
+        {
+            lv_table_set_row_cnt(sub_obj, 1);
+        }
+        else
+        {
+        }
+        lv_table_set_cell_value(sub_obj, 0, 0, "Name");
+        lv_table_set_cell_value(sub_obj, 0, 1, "chn");
+        lv_table_set_cell_value(sub_obj, 0, 2, "addr");
+        lv_table_set_cell_value(sub_obj, 0, 3, "dev_addr");
+    }
 }
 static void lv_event_clicked(lv_event_t *e)
 {
@@ -93,11 +115,13 @@ static void lv_event_clicked(lv_event_t *e)
         switch (comp_id)
         {
         case SEN_CONFIG_RESTORE:
+        {
             var_reload(&g_sensor_param);
             lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, NULL);
             lv_obj_t *mbox1 = lv_msgbox_create(NULL, "restore", "Successfully restore", NULL, true);
             lv_obj_center(mbox1);
-            break;
+        }
+        break;
         case SEN_CONFIG_SAVE:
         {
             int8_t ret = var_save(&g_sensor_param);

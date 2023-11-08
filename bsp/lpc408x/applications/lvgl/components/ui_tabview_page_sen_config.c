@@ -82,6 +82,20 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 
         lv_dropdown_set_options(rs485_3_baud_obj, baud_str);
     }
+
+    /**
+     * @brief 传感器表格
+     *
+     */
+    lv_obj_t *tab_obj = lv_table_create(obj);
+    lv_obj_set_grid_cell(tab_obj, LV_GRID_ALIGN_STRETCH, 0, 4,
+                         LV_GRID_ALIGN_STRETCH, 2, 4);
+    // lv_table_set_col_width(tab_obj, 0,); // 设置第二列自适应宽度
+    lv_obj_align(tab_obj, LV_ALIGN_CENTER, 0, 0);
+    /**
+     * @brief 按键保存
+     *
+     */
     lv_obj_t *btn_restore = lv_btn_create(obj);
     lv_obj_add_event_cb(btn_restore, lv_event_clicked, LV_EVENT_CLICKED, (void *)SEN_CONFIG_RESTORE);
     lv_obj_set_grid_cell(btn_restore, LV_GRID_ALIGN_STRETCH, 4, 1,
@@ -112,6 +126,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     children[SEN_CONFIG_RS485_3] = rs485_3_en_obj;
     children[SEN_CONFIG_RS485_3_ADDR] = rs485_3_addr_obj;
     children[SEN_CONFIG_RS485_3_BAUD] = rs485_3_baud_obj;
+    children[SEN_CONFIG_TABLE] = tab_obj;
     children[SEN_CONFIG_RESTORE] = btn_restore;
     children[SEN_CONFIG_SAVE] = btn_save;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);

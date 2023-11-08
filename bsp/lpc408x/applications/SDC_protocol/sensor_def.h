@@ -86,7 +86,7 @@ extern "C"
         LOCAL_PRESS = 0x70,     //	本地大气压	模拟量传感器
         SEN_N2 = 0x71,          //	氮气浓度	模拟量传感器
                                 // 0x72~0xFF	预留
-
+        SEN_NUM,                /*!< 传感器总数 */
     };
 #ifdef __cplusplus
 }

@@ -113,7 +113,7 @@ extern "C"
     {
         header_param_t header; /*!<版本标识*/
         uint8_t device_num;
-        uint8_t sensor_len;
+        uint8_t sensor_num;
 
         device_config_t dev_config[2];
         sensor_config_t *psen_config;
