@@ -5,6 +5,7 @@
 lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;
+    lv_obj_t *label;
     obj = lv_tabview_add_tab(tableview, "config");
     lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -84,26 +85,53 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     }
 
     /**
-     * @brief 传感器表格
-     *
+     * @addtogroup 传感器表格
+     * @{
      */
     lv_obj_t *tab_obj = lv_table_create(obj);
-    lv_obj_set_grid_cell(tab_obj, LV_GRID_ALIGN_STRETCH, 0, 4,
+    lv_obj_set_grid_cell(tab_obj, LV_GRID_ALIGN_STRETCH, 0, 5,
                          LV_GRID_ALIGN_STRETCH, 2, 4);
     // lv_table_set_col_width(tab_obj, 0,); // 设置第二列自适应宽度
     lv_obj_align(tab_obj, LV_ALIGN_CENTER, 0, 0);
+
+    lv_obj_t *btn_del = lv_btn_create(obj);
+    lv_obj_add_event_cb(btn_del, lv_event_clicked, LV_EVENT_CLICKED, (void *)SEN_CONFIG_DEL);
+    lv_obj_set_grid_cell(btn_del, LV_GRID_ALIGN_STRETCH, 5, 1,
+                         LV_GRID_ALIGN_CENTER, 2, 1);
+    lv_obj_align(btn_del, LV_ALIGN_CENTER, 0, 40);
+    // lv_obj_add_flag(btn_restore, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_height(btn_del, LV_SIZE_CONTENT);
+    label = lv_label_create(btn_del);
+    lv_label_set_text(label, "del");
+    lv_obj_center(label);
+
+    lv_obj_t *btn_new = lv_btn_create(obj);
+    lv_obj_add_event_cb(btn_new, lv_event_clicked, LV_EVENT_CLICKED, (void *)SEN_CONFIG_NEW);
+    lv_obj_set_grid_cell(btn_new, LV_GRID_ALIGN_STRETCH, 5, 1,
+                         LV_GRID_ALIGN_CENTER, 3, 1);
+    lv_obj_align(btn_new, LV_ALIGN_CENTER, 0, 40);
+    // lv_obj_add_flag(btn_save, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_height(btn_new, LV_SIZE_CONTENT);
+
+    label = lv_label_create(btn_new);
+    lv_label_set_text(label, "new");
+    lv_obj_center(label);
+    /**
+     * @}
+     */
+
     /**
      * @brief 按键保存
      *
      */
     lv_obj_t *btn_restore = lv_btn_create(obj);
     lv_obj_add_event_cb(btn_restore, lv_event_clicked, LV_EVENT_CLICKED, (void *)SEN_CONFIG_RESTORE);
-    lv_obj_set_grid_cell(btn_restore, LV_GRID_ALIGN_STRETCH, 4, 1,
-                         LV_GRID_ALIGN_CENTER, 5, 1);
+    lv_obj_set_grid_cell(btn_restore, LV_GRID_ALIGN_STRETCH, 5, 1,
+                         LV_GRID_ALIGN_CENTER, 4, 1);
     lv_obj_align(btn_restore, LV_ALIGN_CENTER, 0, 40);
     // lv_obj_add_flag(btn_restore, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_height(btn_restore, LV_SIZE_CONTENT);
-    lv_obj_t *label = lv_label_create(btn_restore);
+    label = lv_label_create(btn_restore);
     lv_label_set_text(label, "restore");
     lv_obj_center(label);
 
@@ -127,6 +155,8 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     children[SEN_CONFIG_RS485_3_ADDR] = rs485_3_addr_obj;
     children[SEN_CONFIG_RS485_3_BAUD] = rs485_3_baud_obj;
     children[SEN_CONFIG_TABLE] = tab_obj;
+    children[SEN_CONFIG_DEL] = btn_del;
+    children[SEN_CONFIG_NEW] = btn_new;
     children[SEN_CONFIG_RESTORE] = btn_restore;
     children[SEN_CONFIG_SAVE] = btn_save;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
@@ -139,7 +169,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
             lv_obj_add_event_cb(children[i], child_event_value_changed, LV_EVENT_VALUE_CHANGED, (void *)i);
     }
 
-    //_lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, NULL);
+    _lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, (void *)-1);
 
     return obj;
 }

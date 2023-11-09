@@ -14,15 +14,16 @@
 #include "system_var.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "sensor_var.h"
 static const uint32_t baud_array[] = {4800, 9600, 19200, 38400, 115200};
 static void lv_event_value_changed(lv_event_t *e)
 {
-    // char *param = lv_event_get_param(e);
     lv_obj_t *obj = lv_event_get_target(e);
+    uint32_t mask = (uint32_t)lv_event_get_param(e);
     lv_obj_t *sub_obj = NULL;
 
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_2)))
         if (g_sensor_param.dev_config[0].en)
         {
             lv_obj_add_state(sub_obj, LV_STATE_CHECKED);
@@ -33,7 +34,7 @@ static void lv_event_value_changed(lv_event_t *e)
         }
 
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_3);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_3)))
         if (g_sensor_param.dev_config[1].en)
         {
             lv_obj_add_state(sub_obj, LV_STATE_CHECKED);
@@ -44,7 +45,7 @@ static void lv_event_value_changed(lv_event_t *e)
         }
 
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2_BAUD);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_2_BAUD)))
     {
         size_t i;
         for (i = 0; i < sizeof(baud_array) / sizeof(baud_array[0]); i++)
@@ -56,9 +57,8 @@ static void lv_event_value_changed(lv_event_t *e)
         }
     }
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_3_BAUD);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_3_BAUD)))
     {
-
         size_t i;
         for (i = 0; i < sizeof(baud_array) / sizeof(baud_array[0]); i++)
         {
@@ -69,14 +69,14 @@ static void lv_event_value_changed(lv_event_t *e)
         }
     }
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2_ADDR);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_2_ADDR)))
     {
         char strbuff[6];
         rt_sprintf(strbuff, "%d", g_sensor_param.dev_config[0].addr);
         lv_label_set_text(lv_textarea_get_label(sub_obj), strbuff);
     }
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_3_ADDR);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_3_ADDR)))
     {
         char strbuff[6];
         rt_sprintf(strbuff, "%d", g_sensor_param.dev_config[1].addr);
@@ -89,7 +89,7 @@ static void lv_event_value_changed(lv_event_t *e)
      */
 
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_TABLE);
-    if (sub_obj)
+    if (sub_obj && (mask & (1 << SEN_CONFIG_TABLE)))
     {
         lv_table_set_col_cnt(sub_obj, 4);
         if (g_sensor_param.sensor_num == 0 || g_sensor_param.psen_config == NULL)
@@ -98,6 +98,21 @@ static void lv_event_value_changed(lv_event_t *e)
         }
         else
         {
+            for (size_t i = 0; i < g_sensor_param.sensor_num; i++)
+            {
+                sensor_config_t *psen = &g_sensor_param.psen_config[i];
+                if (psen->type < SEN_NUM)
+                {
+                    lv_table_set_cell_value_fmt(sub_obj, i + 1, 0, rom_sensor_var[psen->type].symbolname);
+                }
+                else
+                {
+                    lv_table_set_cell_value_fmt(sub_obj, i + 1, 0, "unknown");
+                }
+                lv_table_set_cell_value_fmt(sub_obj, i + 1, 1, "%d", psen->chn);
+                lv_table_set_cell_value_fmt(sub_obj, i + 1, 2, "%d", psen->chn);
+                lv_table_set_cell_value_fmt(sub_obj, i + 1, 3, "%d", psen->chn);
+            }
         }
         lv_table_set_cell_value(sub_obj, 0, 0, "Name");
         lv_table_set_cell_value(sub_obj, 0, 1, "chn");
@@ -112,12 +127,30 @@ static void lv_event_clicked(lv_event_t *e)
     enum UI_COMP_SEN_CONFIG comp_id = (enum UI_COMP_SEN_CONFIG)lv_event_get_user_data(e);
     if (obj && code == LV_EVENT_CLICKED)
     {
+        char buff[32];
         switch (comp_id)
         {
+        case SEN_CONFIG_DEL: /*!< 增删传感器配置 */
+        {
+            // sensor_del(&g_sensor_param, sel);
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, (void *)(1 << SEN_CONFIG_TABLE));
+        }
+        break;
+        case SEN_CONFIG_NEW:
+        {
+            uint8_t ret = sensor_new(&g_sensor_param);
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, (void *)(1 << SEN_CONFIG_TABLE));
+            if (ret == 0)
+            {
+                lv_obj_t *mbox1 = lv_msgbox_create(NULL, "error", "create error", NULL, true);
+                lv_obj_center(mbox1);
+            }
+        }
+        break;
         case SEN_CONFIG_RESTORE:
         {
             var_reload(&g_sensor_param);
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, NULL);
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, (void *)-1);
             lv_obj_t *mbox1 = lv_msgbox_create(NULL, "restore", "Successfully restore", NULL, true);
             lv_obj_center(mbox1);
         }
@@ -132,7 +165,7 @@ static void lv_event_clicked(lv_event_t *e)
             }
             else
             {
-                char buff[16];
+
                 rt_sprintf(buff, "Error code (0x%0X)", ret);
                 lv_obj_t *mbox1 = lv_msgbox_create(NULL, "save", buff, NULL, true);
                 lv_obj_center(mbox1);

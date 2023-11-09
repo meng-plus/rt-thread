@@ -28,6 +28,12 @@ extern "C"
     uint8_t var_save(void *param);
     uint8_t var_reload(void *param);
     uint8_t var_resetting(void *param);
+    /**
+     * @ref sensor config
+     */
+    uint8_t sensor_new(sensor_param_t *param);
+    uint8_t sensor_del(sensor_param_t *param, uint8_t id);
+
 #ifdef __cplusplus
 }
 #endif

@@ -115,7 +115,7 @@ void SysArgUpdata(void *param)
         struct fdb_blob blob;
         /*!< read sensor config */
         size_t len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
-                              fdb_blob_make(&blob, NULL, NULL));
+                                     fdb_blob_make(&blob, NULL, NULL));
         if (blob.saved.len)
         {
             g_sensor_param.psen_config = malloc(blob.saved.len);
@@ -211,4 +211,27 @@ uint8_t var_resetting(void *param)
         }
     }
     return 0;
+}
+
+uint8_t sensor_new(sensor_param_t *param)
+{
+    if (param == NULL)
+        return 0;
+
+    sensor_config_t *pnew = rt_realloc(param->psen_config, sizeof(sensor_config_t) * (param->sensor_num + 1));
+    if (pnew)
+    {
+        param->sensor_num++;
+        param->psen_config = pnew;
+        return 1;
+    }
+    return 0;
+}
+
+uint8_t sensor_del(sensor_param_t *param, uint8_t id)
+{
+    if (param == NULL || param->psen_config == NULL || id >= param->sensor_num)
+        return 0;
+    memcpy(param->psen_config + id, (param->psen_config + id + 1), param->sensor_num - id - 1);
+    return 1;
 }

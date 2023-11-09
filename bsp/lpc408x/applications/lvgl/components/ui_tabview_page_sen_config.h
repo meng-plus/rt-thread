@@ -27,7 +27,8 @@ extern "C"
         SEN_CONFIG_RS485_3_BAUD,
 
         SEN_CONFIG_TABLE,
-
+        SEN_CONFIG_DEL,
+        SEN_CONFIG_NEW,
         SEN_CONFIG_RESTORE,
         SEN_CONFIG_SAVE,
 
