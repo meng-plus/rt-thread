@@ -92,6 +92,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_set_grid_cell(tab_obj, LV_GRID_ALIGN_STRETCH, 0, 5,
                          LV_GRID_ALIGN_STRETCH, 2, 4);
     // lv_table_set_col_width(tab_obj, 0,); // 设置第二列自适应宽度
+    lv_obj_add_event_cb(tab_obj, table_event_pressed, LV_EVENT_PRESSED, NULL);
     lv_obj_align(tab_obj, LV_ALIGN_CENTER, 0, 0);
 
     lv_obj_t *btn_del = lv_btn_create(obj);

@@ -273,3 +273,11 @@ static void btnm_event_handler(lv_event_t *e)
     else
         lv_textarea_add_text(ta, txt);
 }
+static void table_event_pressed(lv_event_t *e)
+{
+    lv_obj_t *table = lv_event_get_target(e);
+    uint16_t row;
+    uint16_t col;
+    lv_table_get_selected_cell(table, row, col);
+    LOG_D("[%d,%d]", col, row);
+}
