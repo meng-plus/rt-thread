@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "sensor_var.h"
+#include "ui_comp_edit.h"
 static const uint32_t baud_array[] = {4800, 9600, 19200, 38400, 115200};
 static void lv_event_value_changed(lv_event_t *e)
 {
@@ -273,11 +274,39 @@ static void btnm_event_handler(lv_event_t *e)
     else
         lv_textarea_add_text(ta, txt);
 }
-static void table_event_pressed(lv_event_t *e)
+
+typedef struct table_edit
 {
-    lv_obj_t *table = lv_event_get_target(e);
     uint16_t row;
     uint16_t col;
-    lv_table_get_selected_cell(table, row, col);
-    LOG_D("[%d,%d]", col, row);
+    lv_obj_t *obj;
+} table_edit_t;
+
+static void table_edit_event_cb(lv_event_t *e)
+{
+    lv_obj_t *obj = lv_event_get_target(e);
+    table_edit_t *pedit = (table_edit_t *)lv_event_get_user_data(e);
+    if (pedit)
+    {
+        const char *string = lv_label_get_text(lv_textarea_get_label(obj));
+        LOG_D("[%d,%d]:%s", pedit->row, pedit->col, string);
+        lv_table_set_cell_value(pedit->obj, pedit->row, pedit->col, string);
+    }
+}
+static void table_event_pressed(lv_event_t *e)
+{
+    static table_edit_t s_edit;
+    s_edit.obj = lv_event_get_target(e);
+    lv_table_get_selected_cell(s_edit.obj, &s_edit.row, &s_edit.col);
+    LOG_D("[%d,%d]", s_edit.row, s_edit.col);
+    const char *string = lv_table_get_cell_value(s_edit.obj, s_edit.row, s_edit.col);
+
+    if (s_edit.row > 0)
+    {
+
+        lv_obj_t *kb = ui_edit_create(lv_layer_top());
+        lv_obj_set_size(kb, 800, 480);
+        ui_edit_add_event(kb, table_edit_event_cb, LV_EVENT_READY, &s_edit);
+        ui_edit_pop_with_default(kb, string);
+    }
 }

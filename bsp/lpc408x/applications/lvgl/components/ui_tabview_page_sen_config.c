@@ -100,7 +100,6 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_set_grid_cell(btn_del, LV_GRID_ALIGN_STRETCH, 5, 1,
                          LV_GRID_ALIGN_CENTER, 2, 1);
     lv_obj_align(btn_del, LV_ALIGN_CENTER, 0, 40);
-    // lv_obj_add_flag(btn_restore, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_height(btn_del, LV_SIZE_CONTENT);
     label = lv_label_create(btn_del);
     lv_label_set_text(label, "del");
@@ -111,7 +110,6 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_set_grid_cell(btn_new, LV_GRID_ALIGN_STRETCH, 5, 1,
                          LV_GRID_ALIGN_CENTER, 3, 1);
     lv_obj_align(btn_new, LV_ALIGN_CENTER, 0, 40);
-    // lv_obj_add_flag(btn_save, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_height(btn_new, LV_SIZE_CONTENT);
 
     label = lv_label_create(btn_new);

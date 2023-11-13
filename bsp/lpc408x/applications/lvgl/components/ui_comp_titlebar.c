@@ -8,6 +8,7 @@
 #include "ui_comp.h"
 #include <stdio.h>
 #include "system_var.h"
+#include "ui_comp_edit.h"
 uint32_t LV_EVENT_SET_TITLE;
 uint32_t LV_EVENT_SET_LED_MODE;
 uint32_t LV_EVENT_SET_LED_Value;
@@ -129,3 +130,4 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
 
     return obj;
 }
+
