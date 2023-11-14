@@ -112,20 +112,7 @@ void SysArgUpdata(void *param)
     if (param == &g_sensor_param)
     {
         currver = g_sensor_param.header.ver;
-        struct fdb_blob blob;
-        /*!< read sensor config */
-        size_t len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
-                                     fdb_blob_make(&blob, NULL, NULL));
-        if (blob.saved.len)
-        {
-            g_sensor_param.psen_config = malloc(blob.saved.len);
-            len = fdb_kv_get_blob(&kj428_kvdb, "sensor",
-                                  fdb_blob_make(&blob, g_sensor_param.psen_config, blob.saved.len));
-        }
-        else
-        {
-            g_sensor_param.psen_config = 0;
-        }
+
         if (FLASH_SENSOR_PARAMETER_VER != g_sensor_param.header.ver)
         {
             if (currver < 1)
@@ -163,15 +150,8 @@ uint8_t var_save(void *param)
     }
     else if (param == &g_sensor_param)
     {
-
-        fdb_blob_make(&blob, g_sensor_param.psen_config, g_sensor_param.sensor_num * sizeof(sensor_config_t));
-        err = fdb_kv_set_blob(&kj428_kvdb, "sensor", &blob);
-        if (g_sensor_param.psen_config && err != FDB_NO_ERR)
-            return err;
-
         g_sensor_param.header.ver = FLASH_SENSOR_PARAMETER_VER;
-        fdb_blob_make(&blob, &g_sensor_param, sizeof(sensor_param_t));
-
+        fdb_blob_make(&blob, &g_sensor_param, sizeof(sensor_param_t) - (10 - g_sensor_param.sensor_num) * sizeof(sensor_config_t));
         err = fdb_kv_set_blob(&kj428_kvdb, param_table[SENSOR_PARAM_ID].name, &blob);
     }
 
@@ -217,12 +197,9 @@ uint8_t sensor_new(sensor_param_t *param)
 {
     if (param == NULL)
         return 0;
-
-    sensor_config_t *pnew = rt_realloc(param->psen_config, sizeof(sensor_config_t) * (param->sensor_num + 1));
-    if (pnew)
+    if (param->sensor_num < 10)
     {
         param->sensor_num++;
-        param->psen_config = pnew;
         return 1;
     }
     return 0;
@@ -230,8 +207,9 @@ uint8_t sensor_new(sensor_param_t *param)
 
 uint8_t sensor_del(sensor_param_t *param, uint8_t id)
 {
-    if (param == NULL || param->psen_config == NULL || id >= param->sensor_num)
+    if (param == NULL || id >= param->sensor_num)
         return 0;
-    memcpy(param->psen_config + id, (param->psen_config + id + 1), param->sensor_num - id - 1);
+
+    memcpy(param->sen_config + id, (param->sen_config + id + 1), param->sensor_num - id - 1);
     return 1;
 }

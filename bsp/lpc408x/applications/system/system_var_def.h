@@ -116,7 +116,7 @@ extern "C"
         uint8_t sensor_num;
 
         device_config_t dev_config[2];
-        sensor_config_t *psen_config;
+        sensor_config_t sen_config[10];
 
     } sensor_param_t;
 

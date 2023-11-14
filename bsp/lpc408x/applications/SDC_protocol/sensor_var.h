@@ -26,7 +26,7 @@ extern "C"
         char *unit;       /*!< 单位 */
 
     } rom_sensor_var_t;
-    extern rom_sensor_var_t rom_sensor_var[SEN_NUM];
+    extern const rom_sensor_var_t rom_sensor_var[SEN_NUM];
 #ifdef __cplusplus
 }
 #endif

@@ -55,6 +55,7 @@ void ui_edit_pop_with_default(lv_obj_t *obj, const char *string)
     lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
     // lv_obj_clear_flag(text, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(lv_textarea_get_label(text), string);
+    lv_obj_add_state(text, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
 }
 
 bool ui_edit_add_event(lv_obj_t *obj, lv_event_cb_t event_cb, lv_event_code_t filter, void *user_data)
@@ -100,7 +101,7 @@ lv_obj_t *ui_edit_create(lv_obj_t *comp_parent)
     lv_obj_center(obj);
 
     lv_obj_t *ui_text = lv_textarea_create(obj);
-    lv_obj_set_grid_cell(ui_text, LV_GRID_ALIGN_START, 0, 1,
+    lv_obj_set_grid_cell(ui_text, LV_GRID_ALIGN_CENTER, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     // lv_obj_add_flag(ui_text, LV_OBJ_FLAG_HIDDEN);
     lv_textarea_set_one_line(ui_text, true);
