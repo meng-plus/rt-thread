@@ -8,7 +8,7 @@
 // COMPONENT TabView1
 #include "ui_tabview_page_Dashboard.h"
 #include "ui_tabview_page_sen_config.h"
-
+#include "ui_tabview_page_debug.h"
 static void btns_value_changed_event_cb(lv_event_t *e)
 { // char *param = lv_event_get_param(e);
     lv_obj_t *obj = lv_event_get_target(e);
@@ -16,8 +16,9 @@ static void btns_value_changed_event_cb(lv_event_t *e)
     {
         return;
     }
-    // uint32_t id = lv_btnmatrix_get_selected_btn(obj);
-    // lv_event_send(lv_tabview_get_tab_act(lv_obj_get_parent(obj)), LV_EVENT_VALUE_CHANGED, NULL);
+    _lv_event_child_notify(lv_tabview_get_content(lv_obj_get_parent(obj)), LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
+    uint32_t id = lv_btnmatrix_get_selected_btn(obj);
+    lv_event_send(ui_comp_get_child(lv_obj_get_parent(obj), id), LV_EVENT_NOTIFY_PAGE_ACT, NULL);
 }
 
 lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
@@ -34,11 +35,14 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
 
     lv_obj_t *dashboard = ui_tabview_page_dashboard_create(obj);
     lv_obj_t *sen_config = ui_tabview_page_sen_config_create(obj);
+    lv_obj_t *debug_obj = ui_tabview_page_debug_create(obj);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * UI_COMP_TABVIEW_MAIN_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * UI_COMP_TABVIEW_MAIN_NUM);
     children[UI_COMP_TABVIEW_MAIN_DASHBOARD] = dashboard;
-    children[UI_COMP_TABVIEW_MAIN_SETING] = obj;
+    // children[UI_COMP_TABVIEW_MAIN_SETING] = obj;
     children[UI_COMP_TABVIEW_MAIN_SEN_CONFIG] = sen_config;
+    children[UI_COMP_TABVIEW_MAIN_DEBUG] = debug_obj;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
 

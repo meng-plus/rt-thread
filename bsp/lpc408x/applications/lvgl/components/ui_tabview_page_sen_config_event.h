@@ -17,7 +17,22 @@
 #include "sensor_var.h"
 #include "ui_comp_edit.h"
 static const uint32_t baud_array[] = {4800, 9600, 19200, 38400, 115200};
-static void lv_event_value_changed(lv_event_t *e)
+static void lv_event_notify_page(lv_event_t *e)
+{
+    /*!< 通知发生了页面也换，可能不是活动状态，将关闭刷新功能 */
+    uint32_t code = lv_event_get_code(e);
+    lv_obj_t *obj = lv_event_get_target(e);
+    if (code == LV_EVENT_NOTIFY_PAGE_ACT)
+    {
+        lv_event_send(obj, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
+    }
+    if (code == LV_EVENT_NOTIFY_PAGE_CHANGE)
+    {
+        // lv_event_send(obj, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
+    }
+}
+
+static void lv_event_value_update(lv_event_t *e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
     uint32_t mask = (uint32_t)lv_event_get_param(e);
@@ -136,13 +151,13 @@ static void lv_event_clicked(lv_event_t *e)
         case SEN_CONFIG_DEL: /*!< 增删传感器配置 */
         {
             // sensor_del(&g_sensor_param, sel);
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, (void *)(1 << SEN_CONFIG_TABLE));
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
         }
         break;
         case SEN_CONFIG_NEW:
         {
             uint8_t ret = sensor_new(&g_sensor_param);
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, (void *)(1 << SEN_CONFIG_TABLE));
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
             if (ret == 0)
             {
                 lv_obj_t *mbox1 = lv_msgbox_create(NULL, "error", "create error", NULL, true);
@@ -153,7 +168,7 @@ static void lv_event_clicked(lv_event_t *e)
         case SEN_CONFIG_RESTORE:
         {
             var_reload(&g_sensor_param);
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, (void *)-1);
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)-1);
             lv_obj_t *mbox1 = lv_msgbox_create(NULL, "restore", "Successfully restore", NULL, true);
             lv_obj_center(mbox1);
         }
@@ -221,7 +236,7 @@ static void child_event_value_changed(lv_event_t *e)
             break;
         case SEN_CONFIG_RESTORE:
             var_reload(&g_sensor_param);
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_VALUE_CHANGED, NULL);
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, NULL);
             break;
         case SEN_CONFIG_SAVE:
             var_save(&g_sensor_param);
@@ -294,7 +309,7 @@ static void table_edit_event_cb(lv_event_t *e)
 
         const char *string = NULL;
         if (pedit->col)
-            lv_label_get_text(lv_textarea_get_label(obj));
+            string = lv_label_get_text(lv_textarea_get_label(obj));
 
         switch (pedit->col)
         {
@@ -320,7 +335,7 @@ static void table_edit_event_cb(lv_event_t *e)
             break;
         }
         LOG_D("[%d,%d]:%s", pedit->row, pedit->col, string);
-        lv_event_send(lv_obj_get_parent(pedit->obj), LV_EVENT_VALUE_CHANGED, (void *)(1 << SEN_CONFIG_TABLE));
+        lv_event_send(lv_obj_get_parent(pedit->obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
     }
 }
 

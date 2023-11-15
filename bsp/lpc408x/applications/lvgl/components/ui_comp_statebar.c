@@ -52,6 +52,7 @@ lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
     lv_timer_t *time_data_update = lv_timer_create(time_update, 1000, cui_date);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * STATE_BAR_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * STATE_BAR_NUM);
     children[STATE_BAR_TIPS] = cui_tips;
     children[STATE_BAR_DATE] = cui_date;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);

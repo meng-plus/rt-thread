@@ -51,20 +51,6 @@ static void dd_event_handler(lv_event_t *e)
         }
     }
 }
-static void lv_event_value_changed_spinbox(lv_event_t *e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *obj = lv_event_get_target(e);
-    if (code == LV_EVENT_VALUE_CHANGED)
-    {
-        char buf[32];
-        lv_dropdown_get_selected_str(obj, buf, sizeof(buf));
-        if (g_var_work.dts)
-        {
-            // g_var_work.dts->sel_chn=;
-        }
-    }
-}
 lv_obj_t *ui_Dashboard_ctl_create(lv_obj_t *comp_parent)
 {
 
@@ -108,6 +94,7 @@ lv_obj_t *ui_Dashboard_ctl_create(lv_obj_t *comp_parent)
     // lv_obj_add_event_cb(label_span, lv_event_value_changed_spinbox, LV_EVENT_VALUE_CHANGED, NULL);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * DASHBOARD_CTL_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * DASHBOARD_CTL_NUM);
     children[DASHBOARD_CTL_CHN_SEL] = dd;
 
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);

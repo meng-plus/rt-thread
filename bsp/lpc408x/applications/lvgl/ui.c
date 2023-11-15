@@ -8,22 +8,10 @@
 #include "ui_P00startup.h"
 #include "ui_comp.h"
 ///////////////////// VARIABLES ////////////////////
-lv_obj_t *ui_P01main;
-lv_obj_t *ui_head;
-lv_obj_t *ui_title;
-lv_obj_t *ui_TabView1;
-lv_obj_t *ui_TabPage1;
-lv_obj_t *ui_TabPage2;
-lv_obj_t *ui_TextArea1;
-lv_obj_t *ui_TabPage3;
-lv_obj_t *ui_Chart1;
-lv_obj_t *ui_TabPage4;
-lv_obj_t *ui_TabPage5;
-lv_obj_t *ui_stateBar;
-lv_obj_t *ui_tips;
-lv_obj_t *ui_date;
-lv_obj_t *ui____initial_actions0;
 
+uint32_t LV_EVENT_NOTIFY_PAGE_CHANGE;
+uint32_t LV_EVENT_NOTIFY_PAGE_ACT;
+uint32_t LV_EVENT_NOTIFY_UPDATE;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
 #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
@@ -42,6 +30,12 @@ void ui_init(void)
 {
     if (LV_EVENT_GET_COMP_CHILD == 0)
         LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
+    if (LV_EVENT_NOTIFY_PAGE_CHANGE == 0)
+        LV_EVENT_NOTIFY_PAGE_CHANGE = lv_event_register_id();
+    if (LV_EVENT_NOTIFY_PAGE_ACT == 0)
+        LV_EVENT_NOTIFY_PAGE_ACT = lv_event_register_id();
+    if (LV_EVENT_NOTIFY_UPDATE == 0)
+        LV_EVENT_NOTIFY_UPDATE = lv_event_register_id();
     lv_disp_t *dispp = lv_disp_get_default();
     lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);

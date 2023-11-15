@@ -64,7 +64,6 @@ extern "C"
     {
         header_param_t header; /*!<版本标识*/
         uint16_t dts_delayms;  /*!< 测温主机数据扫描周期 range[0,10000] */
-
     } product_param_t;
 
 /**

@@ -24,6 +24,9 @@ extern "C"
     LV_FONT_DECLARE(lv_font_simhei_20);
     LV_FONT_DECLARE(ui_font_heiti24);
 
+    extern uint32_t LV_EVENT_NOTIFY_PAGE_CHANGE; /*!< page页面发生了切换 */
+    extern uint32_t LV_EVENT_NOTIFY_PAGE_ACT;    /*!< page页面被激活 */
+    extern uint32_t LV_EVENT_NOTIFY_UPDATE;      /*!< 通知页面刷新 */
     void ui_init(void);
 
 #ifdef __cplusplus

@@ -101,6 +101,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
     lv_obj_set_size(led_r, 16, 16);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * TITLE_BAR_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * TITLE_BAR_NUM);
     children[TITLE_BAR_TITLE] = ui_title;
     children[TITLE_BAR_LED_Y] = led_y;
     children[TITLE_BAR_LED_G] = led_g;

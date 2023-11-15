@@ -2558,10 +2558,10 @@
             <name>$PROJ_DIR$\applications\DOIC_protocol\DOIC_protocol.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\DOIC_protocol\thread_DOIC.c</name>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\DOIC_waiting_response.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\DOIC_protocol\transport_DOIC.c</name>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\thread_DOIC.c</name>
         </file>
     </group>
     <group>
@@ -3506,6 +3506,9 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_edit.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_page_Dashboard_ctl.c</name>
         </file>
         <file>
@@ -3547,6 +3550,12 @@
         <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_tabview_page_Dashboard.c</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_tabview_page_debug.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_tabview_page_sen_config.c</name>
+        </file>
     </group>
     <group>
         <name>POSIX</name>
@@ -3561,6 +3570,15 @@
         </file>
         <file>
             <name>$PROJ_DIR$\applications\Protocol\Transport.c</name>
+        </file>
+    </group>
+    <group>
+        <name>SDC_protocol</name>
+        <file>
+            <name>$PROJ_DIR$\applications\SDC_protocol\SDC_protocol.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\SDC_protocol\sensor_var.c</name>
         </file>
     </group>
     <group>

@@ -7,6 +7,10 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_t *obj;
     lv_obj_t *label;
     obj = lv_tabview_add_tab(tableview, "config");
+    lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
+    lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
+    lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
+
     lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -147,6 +151,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_center(label);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SEN_CONFIG_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * SEN_CONFIG_NUM);
     children[SEN_CONFIG_RS485_2] = rs485_2_en_obj;
     children[SEN_CONFIG_RS485_2_ADDR] = rs485_2_addr_obj;
     children[SEN_CONFIG_RS485_2_BAUD] = rs485_2_baud_obj;
@@ -160,15 +165,11 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     children[SEN_CONFIG_SAVE] = btn_save;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
-    lv_obj_add_event_cb(obj, lv_event_value_changed, LV_EVENT_VALUE_CHANGED, NULL); /*!< 通知刷新后，初始化所有控件 */
 
     for (size_t i = 0; i < SEN_CONFIG_NUM; i++)
     {
         if (children[i])
             lv_obj_add_event_cb(children[i], child_event_value_changed, LV_EVENT_VALUE_CHANGED, (void *)i);
     }
-
-    _lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, (void *)-1);
-
     return obj;
 }

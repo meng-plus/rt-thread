@@ -64,6 +64,7 @@ lv_obj_t *ui_calibration_create(lv_obj_t *parent)
     lv_obj_set_style_bg_color(bt_rb, lv_palette_main(LV_PALETTE_RED), LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SCREEN_CALIBRATION_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * SCREEN_CALIBRATION_NUM);
     children[SCREEN_CALIBRATION_TIPS] = lable_obj;
     children[SCREEN_CALIBRATION_LT] = bt_lt;
     children[SCREEN_CALIBRATION_RT] = bt_lb;

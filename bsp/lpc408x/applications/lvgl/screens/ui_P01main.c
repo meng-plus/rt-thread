@@ -40,6 +40,7 @@ lv_obj_t *ui_main_create(lv_obj_t *parent)
                          LV_GRID_ALIGN_STRETCH, 2, 1);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SCREEN_P01_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * SCREEN_P01_NUM);
     children[SCREEN_P01_TITLE_BAR] = ui_head;
     children[SCREEN_P01_TABLE] = ui_TabView1;
     children[SCREEN_P01_STATE_BAR] = ui_stateBar;

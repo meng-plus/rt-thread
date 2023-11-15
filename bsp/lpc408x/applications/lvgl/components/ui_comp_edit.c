@@ -124,6 +124,7 @@ lv_obj_t *ui_edit_create(lv_obj_t *comp_parent)
     lv_obj_add_event_cb(btnm, btnm_event_handler, LV_EVENT_VALUE_CHANGED, ui_text);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * EDIT_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * EDIT_NUM);
     children[EDIT_TEXTAREA] = ui_text;
     children[EDIT_KEYBOARD] = btnm;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
