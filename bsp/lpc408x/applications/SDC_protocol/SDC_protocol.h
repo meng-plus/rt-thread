@@ -41,7 +41,7 @@ extern "C"
      * @param psdc
      * @return int8_t
      */
-    void SDC_master_init(sdc_master_t *phander, sdc_map_t *pmap, uint16_t map_num);
+    void SDC_master_init(sdc_master_t *phander, uint8_t *buff, uint16_t len);
     /**
      * @brief 分站查询模拟量传感器
      *
@@ -69,6 +69,7 @@ extern "C"
      * @return uint16_t
      */
     uint16_t SDC_addCrc(sdc_data_t *pdata);
+
 #ifdef __cplusplus
 }
 #endif

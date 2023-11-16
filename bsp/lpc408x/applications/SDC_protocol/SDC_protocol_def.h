@@ -2,6 +2,7 @@
  * @file SDC_protocol_def.h
  * @author mengplus (chengmeng_2@outlook.com)
  * @brief 分站下行通信协议
+ *  分站下行通讯协议分析指南_Ver1.69_20220311.pdf
  * @version 0.1
  * @date 2023-11-03
  *
@@ -32,6 +33,24 @@ extern "C"
         uint8_t cmd;     /*!< 命令 */
         uint8_t data[0]; /*!< 柔性数组,  crc16(0x1021)校验高位在前，低位在后 */
     } sdc_data_t;
+    /**
+     * @brief 模拟量传感器响应分站查询（0x90）
+     * 4byte 对齐
+     */
+    typedef struct SDC_protocol_0x90
+    {
+        uint8_t SenName; /*!< 传感器名 */
+        uint8_t ChNum;   /*!< 通道 */
+        uint16_t SenSat; /*!< 传感器状态 */
+
+        uint8_t SenMode;   /*!< 工作模式 */
+        uint8_t CfgUpdata; /*!< 参数更新 */
+        uint8_t SenFlag;   /*!< 标志位 */
+        uint8_t Res;
+
+        float SenData[4]; /*!< 数据 一般为单数据 */
+
+    } sdc_0x90_t;
 
 #ifdef __cplusplus
 }

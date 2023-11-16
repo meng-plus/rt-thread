@@ -1,11 +1,13 @@
 #include "DOIC_protocol.h"
 #include <string.h>
-void DOIC_master_init(doic_master_t *phander, doic_map_t *pmap, uint16_t map_num)
+#include "DOIC_map.h"
+void DOIC_master_init(doic_master_t *phander, uint8_t *buff, uint16_t len)
 {
-    if (phander && pmap)
+    if (phander)
     {
-        phander->map = pmap;
-        phander->map_num = map_num;
+        phander->map = g_doic_map;
+        phander->map_num = g_doic_map_num;
+        phander->pdata = (doic_data_t *)buff;
     }
 }
 

@@ -43,9 +43,13 @@ extern "C"
         uint8_t read_buf[512];
         uint8_t rx_len;
         doic_master_t m_DOIC_master;
+
+        session_master_t m_DSCsession;
         sdc_master_t m_SDC_master;
+        uint8_t sdc_send_buf[512];
         uint8_t sdc_read_buf[512];
         uint8_t sdc_rx_len;
+
     } thread_doic_t;
 
     void thread_DOIC_control(TH_DOIC_CMD_E cmd, void *param);

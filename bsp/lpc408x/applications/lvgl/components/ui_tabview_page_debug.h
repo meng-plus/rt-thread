@@ -19,7 +19,14 @@ extern "C"
 #endif
     enum UI_COMP_DEBUG
     {
-        DEBUG_CHART,
+        DEBUG_LABLE_WARING,
+        DEBUG_LABLE_CTRL1,
+        DEBUG_LABLE_CTRL2,
+        DEBUG_LABLE_CTRL3,
+        DEBUG_BT_WARING,
+        DEBUG_BT_CTRL1,
+        DEBUG_BT_CTRL2,
+        DEBUG_BT_CTRL3,
 
         DEBUG_NUM,
     };

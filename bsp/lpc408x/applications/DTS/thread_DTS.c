@@ -32,18 +32,7 @@ static rt_err_t finsh_rx_ind(rt_device_t dev, rt_size_t size)
     }
     return RT_EOK;
 }
-int DTS_getchar()
-{
-    char ch = 0;
-    while (rt_device_read(pthread_dts->device, -1, &ch, 1) != 1)
-    {
-        if (RT_EOK != rt_sem_take(&pthread_dts->rx_sem, 100)) // RT_WAITING_FOREVER
-        {
-            break;
-        }
-    }
-    return ch;
-}
+
 void thread_dts_entry(void *param)
 {
     if (pthread_dts->device == RT_NULL)

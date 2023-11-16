@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "thread_DTS.h"
+#include "SDC_protocol_def.h"
 #ifdef __cplusplus
 extern "C"
 {
@@ -29,7 +30,8 @@ extern "C"
     typedef struct _RAM_VAR_WORKING
     {
         uint32_t tick;
-        thread_dts_t *dts; /*!< 测温主机数据 */
+        thread_dts_t *dts;     /*!< 测温主机数据 */
+        sdc_0x90_t Sensor[10]; // Sensor[SEN_NUM];
     } varWork_t;
 
     /**

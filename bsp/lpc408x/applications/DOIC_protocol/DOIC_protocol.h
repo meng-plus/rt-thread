@@ -42,7 +42,7 @@ extern "C"
      * @param pdoic
      * @return int8_t
      */
-    void DOIC_master_init(doic_master_t *phander, doic_map_t *pmap, uint16_t map_num);
+    void DOIC_master_init(doic_master_t *phander, uint8_t *buff, uint16_t len);
     /**
      * @brief 数据透传——0x41  0x01 查询下位机上传的透
      *
@@ -70,6 +70,8 @@ extern "C"
      * @return uint16_t
      */
     uint16_t DOIC_addCrc(doic_data_t *pdata);
+
+
 #ifdef __cplusplus
 }
 #endif

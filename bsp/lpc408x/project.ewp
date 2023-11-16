@@ -2522,6 +2522,12 @@
     <group>
         <name>DOIC_protocol</name>
         <file>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\DOIC_deal_0x4101.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\DOIC_protocol\DOIC_map.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\DOIC_protocol\DOIC_protocol.c</name>
         </file>
         <file>
@@ -3542,7 +3548,16 @@
     <group>
         <name>SDC_protocol</name>
         <file>
+            <name>$PROJ_DIR$\applications\SDC_protocol\SDC_deal_0x90.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\SDC_protocol\SDC_map.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\SDC_protocol\SDC_protocol.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\SDC_protocol\SDC_waiting_response.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\applications\SDC_protocol\sensor_var.c</name>

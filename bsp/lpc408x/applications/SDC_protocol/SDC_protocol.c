@@ -1,12 +1,14 @@
 
 #include "SDC_protocol.h"
 #include <string.h>
-void SDC_master_init(sdc_master_t *phander, sdc_map_t *pmap, uint16_t map_num)
+#include "SDC_map.h"
+void SDC_master_init(sdc_master_t *phander, uint8_t *buff, uint16_t len)
 {
-    if (phander && pmap)
+    if (phander)
     {
-        phander->map = pmap;
-        phander->map_num = map_num;
+        phander->map = g_sdc_map;
+        phander->map_num = g_sdc_map_num;
+        phander->pdata = (sdc_data_t *)buff;
     }
 }
 

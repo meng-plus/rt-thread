@@ -28,12 +28,12 @@ int32_t session_tick(session_master_t *se_handle)
     {
         if (0 == session_response(se_handle, se_handle->msg_id))
         {
-            //session_change(se_handle, SYS);
+            // session_change(se_handle, SYS);
         }
     }
     else
     {
-        //session_change(se_handle, SYS);
+        // session_change(se_handle, SYS);
     }
     return res;
 }
@@ -58,6 +58,4 @@ void session_master_init(session_master_t *se_handle)
         return;
     }
     memset(se_handle, 0, sizeof(session_master_t));
-    tr_init(&se_handle->transport, NULL, 0);
-    // tr_control(&se_handle->transport, TR_SET_WAITING_RESPONSE, (void *)waiting_response);
 }

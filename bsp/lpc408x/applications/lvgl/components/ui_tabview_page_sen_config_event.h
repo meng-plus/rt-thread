@@ -46,7 +46,7 @@ static void lv_event_value_update(lv_event_t *e)
         }
         else
         {
-            lv_obj_clear_flag(sub_obj, LV_STATE_CHECKED);
+            lv_obj_clear_state(sub_obj, LV_STATE_CHECKED);
         }
 
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_3);
@@ -57,7 +57,7 @@ static void lv_event_value_update(lv_event_t *e)
         }
         else
         {
-            lv_obj_clear_flag(sub_obj, LV_STATE_CHECKED);
+            lv_obj_clear_state(sub_obj, LV_STATE_CHECKED);
         }
 
     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2_BAUD);
@@ -236,7 +236,7 @@ static void child_event_value_changed(lv_event_t *e)
             break;
         case SEN_CONFIG_RESTORE:
             var_reload(&g_sensor_param);
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, NULL);
+            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)-1);
             break;
         case SEN_CONFIG_SAVE:
             var_save(&g_sensor_param);
