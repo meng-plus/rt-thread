@@ -209,7 +209,11 @@ uint8_t sensor_del(sensor_param_t *param, uint8_t id)
 {
     if (param == NULL || id >= param->sensor_num)
         return 0;
+    if (param->sensor_num)
+    {
+        memcpy(param->sen_config + id, (param->sen_config + id + 1), param->sensor_num - id - 1);
+        param->sensor_num--;
+    }
 
-    memcpy(param->sen_config + id, (param->sen_config + id + 1), param->sensor_num - id - 1);
     return 1;
 }

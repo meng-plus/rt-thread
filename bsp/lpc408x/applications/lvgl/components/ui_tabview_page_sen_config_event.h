@@ -142,7 +142,7 @@ static void lv_event_clicked(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-    enum UI_COMP_SEN_CONFIG comp_id = (enum UI_COMP_SEN_CONFIG)lv_event_get_user_data(e);
+    enum UI_COMP_SEN_CONFIG comp_id = (enum UI_COMP_SEN_CONFIG)(uint32_t)lv_event_get_user_data(e);
     if (obj && code == LV_EVENT_CLICKED)
     {
         char buff[32];
@@ -150,7 +150,10 @@ static void lv_event_clicked(lv_event_t *e)
         {
         case SEN_CONFIG_DEL: /*!< 增删传感器配置 */
         {
-            // sensor_del(&g_sensor_param, sel);
+            if (g_sensor_param.sensor_num > 1)
+            {
+                sensor_del(&g_sensor_param, g_sensor_param.sensor_num - 1);
+            }
             lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
         }
         break;
@@ -199,7 +202,7 @@ static void child_event_value_changed(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-    enum UI_COMP_SEN_CONFIG comp_id = (enum UI_COMP_SEN_CONFIG)lv_event_get_user_data(e);
+    enum UI_COMP_SEN_CONFIG comp_id = (enum UI_COMP_SEN_CONFIG)(uint32_t)lv_event_get_user_data(e);
     if (obj && code == LV_EVENT_VALUE_CHANGED)
     {
         uint32_t chn_sel = 0;
