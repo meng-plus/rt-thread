@@ -45,7 +45,7 @@ int8_t SDC_deal(sdc_master_t *phander, sdc_data_t *pdst)
         if (pdst->cmd == pmap->cmd &&
             pmap->func)
         {
-            return pmap->func(pdata, pdst);
+            return pmap->func(pdst, pdata);
         }
     }
 
@@ -63,8 +63,8 @@ uint16_t SDC_getCrc(sdc_data_t *psdc)
     uint16_t crc = 0;
     if (NULL == psdc)
         return 0;
-    crc = psdc->data[psdc->length] << 8;
-    crc |= psdc->data[psdc->length + 1];
+    crc = psdc->data[psdc->length - 1] << 8;
+    crc |= psdc->data[psdc->length];
 
     return crc;
 }

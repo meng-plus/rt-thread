@@ -43,7 +43,7 @@ int8_t DOIC_deal(doic_master_t *phander, doic_data_t *pdst)
             pdst->scmd == pmap->scmd &&
             pmap->func)
         {
-            return pmap->func(pdata, pdst);
+            return pmap->func(pdst,pdata);
         }
     }
 

@@ -50,7 +50,7 @@ TR_CHECK_RES_E DOIC_waiting_response(transport_t *pTr) /*!< 等待帧数据 */
         }
 
         read_len += offset;
-        if (read_len > 8 && data_len + 8 <= read_len)
+        if (read_len > 8 && data_len + 10 <= read_len)
         {
             repeat = 0;
             uint16_t crc_get = DOIC_getCrc((doic_data_t *)pTr->rxBuff);

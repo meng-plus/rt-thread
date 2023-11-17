@@ -22,42 +22,49 @@ TR_CHECK_RES_E SDC_waiting_response(transport_t *pTr) /*!< 等待帧数据 */
     uint16_t data_len = 0;
     if (rb_sdc == 0)
         return TR_CHECK_ERR_LEN;
-
+    uint16_t buff_len = rt_ringbuffer_data_len(rb_sdc);
     while (1)
     {
         uint16_t offset = 0;
-        if (rt_ringbuffer_data_len(rb_sdc) == 0)
-        {
-            repeat = 1;
-            break;
-        }
         if (read_len < 3)
         {
-
+            if (buff_len < 3)
+            {
+                repeat = 1;
+                break;
+            }
             offset = rt_ringbuffer_getchar(rb_sdc, read_len + pTr->rxBuff);
+
             if (offset && pTr->rxBuff[read_len] != 0xFB)
             {
                 read_len = pTr->read_len = 0;
+                buff_len--;
                 continue;
             }
         }
         else if (read_len < 7)
         {
-            offset = rt_ringbuffer_getchar(rb_sdc, read_len + pTr->rxBuff);
+            if (buff_len < 4)
+            {
+                break;
+            }
+            offset = rt_ringbuffer_get(rb_sdc, read_len + pTr->rxBuff, 4);
         }
         else
         {
-            data_len = pTr->rxBuff[6];
+            data_len = pTr->rxBuff[5];
             offset = rt_ringbuffer_get(rb_sdc, read_len + pTr->rxBuff, data_len + 8 - read_len);
         }
 
         read_len += offset;
+        buff_len -= offset;
         if (read_len > 8 && data_len + 8 <= read_len)
         {
             repeat = 0;
             uint16_t crc_get = SDC_getCrc((sdc_data_t *)pTr->rxBuff);
             uint16_t crc_calc = SDC_checkCrc((sdc_data_t *)pTr->rxBuff);
-            if (crc_get == crc_calc)
+            if (((crc_get & 0xFF) == (crc_calc >> 8)) &&
+                ((crc_get >> 8) == (crc_calc & 0xFF)))
             { /*!< 校验通过 */
                 read_len = 0;
                 break;
@@ -67,6 +74,8 @@ TR_CHECK_RES_E SDC_waiting_response(transport_t *pTr) /*!< 等待帧数据 */
                 read_len = 0;
             }
         }
+        if (offset == 0)
+            break;
     }
     pTr->read_len = read_len;
     if (repeat == 1)
