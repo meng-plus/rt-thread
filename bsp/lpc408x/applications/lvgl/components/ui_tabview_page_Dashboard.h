@@ -23,7 +23,7 @@ extern "C"
         DASHBOARD_SLIDER_X,
         DASHBOARD_SLIDER_Y,
         DASHBOARD_CTL,
-        DASHBOARD_SEN_VAL,
+        DASHBOARD_SENSOR,
 
         DASHBOARD_NUM,
     };

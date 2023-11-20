@@ -72,7 +72,7 @@ void thread_doic_entry(void *param)
     transport_t *pTransport = &pSession->transport;
     tr_init(pTransport, pthread_doic->read_buf, pthread_doic->rx_len);
     TR_CHECK_RES_E DOIC_waiting_response(transport_t * pTr);
-    tr_control(pTransport, TR_SET_WAITING_RESPONSE, (void*)DOIC_waiting_response);
+    tr_control(pTransport, TR_SET_WAITING_RESPONSE, (void *)DOIC_waiting_response);
     doic_master_t *phander_doic = &pthread_doic->m_DOIC_master;
     DOIC_master_init(phander_doic, pthread_doic->send_buf, sizeof(pthread_doic->send_buf));
 
@@ -81,7 +81,7 @@ void thread_doic_entry(void *param)
     transport_t *pSDCTransport = &pSDCSession->transport;
     tr_init(pSDCTransport, pthread_doic->sdc_read_buf, sizeof(pthread_doic->sdc_read_buf));
     TR_CHECK_RES_E SDC_waiting_response(transport_t * pTr); /*!< 等待帧数据 */
-    tr_control(pSDCTransport, TR_SET_WAITING_RESPONSE, (void*)SDC_waiting_response);
+    tr_control(pSDCTransport, TR_SET_WAITING_RESPONSE, (void *)SDC_waiting_response);
     sdc_master_t *phander_sdc = &pthread_doic->m_SDC_master;
     SDC_master_init(phander_sdc, pthread_doic->sdc_send_buf, sizeof(pthread_doic->sdc_send_buf));
     while (1)
@@ -95,8 +95,21 @@ void thread_doic_entry(void *param)
                 DOIC_deal(phander_doic, (doic_data_t *)pTransport->rxBuff);
             }
         }
+#if 1
+        static uint8_t idx = 0;
+        if (g_sensor_param.sensor_num <= idx)
+        {
+            idx = 0;
+        }
+        uint16_t sdc_len = 0;
+        static uint8_t sen_idx = 0;
+        sensor_config_t *pSensor_config = &g_sensor_param.sen_config[idx];
+        sdc_len = SDC_master_0x10(phander_sdc, pSensor_config->addr, pSensor_config->type, pSensor_config->chn);
+        uint16_t len = DOIC_master_0x4181(phander_doic, g_sensor_param.dev_config[0].addr, pSensor_config->dev_addr, (uint8_t *)phander_sdc->pdata, sdc_len);
 
-        // session_doic_tick(pSession);
+        idx++;
+
+#else
         const enum SENSOR_DEF table[] = {SEN_ENVI_TEMP, SEN_CO, SEN_SMOG, SOUND_LIGHT_ALARM};
         uint16_t sdc_len = 0;
         static uint8_t sen_idx = 0;
@@ -104,6 +117,7 @@ void thread_doic_entry(void *param)
         sen_idx = (sen_idx + 1) % sizeof(table) / sizeof(table[0]);
 
         uint16_t len = DOIC_master_0x4181(phander_doic, 12, 1, (uint8_t *)phander_sdc->pdata, sdc_len);
+#endif
         rt_device_write(pthread_doic->device, 0, phander_doic->pdata, len);
 
         rt_thread_yield();

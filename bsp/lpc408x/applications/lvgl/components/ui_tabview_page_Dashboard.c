@@ -1,8 +1,10 @@
 #include "ui_tabview_page_Dashboard.h"
 #include "ui_comp_page_Dashboard_ctl.h"
+#include "ui_comp_page_Dashboard_sensor.h"
 #include "ui_comp.h"
 #include "system_var.h"
 #include "thread_DTS.h"
+#include "stdio.h"
 static void slider_x_event_cb(lv_event_t *e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
@@ -26,9 +28,9 @@ static void time_update(lv_timer_t *ptime)
         return;
 
     static uint8_t offline_last = 1;
-    if (offline_last != pdts->offline)
+    if (offline_last != (pdts->offline>5))
     { /*!< 掉线刷新显示 */
-        offline_last = pdts->offline;
+        offline_last = (pdts->offline>5);
         _lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, NULL);
     }
     if (0 == pdts->offline)
@@ -60,9 +62,10 @@ static void time_update(lv_timer_t *ptime)
         lv_chart_set_point_count(pchart, pdata->channel[chn_sel].partition); // 设置X轴范围（示例中设置为0到100）
         lv_chart_set_range(pchart, LV_CHART_AXIS_PRIMARY_X, 0, pdata->channel[chn_sel].partition);
 
+        
         for (size_t i = 0; i < pdata->channel[chn_sel].partition; i++)
         {
-            lv_chart_set_next_value(pchart, pser, pdata->partition[chn_sel][i].temp_max_real);
+            lv_chart_set_next_value(pchart, pser, pdata->partition[chn_sel][i].temp_max_real*0.01-200);
             // lv_chart_set_next_value2(pchart, pser, i, pdata->partition[chn_sel][i].temp_max_real);
         }
     }
@@ -93,7 +96,11 @@ static void event_cb(lv_event_t *e)
         lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
         lv_coord_t v = data_array[last_id];
         char buf[16];
-        lv_snprintf(buf, sizeof(buf), "%d", v);
+        
+        dts_data_t *pdata = NULL;
+        thread_DTS_control(TH_DTS_GET_DATA, &pdata);
+        thread_dts_t *pdts = g_var_work.dts;
+        snprintf(buf, sizeof(buf), "%.2f", pdata->partition[pdts->sel_chn][last_id].temp_max_real*0.01-200);
 
         lv_point_t size;
         lv_txt_get_size(&size, buf, LV_FONT_DEFAULT, 0, 0, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
@@ -142,7 +149,7 @@ static void lv_event_notify_page(lv_event_t *e)
         }
     }
 }
-void lv_event_value_update(lv_event_t *e)
+static void lv_event_value_update(lv_event_t *e)
 {
     uint32_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
@@ -202,10 +209,9 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     // lv_obj_set_size(slider_y, 10, 150);
     lv_obj_align_to(slider_y, ui_Chart1, LV_ALIGN_OUT_RIGHT_MID, 20, 0);
 
-    lv_obj_t *label_obj = lv_label_create(obj);
-    lv_obj_set_grid_cell(label_obj, LV_GRID_ALIGN_START, 2, 1,
-                         LV_GRID_ALIGN_STRETCH, 0, 1);
-    lv_label_set_text_fmt(label_obj, "hello word");
+    lv_obj_t *sensor_obj = ui_Dashboard_sensor_create(obj);
+    lv_obj_set_grid_cell(sensor_obj, LV_GRID_ALIGN_START, 2, 1,
+                         LV_GRID_ALIGN_STRETCH, 0, 3);
     lv_obj_t *dashboard_ctl = ui_Dashboard_ctl_create(obj);
     lv_obj_set_grid_cell(dashboard_ctl, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_STRETCH, 2, 1);
@@ -216,6 +222,7 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     children[DASHBOARD_SLIDER_X] = slider_x;
     children[DASHBOARD_SLIDER_Y] = slider_y;
     children[DASHBOARD_CTL] = dashboard_ctl;
+    children[DASHBOARD_SENSOR] = sensor_obj;
 
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);

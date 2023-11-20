@@ -23,7 +23,6 @@ static void btns_value_changed_event_cb(lv_event_t *e)
 
 lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
 {
-
     lv_obj_t *obj;
     obj = lv_tabview_create(comp_parent, LV_DIR_LEFT, 100);
     lv_obj_set_flex_flow(obj, LV_FLEX_FLOW_ROW_WRAP);
@@ -48,5 +47,7 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
 
     lv_obj_add_event_cb(lv_tabview_get_tab_btns(obj), btns_value_changed_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
     _lv_event_child_notify(lv_tabview_get_content(obj), LV_EVENT_VALUE_CHANGED, (void *)-1);
+    lv_event_send(lv_tabview_get_tab_btns(obj), LV_EVENT_VALUE_CHANGED, NULL);
+
     return obj;
 }

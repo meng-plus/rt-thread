@@ -29,7 +29,7 @@ static void lv_event_value_changed(lv_event_t *e)
             uint32_t offset = 0;
             for (size_t i = 0; i < pdata->system.chn_num; i++)
             {
-                offset += sprintf(buff + offset, "ch%02d\n", i + 1);
+                offset += sprintf(buff + offset, "ch%2d\n", i + 1);
             }
             buff[offset - 1] = '\0';
         }

@@ -180,6 +180,9 @@
 /* Memory management */
 
 
+/* Memory protection */
+
+
 /* RT-Thread Utestcases */
 
 
@@ -194,9 +197,6 @@
 
 
 /* Wiced WiFi */
-
-
-/* CYW43012 WiFi */
 
 
 /* IoT Cloud */
@@ -225,8 +225,8 @@
 #define PKG_LVGL_THREAD_STACK_SIZE 4096
 #define PKG_LVGL_DISP_REFR_PERIOD 30
 #define PKG_USING_LVGL_SQUARELINE
-#define PKG_LVGL_USING_V08039
-#define PKG_LVGL_VER_NUM 0x080309
+#define PKG_LVGL_USING_V08035
+#define PKG_LVGL_VER_NUM 0x08035
 
 /* u8g2: a monochrome graphic library */
 
