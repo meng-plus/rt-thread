@@ -12,23 +12,26 @@
 
 #if defined(RT_USING_SPI) && defined(RT_USING_SPI_BITOPS) && defined(RT_USING_PIN)
 
-//#define DRV_DEBUG
-#define LOG_TAG             "drv.soft_spi"
+// #define DRV_DEBUG
+#define LOG_TAG "drv.soft_spi"
 #include <rtdbg.h>
 
 static struct lpc_soft_spi_config soft_spi_config[] =
-{
+    {
 #ifdef BSP_USING_SOFT_SPI1
         SOFT_SPI1_BUS_CONFIG,
 #endif
 #ifdef BSP_USING_SOFT_SPI2
         SOFT_SPI2_BUS_CONFIG,
 #endif
+#ifdef BSP_USING_SOFT_SPI3
+        SOFT_SPI3_BUS_CONFIG
+#endif /* BSP_USING_SOFT_SPI3 */
 };
 
 /**
-  * Attach the spi device to soft SPI bus, this function must be used after initialization.
-  */
+ * Attach the spi device to soft SPI bus, this function must be used after initialization.
+ */
 rt_err_t rt_hw_softspi_device_attach(const char *bus_name, const char *device_name, rt_base_t cs_pin)
 {
 
@@ -57,8 +60,8 @@ static void lpc_spi_gpio_init(struct lpc_soft_spi *spi)
 
 void lpc_tog_sclk(void *data)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
-    if(rt_pin_read(cfg->sck) == PIN_HIGH)
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
+    if (rt_pin_read(cfg->sck) == PIN_HIGH)
     {
         rt_pin_write(cfg->sck, PIN_LOW);
     }
@@ -71,7 +74,7 @@ void lpc_tog_sclk(void *data)
 void lpc_set_sclk(void *data, rt_int32_t state)
 {
 
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     if (state)
     {
         rt_pin_write(cfg->sck, PIN_HIGH);
@@ -84,7 +87,7 @@ void lpc_set_sclk(void *data, rt_int32_t state)
 
 void lpc_set_mosi(void *data, rt_int32_t state)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     if (state)
     {
         rt_pin_write(cfg->mosi, PIN_HIGH);
@@ -97,7 +100,7 @@ void lpc_set_mosi(void *data, rt_int32_t state)
 
 void lpc_set_miso(void *data, rt_int32_t state)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     if (state)
     {
         rt_pin_write(cfg->miso, PIN_HIGH);
@@ -110,25 +113,25 @@ void lpc_set_miso(void *data, rt_int32_t state)
 
 rt_int32_t lpc_get_sclk(void *data)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     return rt_pin_read(cfg->sck);
 }
 
 rt_int32_t lpc_get_mosi(void *data)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     return rt_pin_read(cfg->mosi);
 }
 
 rt_int32_t lpc_get_miso(void *data)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     return rt_pin_read(cfg->miso);
 }
 
 void lpc_dir_mosi(void *data, rt_int32_t state)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     if (state)
     {
         rt_pin_mode(cfg->mosi, PIN_MODE_INPUT);
@@ -141,7 +144,7 @@ void lpc_dir_mosi(void *data, rt_int32_t state)
 
 void lpc_dir_miso(void *data, rt_int32_t state)
 {
-    struct lpc_soft_spi_config* cfg = (struct lpc_soft_spi_config*)data;
+    struct lpc_soft_spi_config *cfg = (struct lpc_soft_spi_config *)data;
     if (state)
     {
         rt_pin_mode(cfg->miso, PIN_MODE_INPUT);
@@ -182,7 +185,7 @@ static void lpc_udelay(rt_uint32_t us)
     }
 }
 
-static struct rt_spi_bit_ops lpc_soft_spi_ops =
+static const struct rt_spi_bit_ops lpc_soft_spi_ops =
     {
         .data = RT_NULL,
         .tog_sclk = lpc_tog_sclk,
@@ -208,11 +211,11 @@ int rt_hw_softspi_init(void)
 
     for (int i = 0; i < obj_num; i++)
     {
-        lpc_soft_spi_ops.data = (void *)&soft_spi_config[i];
-        spi_obj[i].spi.ops = &lpc_soft_spi_ops;
+        memcpy(&spi_obj[i].ops, &lpc_soft_spi_ops, sizeof(lpc_soft_spi_ops));
+        spi_obj[i].ops.data = (void *)&soft_spi_config[i];
         spi_obj[i].cfg = (void *)&soft_spi_config[i];
         lpc_spi_gpio_init(&spi_obj[i]);
-        result = rt_spi_bit_add_bus(&spi_obj[i].spi, soft_spi_config[i].bus_name, &lpc_soft_spi_ops);
+        result = rt_spi_bit_add_bus(&spi_obj[i].spi, soft_spi_config[i].bus_name, &spi_obj[i].ops);
         RT_ASSERT(result == RT_EOK);
     }
 

@@ -91,18 +91,6 @@ void _pin_mode(struct rt_device *device, rt_base_t pin, rt_uint8_t mode)
         break;
     }
 }
-rt_inline rt_int32_t bit2bitno(rt_uint32_t bit)
-{
-    rt_int32_t i;
-    for (i = 0; i < 32; i++)
-    {
-        if (((rt_uint32_t)0x01 << i) == bit)
-        {
-            return i;
-        }
-    }
-    return -1;
-}
 rt_bool_t isIrqPort(rt_base_t pin)
 {
     if ((PIN_PORT(pin) == 0) || (PIN_PORT(pin) == 2))

@@ -71,9 +71,9 @@ menu "Hardware Drivers Config"
                 bool "Enable sspi3"
                 default n
                 if BSP_USING_SOFT_SPI3
-                    config BSP_S_SPI2_SCK_PIN
+                    config BSP_S_SPI3_SCK_PIN
                     int "Select sck"
-                    default 128
+                    default 46
                     config BSP_S_SPI3_MOSI_PIN
                     int "Select mosi"
                     default 156

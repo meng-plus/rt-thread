@@ -29,4 +29,5 @@ int8_t DOIC_deal_0x4101(doic_data_t *pdata, doic_data_t *pdst)
             }
         }
     }
+    return 0;
 }

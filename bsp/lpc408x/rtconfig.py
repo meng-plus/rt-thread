@@ -16,7 +16,7 @@ elif CROSS_TOOL == 'keil':
 	EXEC_PATH 	= 'D:/Keil'
 elif CROSS_TOOL == 'iar':
     PLATFORM    = 'iccarm'
-    EXEC_PATH   = r'C:/Program Files (x86)/IAR Systems/Embedded Workbench 8.4'
+    EXEC_PATH   = r'D:/Program Files (x86)/IAR Systems/Embedded Workbench 8.3'
 
 if os.getenv('RTT_EXEC_PATH'):
 	EXEC_PATH = os.getenv('RTT_EXEC_PATH')
@@ -128,5 +128,5 @@ elif PLATFORM == 'iccarm':
     CXXFLAGS = CFLAGS
 
     EXEC_PATH = EXEC_PATH + '/arm/bin/'
-    #POST_ACTION = 'ielftool --bin $TARGET rtthread.bin'
+    POST_ACTION = 'ielftool --bin $TARGET rtthread.bin'
 
