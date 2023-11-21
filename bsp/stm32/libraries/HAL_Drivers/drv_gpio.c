@@ -63,7 +63,7 @@
 #error Unsupported STM32 GPIO peripheral.
 #endif
 
-#define PIN_STPORT_MAX __STM32_PORT_MAX
+#define PIN_STPORT_MAX 5
 
 static const struct pin_irq_map pin_irq_map[] =
     {

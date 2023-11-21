@@ -49,6 +49,15 @@ struct lpc_soft_spi
         .bus_name = "sspi2",                                \
     }
 #endif /* BSP_USING_SOFT_SPI2 */
+#ifdef BSP_USING_SOFT_SPI2
+#define SOFT_SPI2_BUS_CONFIG                                \
+    {                                                       \
+        .sck = BSP_S_SPI3_SCK_PIN,                          \
+        .mosi = BSP_S_SPI3_MOSI_PIN,                        \
+        .miso = BSP_S_SPI3_MISO_PIN,                        \
+        .bus_name = "sspi3",                                \
+    }
+#endif /* BSP_USING_SOFT_SPI2 */
 
 rt_err_t rt_hw_softspi_device_attach(const char *bus_name, const char *device_name, rt_base_t cs_pin);
 int rt_soft_spi_init(void);

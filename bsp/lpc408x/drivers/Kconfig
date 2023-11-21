@@ -67,6 +67,20 @@ menu "Hardware Drivers Config"
                     int "Select miso"
                     default 8
                 endif
+                config BSP_USING_SOFT_SPI3
+                bool "Enable sspi3"
+                default n
+                if BSP_USING_SOFT_SPI3
+                    config BSP_S_SPI2_SCK_PIN
+                    int "Select sck"
+                    default 128
+                    config BSP_S_SPI3_MOSI_PIN
+                    int "Select mosi"
+                    default 156
+                    config BSP_S_SPI3_MISO_PIN
+                    int "Select miso"
+                    default 40
+                endif
             endif
         endmenu
         config BSP_USING_UART
