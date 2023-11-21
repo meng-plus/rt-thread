@@ -25,7 +25,10 @@ static void lv_event_notify_page(lv_event_t *e)
     {
         lv_event_send(obj, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
         /** 定时刷新的 任务*/
-        timer = lv_timer_create(time_update, 1000, obj);
+        if (timer == 0)
+        {
+            timer = lv_timer_create(time_update, 1000, obj);
+        }
     }
     if (code == LV_EVENT_NOTIFY_PAGE_CHANGE)
     {
@@ -56,7 +59,10 @@ static void lv_event_value_update(lv_event_t *e)
                     lv_obj_clear_flag(label_obj, LV_OBJ_FLAG_HIDDEN);
                     lv_obj_clear_flag(value_obj, LV_OBJ_FLAG_HIDDEN);
                     lv_label_set_text(label_obj, rom_sensor_var[g_sensor_param.sen_config[idx].type].symbolname);
-                    lv_label_set_text_fmt(value_obj, "%.2f%s", g_var_work.Sensor[idx].SenData[0], rom_sensor_var[g_sensor_param.sen_config[idx].type].unit);
+                    char strbuff[16];
+                    sprintf(strbuff, "%.2f%s", g_var_work.Sensor[idx].SenData[0], rom_sensor_var[g_sensor_param.sen_config[idx].type].unit);
+                    lv_label_set_text(value_obj, strbuff);
+                    idx++;
                 }
                 else
                 {
@@ -85,10 +91,10 @@ lv_obj_t *ui_Dashboard_sensor_create(lv_obj_t *comp_parent)
     static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
-    
+
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * DASHBOARD_SEN_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * DASHBOARD_SEN_NUM);
-    
+
     for (size_t i = DASHBOARD_SEN_LABEL_VAL; i < DASHBOARD_SEN_LABEL_VAL_ED; i++)
     {
         lv_obj_t *label_obj = lv_label_create(obj);

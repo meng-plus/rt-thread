@@ -13,8 +13,9 @@
 
 const rom_sensor_var_t rom_sensor_var[SEN_NUM] = {
     [SEN_ALL] = {.fullname = "自定义", .shortname = "用户", .symbolname = "user", .unit = ""},
-    [SEN_ENVI_TEMP] = {.fullname = "环境温度", .shortname = "温度", .symbolname = "TEMP", .unit = ""},
-    [SEN_CO] = {.fullname = "一氧化碳", .shortname = "一氧", .symbolname = "CO", .unit = ""},
-    [SEN_SMOG] = {.fullname = "烟雾", .shortname = "烟雾", .symbolname = "SMOG", .unit = ""},
+    [SEN_ENVI_TEMP] = {.fullname = "环境温度", .shortname = "温度", .symbolname = "TEMP", .unit = "C"},
+    [SEN_CO] = {.fullname = "一氧化碳", .shortname = "一氧", .symbolname = "CO", .unit = "%"},
+    [SEN_O2] = {.fullname = "氧气", .shortname = "氧气", .symbolname = "O2", .unit = "%"},
+    [SEN_SMOG] = {.fullname = "烟雾", .shortname = "烟雾", .symbolname = "SMOG", .unit = "ppm"},
     [SOUND_LIGHT_ALARM] = {.fullname = "声光报警器", .shortname = "声光", .symbolname = "SOUND_LI", .unit = ""},
 };

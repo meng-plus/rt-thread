@@ -49,8 +49,9 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
 
     lv_obj_add_event_cb(lv_tabview_get_tab_btns(obj), btns_value_changed_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
-    _lv_event_child_notify(lv_tabview_get_content(obj), LV_EVENT_VALUE_CHANGED, (void *)-1);
-    lv_event_send(lv_tabview_get_tab_btns(obj), LV_EVENT_VALUE_CHANGED, NULL);
+    //_lv_event_child_notify(lv_tabview_get_content(obj), LV_EVENT_VALUE_CHANGED, (void *)-1);
+
+    lv_event_send(lv_tabview_get_tab_btns(obj), LV_EVENT_VALUE_CHANGED, NULL); /*!< 通知第一页刷新 */
 
     return obj;
 }

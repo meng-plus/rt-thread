@@ -28,9 +28,9 @@ static void time_update(lv_timer_t *ptime)
         return;
 
     static uint8_t offline_last = 1;
-    if (offline_last != (pdts->offline>5))
+    if (offline_last != (pdts->offline > 5))
     { /*!< 掉线刷新显示 */
-        offline_last = (pdts->offline>5);
+        offline_last = (pdts->offline > 5);
         _lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, NULL);
     }
     if (0 == pdts->offline)
@@ -62,10 +62,9 @@ static void time_update(lv_timer_t *ptime)
         lv_chart_set_point_count(pchart, pdata->channel[chn_sel].partition); // 设置X轴范围（示例中设置为0到100）
         lv_chart_set_range(pchart, LV_CHART_AXIS_PRIMARY_X, 0, pdata->channel[chn_sel].partition);
 
-        
         for (size_t i = 0; i < pdata->channel[chn_sel].partition; i++)
         {
-            lv_chart_set_next_value(pchart, pser, pdata->partition[chn_sel][i].temp_max_real*0.01-200);
+            lv_chart_set_next_value(pchart, pser, pdata->partition[chn_sel][i].temp_max_real * 0.01 - 200);
             // lv_chart_set_next_value2(pchart, pser, i, pdata->partition[chn_sel][i].temp_max_real);
         }
     }
@@ -96,11 +95,11 @@ static void event_cb(lv_event_t *e)
         lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
         lv_coord_t v = data_array[last_id];
         char buf[16];
-        
+
         dts_data_t *pdata = NULL;
         thread_DTS_control(TH_DTS_GET_DATA, &pdata);
         thread_dts_t *pdts = g_var_work.dts;
-        snprintf(buf, sizeof(buf), "%.2f", pdata->partition[pdts->sel_chn][last_id].temp_max_real*0.01-200);
+        snprintf(buf, sizeof(buf), "%dm\r\n%.2f", pdata->partition[pdts->sel_chn][last_id].loc_max_real, pdata->partition[pdts->sel_chn][last_id].temp_max_real * 0.01 - 200);
 
         lv_point_t size;
         lv_txt_get_size(&size, buf, LV_FONT_DEFAULT, 0, 0, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
@@ -139,6 +138,7 @@ static void lv_event_notify_page(lv_event_t *e)
         lv_event_send(obj, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
         /** 定时刷新的 任务*/
         timer = lv_timer_create(time_update, 1000, obj);
+        _lv_event_child_notify(obj, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
     }
     if (code == LV_EVENT_NOTIFY_PAGE_CHANGE)
     {
@@ -147,6 +147,7 @@ static void lv_event_notify_page(lv_event_t *e)
             lv_timer_del(timer);
             timer = 0;
         }
+        _lv_event_child_notify(obj, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     }
 }
 static void lv_event_value_update(lv_event_t *e)

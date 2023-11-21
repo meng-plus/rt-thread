@@ -21,7 +21,7 @@ static void lv_event_value_update(lv_event_t *e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
     uint32_t mask = (uint32_t)lv_event_get_param(e);
-    lv_obj_t *sub_obj = NULL;
+    //lv_obj_t *sub_obj = NULL;
     //
     //    sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2);
     //    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_2)))
@@ -49,24 +49,24 @@ lv_obj_t *ui_tabview_page_about_create(lv_obj_t *tableview)
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
 
-    lv_obj_t *lable_Waring = lv_label_create(obj);
-    lv_obj_set_grid_cell(lable_Waring, LV_GRID_ALIGN_STRETCH, 0, 1,
+    lv_obj_t *lable_SOFT_VER = lv_label_create(obj);
+    lv_obj_set_grid_cell(lable_SOFT_VER, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_STRETCH, 0, 1);
-    lv_label_set_text(lable_Waring, "status");
-    lv_obj_align(lable_Waring, LV_ALIGN_RIGHT_MID, 0, 0);
+    lv_label_set_text_fmt(lable_SOFT_VER, "SOFT_VER  %s", SOFT_VER);
+    lv_obj_align(lable_SOFT_VER, LV_ALIGN_RIGHT_MID, 0, 0);
 
-    lv_obj_t *btn_Waring = lv_btn_create(obj);
-    lv_obj_set_grid_cell(btn_Waring, LV_GRID_ALIGN_STRETCH, 1, 1,
-                         LV_GRID_ALIGN_STRETCH, 0, 1);
-    lv_obj_add_flag(btn_Waring, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_t *lable_HF_VER = lv_label_create(obj);
+    lv_obj_set_grid_cell(lable_HF_VER, LV_GRID_ALIGN_STRETCH, 0, 1,
+                         LV_GRID_ALIGN_STRETCH, 1, 1);
+
+    lv_label_set_text_fmt(lable_HF_VER, "HARD_VER  %s", HARD_VER);
+    lv_obj_align(lable_HF_VER, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * ABOUT_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * ABOUT_NUM);
 
-
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
-
 
     return obj;
 }

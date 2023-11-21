@@ -24,6 +24,7 @@ int8_t SDC_deal_0x90(sdc_data_t *pdata, sdc_data_t *pdst)
         if (pVal->SenName == g_sensor_param.sen_config[i].type)
         {
             memcpy(&g_var_work.Sensor[i], pVal, sizeof(sdc_0x90_t));
+            return 1;
         }
     }
 
