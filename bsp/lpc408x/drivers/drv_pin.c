@@ -187,7 +187,7 @@ rt_err_t _pin_irq_enable(struct rt_device *device, rt_base_t pin, rt_uint8_t ena
     rt_base_t level;
     rt_int32_t irqindex = -1;
 
-    if (isIrqPort(pin))
+    if (isIrqPort(pin) == 0)
     {
         return -RT_ENOSYS;
     }

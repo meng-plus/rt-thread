@@ -11,8 +11,8 @@
 
 #include <rtthread.h>
 #include <rtdevice.h>
-#include "task_gpio.h"
 #include "drv_pin.h"
+#include "user_gpio.h"
 static const rt_base_t outpin[OUT_NUM] = {
     [OUT_A] = {GET_PIN(0, 29)},
     [OUT_B] = {GET_PIN(0, 30)},
@@ -27,7 +27,8 @@ static const rt_base_t inpin[INPUT_NUM] = {
     [INPUT_S5] = {GET_PIN(4, 19)},
     [INPUT_S6] = {GET_PIN(0, 13)},
 };
-int task_gpio_init()
+
+int user_gpio_init()
 {
     for (int i = 0; i < OUT_NUM; i++)
     {
@@ -36,12 +37,14 @@ int task_gpio_init()
     }
     for (int i = 0; i < INPUT_NUM; i++)
     {
-        rt_pin_write(inpin[i], 0);
         rt_pin_mode(inpin[i], PIN_MODE_INPUT);
     }
+
+    rt_pin_attach_irq(inpin[5], PIN_IRQ_MODE_RISING,NULL, 0);
+    rt_pin_irq_enable(inpin[5], 1);
     return 0;
 }
-INIT_DEVICE_EXPORT(task_gpio_init);
+INIT_DEVICE_EXPORT(user_gpio_init);
 
 void gpio_set(enum GPIO_OUTPUT pin, uint8_t en)
 {

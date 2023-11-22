@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef __TASK_GPIO_H_
-#define __TASK_GPIO_H_
+#ifndef __USER_GPIO_H_
+#define __USER_GPIO_H_
 
 #ifdef __cplusplus
 extern "C"
