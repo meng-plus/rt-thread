@@ -43,6 +43,13 @@ extern "C"
      */
     void gpio_set(enum GPIO_OUTPUT pin, uint8_t en);
     /**
+     * @brief 控制输出
+     *
+     * @param pin 端口号 @GPIO_OUTPUT
+     * @param en 1:有输出 0:无输出
+     */
+    uint8_t gpio_get(enum GPIO_OUTPUT pin);
+    /**
      * @brief 读取输入信号
      * 硬件中 浮空为1 有信号为0
      * @param pin  端口号@GPIO_INPUT

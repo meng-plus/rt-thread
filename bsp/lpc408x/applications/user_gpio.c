@@ -40,7 +40,7 @@ int user_gpio_init()
         rt_pin_mode(inpin[i], PIN_MODE_INPUT);
     }
 
-    rt_pin_attach_irq(inpin[5], PIN_IRQ_MODE_RISING,NULL, 0);
+    rt_pin_attach_irq(inpin[5], PIN_IRQ_MODE_RISING, NULL, 0);
     rt_pin_irq_enable(inpin[5], 1);
     return 0;
 }
@@ -49,6 +49,10 @@ INIT_DEVICE_EXPORT(user_gpio_init);
 void gpio_set(enum GPIO_OUTPUT pin, uint8_t en)
 {
     rt_pin_write(outpin[pin], en);
+}
+uint8_t gpio_get(enum GPIO_OUTPUT pin)
+{
+    return rt_pin_read(outpin[pin]);
 }
 uint8_t gpio_read(enum GPIO_INPUT pin)
 {

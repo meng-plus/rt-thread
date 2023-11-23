@@ -20,6 +20,7 @@ static void set_bar(void *bar, int32_t bar_value)
         //     lv_scr_load_anim(ui_calibration_create(NULL), LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, true); /*!< 切换页面并删除启动页 */
         // }
         // else
+        lv_anim_del(NULL, set_bar);
         {
             lv_scr_load_anim(ui_main_create(NULL), LV_SCR_LOAD_ANIM_FADE_ON, 300, 100, true); /*!< 切换页面并删除启动页 */
         }

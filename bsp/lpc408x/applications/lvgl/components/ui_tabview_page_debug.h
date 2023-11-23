@@ -19,15 +19,16 @@ extern "C"
 #endif
     enum UI_COMP_DEBUG
     {
-        DEBUG_LABLE_WARING,
-        DEBUG_LABLE_CTRL1,
-        DEBUG_LABLE_CTRL2,
-        DEBUG_LABLE_CTRL3,
-        DEBUG_BT_WARING,
-        DEBUG_BT_CTRL1,
-        DEBUG_BT_CTRL2,
-        DEBUG_BT_CTRL3,
-
+        DEBUG_INPUT_S1,
+        DEBUG_INPUT_S2,
+        DEBUG_INPUT_S3,
+        DEBUG_INPUT_S4,
+        DEBUG_INPUT_S5,
+        DEBUG_INPUT_S6,
+        DEBUG_OUT_A,
+        DEBUG_OUT_B,
+        DEBUG_OUT_C,
+        DEBUG_PUMP_AIR,
         DEBUG_NUM,
     };
     lv_obj_t *ui_tabview_page_debug_create(lv_obj_t *tableview);
