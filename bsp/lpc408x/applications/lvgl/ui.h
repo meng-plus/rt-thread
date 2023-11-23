@@ -17,7 +17,7 @@ extern "C"
 #include "ui_events.h"
 #include "ui_comp.h"
 
-    LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
+  LV_ATTRIBUTE_MEM_ALIGN  LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
 
     LV_FONT_DECLARE(lv_font_simhei_14);
     LV_FONT_DECLARE(lv_font_simhei_16);

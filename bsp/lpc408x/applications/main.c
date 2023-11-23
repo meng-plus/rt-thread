@@ -11,13 +11,18 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
-#define LOG_TAG              __FILE__
-#define LOG_LVL              LOG_LVL_DBG
+#define LOG_TAG __FILE__
+#define LOG_LVL LOG_LVL_DBG
 #include "rtdbg.h"
 int main(void)
 {
     LOG_I("Hello RT-Thread!");
     LOG_D("Let's start developing\n");
-
+    while (1)
+    {
+        void CommLoraHandler();
+        CommLoraHandler();
+        rt_thread_mdelay(100);
+    }
     return RT_EOK;
 }

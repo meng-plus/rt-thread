@@ -2411,10 +2411,13 @@
             <name>$PROJ_DIR$\rtconfig.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\task_gpio.c</name>
+            <name>$PROJ_DIR$\applications\task_led.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\task_led.c</name>
+            <name>$PROJ_DIR$\applications\task_lora.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\user_gpio.c</name>
         </file>
     </group>
     <group>
@@ -2898,9 +2901,6 @@
         <name>lora</name>
         <file>
             <name>$PROJ_DIR$\drivers\lora\CommLora.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\drivers\lora\drv_lora.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\lora\lora_base_control.c</name>
@@ -3545,6 +3545,9 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_titlebar.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_WIFI.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_heiti12.c</name>
         </file>
         <file>
@@ -3558,9 +3561,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\applications\lvgl\images\ui_img_gltech_png.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\applications\lvgl\images\ui_img_logo_png.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\applications\lvgl\screens\ui_P00startup.c</name>
@@ -3582,6 +3582,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_tabview_page_sen_config.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_tabview_page_set.c</name>
         </file>
     </group>
     <group>

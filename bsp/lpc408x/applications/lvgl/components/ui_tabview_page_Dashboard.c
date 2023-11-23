@@ -64,7 +64,7 @@ static void time_update(lv_timer_t *ptime)
 
         for (size_t i = 0; i < pdata->channel[chn_sel].partition; i++)
         {
-            lv_chart_set_next_value(pchart, pser, pdata->partition[chn_sel][i].temp_max_real * 0.01 - 200);
+            lv_chart_set_next_value(pchart, pser,(lv_coord_t)( pdata->partition[chn_sel][i].temp_max_real * 0.01 - 200));
             // lv_chart_set_next_value2(pchart, pser, i, pdata->partition[chn_sel][i].temp_max_real);
         }
     }
@@ -92,8 +92,8 @@ static void event_cb(lv_event_t *e)
         if (dsc->p1 == NULL || dsc->p2 == NULL || dsc->p1->y != dsc->p2->y || last_id < 0)
             return;
         lv_chart_series_t *pser = lv_chart_get_series_next(obj, NULL);
-        lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
-        lv_coord_t v = data_array[last_id];
+//        lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
+//        lv_coord_t v = data_array[last_id];
         char buf[16];
 
         dts_data_t *pdata = NULL;

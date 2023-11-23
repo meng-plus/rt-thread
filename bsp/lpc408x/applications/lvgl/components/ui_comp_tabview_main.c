@@ -10,6 +10,7 @@
 #include "ui_tabview_page_sen_config.h"
 #include "ui_tabview_page_debug.h"
 #include "ui_tabview_page_about.h"
+#include "ui_tabview_page_set.h"
 static void btns_value_changed_event_cb(lv_event_t *e)
 { // char *param = lv_event_get_param(e);
     lv_obj_t *obj = lv_event_get_target(e);
@@ -36,12 +37,13 @@ lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)
     lv_obj_t *dashboard = ui_tabview_page_dashboard_create(obj);
     lv_obj_t *sen_config = ui_tabview_page_sen_config_create(obj);
     lv_obj_t *debug_obj = ui_tabview_page_debug_create(obj);
+    lv_obj_t *set_obj = ui_tabview_page_set_create(obj);
     lv_obj_t *about_obj = ui_tabview_page_about_create(obj);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * UI_COMP_TABVIEW_MAIN_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * UI_COMP_TABVIEW_MAIN_NUM);
     children[UI_COMP_TABVIEW_MAIN_DASHBOARD] = dashboard;
-    // children[UI_COMP_TABVIEW_MAIN_SETING] = obj;
+    children[UI_COMP_TABVIEW_MAIN_SETING] = set_obj;
     children[UI_COMP_TABVIEW_MAIN_SEN_CONFIG] = sen_config;
     children[UI_COMP_TABVIEW_MAIN_DEBUG] = debug_obj;
     children[UI_COMP_TABVIEW_MAIN_ABOUT] = about_obj;

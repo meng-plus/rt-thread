@@ -11,7 +11,7 @@ void lora_DIO1_isr(void *args)
 }
 void task_lora(void *param)
 {
-    CommLoraHandler();
+    CommLoraTick();
 }
 int drv_lora_init()
 {
