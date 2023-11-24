@@ -21,25 +21,25 @@ static void lv_event_value_update(lv_event_t *e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
     uint32_t mask = (uint32_t)lv_event_get_param(e);
-    //lv_obj_t *sub_obj = NULL;
+    // lv_obj_t *sub_obj = NULL;
     //
-    //    sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2);
-    //    if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_2)))
-    //        if (g_sensor_param.dev_config[0].en)
-    //        {
-    //            lv_obj_add_state(sub_obj, LV_STATE_CHECKED);
-    //        }
-    //        else
-    //        {
-    //            lv_obj_clear_flag(sub_obj, LV_STATE_CHECKED);
-    //        }
-    //    }
+    //     sub_obj = ui_comp_get_child(obj, SEN_CONFIG_RS485_2);
+    //     if (sub_obj && (mask & (1 << SEN_CONFIG_RS485_2)))
+    //         if (g_sensor_param.dev_config[0].en)
+    //         {
+    //             lv_obj_add_state(sub_obj, LV_STATE_CHECKED);
+    //         }
+    //         else
+    //         {
+    //             lv_obj_clear_flag(sub_obj, LV_STATE_CHECKED);
+    //         }
+    //     }
 }
 
 lv_obj_t *ui_tabview_page_about_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;
-    obj = lv_tabview_add_tab(tableview, "about");
+    obj = lv_tabview_add_tab(tableview, TEXT_ABOUT);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
     lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
@@ -52,14 +52,14 @@ lv_obj_t *ui_tabview_page_about_create(lv_obj_t *tableview)
     lv_obj_t *lable_SOFT_VER = lv_label_create(obj);
     lv_obj_set_grid_cell(lable_SOFT_VER, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_STRETCH, 0, 1);
-    lv_label_set_text_fmt(lable_SOFT_VER, "SOFT_VER  %s", SOFT_VER);
+    lv_label_set_text_fmt(lable_SOFT_VER, "%s:%s", TEXT_SOFT_VER, SOFT_VER);
     lv_obj_align(lable_SOFT_VER, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t *lable_HF_VER = lv_label_create(obj);
     lv_obj_set_grid_cell(lable_HF_VER, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_STRETCH, 1, 1);
 
-    lv_label_set_text_fmt(lable_HF_VER, "HARD_VER  %s", HARD_VER);
+    lv_label_set_text_fmt(lable_HF_VER, "%s:%s", TEXT_HARDWARE_VER, HARD_VER);
     lv_obj_align(lable_HF_VER, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * ABOUT_NUM);

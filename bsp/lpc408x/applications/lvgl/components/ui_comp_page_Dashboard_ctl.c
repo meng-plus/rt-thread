@@ -21,7 +21,7 @@ static void lv_event_value_changed(lv_event_t *e)
         char buff[128];
         if (pdts == 0 || pdts->offline == 1 || pdata->system.status == 0)
         {
-            sprintf(buff, "dts offline");
+            sprintf(buff, "dts %s", TEXT_OFFLINE);
             lv_dropdown_set_selected(dd, 0);
         }
         else
@@ -29,7 +29,7 @@ static void lv_event_value_changed(lv_event_t *e)
             uint32_t offset = 0;
             for (size_t i = 0; i < pdata->system.chn_num; i++)
             {
-                offset += sprintf(buff + offset, "ch%2d\n", i + 1);
+                offset += sprintf(buff + offset, "%s%2d\n", TEXT_CHN, i + 1);
             }
             buff[offset - 1] = '\0';
         }
@@ -68,30 +68,15 @@ lv_obj_t *ui_Dashboard_ctl_create(lv_obj_t *comp_parent)
     lv_obj_set_grid_cell(label_obj_1, LV_GRID_ALIGN_START, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_align(label_obj_1, LV_ALIGN_TOP_MID, 0, 20);
-    lv_label_set_text(label_obj_1, "select chn");
+    lv_label_set_text(label_obj_1, TEXT_SEL_CHN);
 
     lv_obj_t *dd = lv_dropdown_create(obj);
     lv_obj_set_grid_cell(dd, LV_GRID_ALIGN_START, 1, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_align(dd, LV_ALIGN_TOP_MID, 0, 20);
     lv_obj_add_event_cb(dd, dd_event_handler, LV_EVENT_VALUE_CHANGED, NULL);
-
-    // lv_obj_t *label_obj_2 = lv_label_create(obj);
-    // lv_obj_set_grid_cell(label_obj_2, LV_GRID_ALIGN_START, 2, 1,
-    //                      LV_GRID_ALIGN_CENTER, 0, 1);
-    // lv_obj_align(label_obj_2, LV_ALIGN_TOP_MID, 0, 20);
-    // lv_label_set_text(label_obj_2, "reflash time");
-
-    // lv_obj_t *label_span = lv_spinbox_create(obj);
-    // lv_obj_set_grid_cell(label_span, LV_GRID_ALIGN_START, 3, 1,
-    //                      LV_GRID_ALIGN_CENTER, 0, 1);
-    // lv_obj_align(label_span, LV_ALIGN_TOP_MID, 0, 20);
-    // lv_spinbox_set_range(label_span, 0, g_var_init.dts_delayms_max);
-    // lv_spinbox_set_digit_format(label_span, 5, 0);
-    // lv_spinbox_step_prev(label_span);
-    // lv_obj_set_width(label_span, 100);
-    // lv_obj_center(label_span);
-    // lv_obj_add_event_cb(label_span, lv_event_value_changed_spinbox, LV_EVENT_VALUE_CHANGED, NULL);
+    lv_obj_t *list = lv_dropdown_get_list(dd);
+    lv_obj_set_style_text_font(list, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * DASHBOARD_CTL_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * DASHBOARD_CTL_NUM);

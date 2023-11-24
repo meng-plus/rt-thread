@@ -64,7 +64,7 @@ static void time_update(lv_timer_t *ptime)
 
         for (size_t i = 0; i < pdata->channel[chn_sel].partition; i++)
         {
-            lv_chart_set_next_value(pchart, pser,(lv_coord_t)( pdata->partition[chn_sel][i].temp_max_real * 0.01 - 200));
+            lv_chart_set_next_value(pchart, pser, (lv_coord_t)(pdata->partition[chn_sel][i].temp_max_real * 0.01 - 200));
             // lv_chart_set_next_value2(pchart, pser, i, pdata->partition[chn_sel][i].temp_max_real);
         }
     }
@@ -92,8 +92,8 @@ static void event_cb(lv_event_t *e)
         if (dsc->p1 == NULL || dsc->p2 == NULL || dsc->p1->y != dsc->p2->y || last_id < 0)
             return;
         lv_chart_series_t *pser = lv_chart_get_series_next(obj, NULL);
-//        lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
-//        lv_coord_t v = data_array[last_id];
+        //        lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
+        //        lv_coord_t v = data_array[last_id];
         char buf[16];
 
         dts_data_t *pdata = NULL;
@@ -163,7 +163,7 @@ static void lv_event_value_update(lv_event_t *e)
 lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;
-    obj = lv_tabview_add_tab(tableview, "dashboard");
+    obj = lv_tabview_add_tab(tableview, TEXT_DASHBOARD);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
     lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
@@ -172,6 +172,7 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), 16, 50, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
+    lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLL_CHAIN);
 
     lv_obj_t *ui_Chart1 = lv_chart_create(obj);
     lv_obj_set_grid_cell(ui_Chart1, LV_GRID_ALIGN_STRETCH, 0, 1,

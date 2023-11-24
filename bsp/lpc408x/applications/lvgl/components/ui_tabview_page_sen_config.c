@@ -6,7 +6,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;
     lv_obj_t *label;
-    obj = lv_tabview_add_tab(tableview, "config");
+    obj = lv_tabview_add_tab(tableview, TEXT_CONFIG);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
     lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
@@ -46,7 +46,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_textarea_set_one_line(rs485_2_addr_obj, true);
     lv_textarea_set_password_mode(rs485_2_addr_obj, false);
-    lv_textarea_set_placeholder_text(rs485_2_addr_obj, "slave addr");
+    lv_textarea_set_placeholder_text(rs485_2_addr_obj, TEXT_SLAVE_ADDR);
     lv_textarea_set_accepted_chars(rs485_2_addr_obj, "0123456789");
     lv_textarea_set_max_length(rs485_2_addr_obj, 4);
     lv_obj_clear_flag(rs485_2_addr_obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
@@ -73,7 +73,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
                          LV_GRID_ALIGN_CENTER, 1, 1);
     lv_textarea_set_one_line(rs485_3_addr_obj, true);
     lv_textarea_set_password_mode(rs485_3_addr_obj, false);
-    lv_textarea_set_placeholder_text(rs485_3_addr_obj, "slave addr");
+    lv_textarea_set_placeholder_text(rs485_3_addr_obj, TEXT_SLAVE_ADDR);
     lv_textarea_set_accepted_chars(rs485_3_addr_obj, "0123456789");
     lv_textarea_set_max_length(rs485_3_addr_obj, 4);
     lv_obj_clear_flag(rs485_3_addr_obj, LV_OBJ_FLAG_SCROLLABLE); /// Flags
@@ -106,7 +106,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_align(btn_del, LV_ALIGN_CENTER, 0, 40);
     lv_obj_set_height(btn_del, LV_SIZE_CONTENT);
     label = lv_label_create(btn_del);
-    lv_label_set_text(label, "del");
+    lv_label_set_text(label, TEXT_DEL);
     lv_obj_center(label);
 
     lv_obj_t *btn_new = lv_btn_create(obj);
@@ -117,7 +117,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_set_height(btn_new, LV_SIZE_CONTENT);
 
     label = lv_label_create(btn_new);
-    lv_label_set_text(label, "new");
+    lv_label_set_text(label, TEXT_NEW);
     lv_obj_center(label);
     /**
      * @}
@@ -135,7 +135,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     // lv_obj_add_flag(btn_restore, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_height(btn_restore, LV_SIZE_CONTENT);
     label = lv_label_create(btn_restore);
-    lv_label_set_text(label, "restore");
+    lv_label_set_text(label, TEXT_RESTORE);
     lv_obj_center(label);
 
     lv_obj_t *btn_save = lv_btn_create(obj);
@@ -147,7 +147,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_obj_set_height(btn_save, LV_SIZE_CONTENT);
 
     label = lv_label_create(btn_save);
-    lv_label_set_text(label, "save");
+    lv_label_set_text(label, TEXT_SAVE);
     lv_obj_center(label);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SEN_CONFIG_NUM);

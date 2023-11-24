@@ -16,18 +16,20 @@ extern "C"
 #include "ui_helpers.h"
 #include "ui_events.h"
 #include "ui_comp.h"
+#include "language.h" /*!< 多国语言管理 */
 
-  LV_ATTRIBUTE_MEM_ALIGN  LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
+  LV_ATTRIBUTE_MEM_ALIGN LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
 
-    LV_FONT_DECLARE(lv_font_simhei_14);
-    LV_FONT_DECLARE(lv_font_simhei_16);
-    LV_FONT_DECLARE(lv_font_simhei_20);
-    LV_FONT_DECLARE(ui_font_heiti24);
+  LV_FONT_DECLARE(lv_font_simhei_14);
+  LV_FONT_DECLARE(lv_font_simhei_16);
+  LV_FONT_DECLARE(lv_font_simhei_20);
+  LV_FONT_DECLARE(ui_font_heiti24);
+  LV_FONT_DECLARE(ui_font_simfang16);
 
-    extern uint32_t LV_EVENT_NOTIFY_PAGE_CHANGE; /*!< page页面发生了切换 */
-    extern uint32_t LV_EVENT_NOTIFY_PAGE_ACT;    /*!< page页面被激活 */
-    extern uint32_t LV_EVENT_NOTIFY_UPDATE;      /*!< 通知页面刷新 */
-    void ui_init(void);
+  extern uint32_t LV_EVENT_NOTIFY_PAGE_CHANGE; /*!< page页面发生了切换 */
+  extern uint32_t LV_EVENT_NOTIFY_PAGE_ACT;    /*!< page页面被激活 */
+  extern uint32_t LV_EVENT_NOTIFY_UPDATE;      /*!< 通知页面刷新 */
+  void ui_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

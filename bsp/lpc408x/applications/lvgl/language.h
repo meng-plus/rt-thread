@@ -1,0 +1,56 @@
+/**
+ * @file language.h
+ * @author mengplus (chengmeng_2@outlook.com)
+ * @brief  lvgl 语言编码切换
+ * 注意 语言编码为UTF8
+ * 使用英文方便快速开发，中文方便客户展示
+ * @version 0.1
+ * @date 2023-11-24
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+#ifndef __LANGUAGE_H_
+#define __LANGUAGE_H_
+
+#ifndef LANGUAGE_CN
+#define LANGUAGE_CN 1
+#endif
+
+#define LANGUAGE(en, ch) (LANGUAGE_CN ? ch : en)
+
+#define SYMBOL_GLOBAL LANGUAGE("", "")
+
+#define SYMBOL_TEMP LANGUAGE("C", "℃")
+#define TEXT_SENSOR ("自定义用户环境温度一氧化碳氧气烟雾声光报警")
+#define TEXT_DASHBOARD LANGUAGE("dashboard", "首页")
+#define TEXT_CONFIG LANGUAGE("config", "配置")
+#define TEXT_DEBUG LANGUAGE("debug", "调试")
+#define TEXT_SET LANGUAGE("set", "设置")
+#define TEXT_ABOUT LANGUAGE("about", "关于")
+#define TEXT_SOFT_VER LANGUAGE("SF_VER", "软件版本")
+#define TEXT_HARDWARE_VER LANGUAGE("HD_VER", "硬件版本")
+#define TEXT_INPUT LANGUAGE("INPUT", "输入")
+#define TEXT_OUTPUT LANGUAGE("OUPUT", "输出")
+#define TEXT_OFF LANGUAGE("OFF", "关")
+#define TEXT_ON LANGUAGE("ON", "开")
+#define TEXT_NAME LANGUAGE("name", "名称")
+#define TEXT_CHN LANGUAGE("chn", "通道")
+#define TEXT_ADDR LANGUAGE("addr", "地址")
+#define TEXT_UART_ADDR LANGUAGE("uart_addr", "串口地址")
+#define TEXT_SLAVE_ADDR LANGUAGE("slave addr", "从机地址")
+#define TEXT_DEL LANGUAGE("del", "删除")
+#define TEXT_NEW LANGUAGE("new", "新增")
+#define TEXT_RESTORE LANGUAGE("restore", "恢复")
+#define TEXT_SAVE LANGUAGE("save", "保存")
+#define TEXT_WIFI_SET LANGUAGE("WIFI Set", "WIFI设置")
+#define TEXT_BLUETOOTH_SET LANGUAGE("BlueTooth Set", "蓝牙设置")
+#define TEXT_EXIT LANGUAGE("exit", "退出")
+#define TEXT_OFFLINE LANGUAGE("offline", "掉线")
+#define TEXT_ERROR LANGUAGE("error", "错误")
+#define TEXT_SEL_CHN LANGUAGE("select chn", "选择通道")
+#define TEXT_RESTORE_OK LANGUAGE("Successfully restore", "恢复成功")
+#define TEXT_SAVE_OK LANGUAGE("Successfully saved", "保存成功")
+#define TEXT_ERROR_CODE LANGUAGE("Error code", "错误码")
+#define TEXT_ERROR_CREATE LANGUAGE("create error", "创建错误")
+#endif

@@ -147,8 +147,8 @@ int32_t session_dts_tick(session_master_t *se_handle)
         }
         else
         {
-            session_dts_change(se_handle, DTS_SYS);
-            pdts->offline++;
+            // session_dts_change(se_handle, DTS_SYS);
+            // pdts->offline++;
         }
     }
     else
@@ -170,12 +170,12 @@ void session_dts_change(session_master_t *se_handle, DTS_MSG_ID_E id)
         break;
     case DTS_CHN: /*!< 读取通道信息 */
         if (pdts)
-            //memset(pdts->data.channel, 0, sizeof(pdts->data.channel));
-        break;
+            // memset(pdts->data.channel, 0, sizeof(pdts->data.channel));
+            break;
     case DTS_PART: /*!< 读取分区数据 */
         if (pdts)
-            //memset(pdts->data.partition, 0, sizeof(pdts->data.partition));
-        break;
+            // memset(pdts->data.partition, 0, sizeof(pdts->data.partition));
+            break;
 
     default:
         break;

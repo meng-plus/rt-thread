@@ -6,7 +6,7 @@
 lv_obj_t *ui_tabview_page_debug_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;
-    obj = lv_tabview_add_tab(tableview, "debug");
+    obj = lv_tabview_add_tab(tableview, TEXT_DEBUG);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
     lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
@@ -24,7 +24,7 @@ lv_obj_t *ui_tabview_page_debug_create(lv_obj_t *tableview)
         lv_obj_t *lable_input = lv_label_create(obj);
         lv_obj_set_grid_cell(lable_input, LV_GRID_ALIGN_END, 0, 1,
                              LV_GRID_ALIGN_STRETCH, i, 1);
-        lv_label_set_text_fmt(lable_input, "INPUT S%d", i + 1);
+        lv_label_set_text_fmt(lable_input, "%s S%d", TEXT_INPUT, i + 1);
         lv_obj_align(lable_input, LV_ALIGN_RIGHT_MID, 0, 0);
         lv_obj_t *led_input = lv_led_create(obj);
         lv_obj_set_grid_cell(led_input, LV_GRID_ALIGN_START, 1, 1,
@@ -45,7 +45,7 @@ lv_obj_t *ui_tabview_page_debug_create(lv_obj_t *tableview)
 
         lv_obj_t *lable_output = lv_label_create(btn_out);
         lv_obj_align(lable_output, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text_fmt(lable_output, "out %d off", idx);
+        lv_label_set_text_fmt(lable_output, "%s %d %s", TEXT_OUTPUT, i + 1, TEXT_OFF);
 
         children[i] = lable_output;
     }

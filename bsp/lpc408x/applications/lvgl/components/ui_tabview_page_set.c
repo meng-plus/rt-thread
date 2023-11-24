@@ -44,7 +44,7 @@ static void btn_event_clicked(lv_event_t *e)
 lv_obj_t *ui_tabview_page_set_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;
-    obj = lv_tabview_add_tab(tableview, "set");
+    obj = lv_tabview_add_tab(tableview, TEXT_SET);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
     lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
@@ -59,7 +59,7 @@ lv_obj_t *ui_tabview_page_set_create(lv_obj_t *tableview)
                          LV_GRID_ALIGN_STRETCH, 0, 1);
     lv_obj_t *lable = lv_label_create(wifi_obj);
     lv_obj_align(lable, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(lable, " WIFI Set");
+    lv_label_set_text(lable, TEXT_WIFI_SET);
     lv_obj_t *sub_obj;
     sub_obj = ui_comp_wifi_set_create(lv_obj_get_parent(tableview));
     lv_obj_add_flag(sub_obj, LV_OBJ_FLAG_HIDDEN);
@@ -72,7 +72,7 @@ lv_obj_t *ui_tabview_page_set_create(lv_obj_t *tableview)
                          LV_GRID_ALIGN_STRETCH, 1, 1);
     lable = lv_label_create(ble_obj);
     lv_obj_align(lable, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(lable, " BlueTooth Set");
+    lv_label_set_text(lable, TEXT_BLUETOOTH_SET );
 
     // sub_obj = ui_comp_bluetooth_set_create(lv_obj_get_parent(tableview));
     lv_obj_add_flag(sub_obj, LV_OBJ_FLAG_HIDDEN);

@@ -58,7 +58,7 @@ static void lv_event_value_update(lv_event_t *e)
                 {
                     lv_obj_clear_flag(label_obj, LV_OBJ_FLAG_HIDDEN);
                     lv_obj_clear_flag(value_obj, LV_OBJ_FLAG_HIDDEN);
-                    lv_label_set_text(label_obj, rom_sensor_var[g_sensor_param.sen_config[idx].type].symbolname);
+                    lv_label_set_text(label_obj, rom_sensor_var[g_sensor_param.sen_config[idx].type].fullname);
                     char strbuff[16];
                     sprintf(strbuff, "%.2f%s", g_var_work.Sensor[idx].SenData[0], rom_sensor_var[g_sensor_param.sen_config[idx].type].unit);
                     lv_label_set_text(value_obj, strbuff);

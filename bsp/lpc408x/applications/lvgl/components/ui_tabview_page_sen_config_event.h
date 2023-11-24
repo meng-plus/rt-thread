@@ -119,9 +119,9 @@ static void lv_event_value_update(lv_event_t *e)
             for (size_t i = 0; i < g_sensor_param.sensor_num; i++)
             {
                 sensor_config_t *psen = &g_sensor_param.sen_config[i];
-                if (psen->type < SEN_NUM && rom_sensor_var[psen->type].symbolname)
+                if (psen->type < SEN_NUM && rom_sensor_var[psen->type].fullname)
                 {
-                    lv_table_set_cell_value_fmt(sub_obj, i + 1, 0, rom_sensor_var[psen->type].symbolname);
+                    lv_table_set_cell_value_fmt(sub_obj, i + 1, 0, rom_sensor_var[psen->type].fullname);
                 }
                 else
                 {
@@ -132,10 +132,10 @@ static void lv_event_value_update(lv_event_t *e)
                 lv_table_set_cell_value_fmt(sub_obj, i + 1, 3, "%d", psen->dev_addr);
             }
         }
-        lv_table_set_cell_value(sub_obj, 0, 0, "Name");
-        lv_table_set_cell_value(sub_obj, 0, 1, "chn");
-        lv_table_set_cell_value(sub_obj, 0, 2, "addr");
-        lv_table_set_cell_value(sub_obj, 0, 3, "dev_addr");
+        lv_table_set_cell_value(sub_obj, 0, 0, TEXT_NAME);
+        lv_table_set_cell_value(sub_obj, 0, 1, TEXT_CHN);
+        lv_table_set_cell_value(sub_obj, 0, 2, TEXT_ADDR);
+        lv_table_set_cell_value(sub_obj, 0, 3, TEXT_UART_ADDR);
     }
 }
 static void lv_event_clicked(lv_event_t *e)
@@ -163,7 +163,9 @@ static void lv_event_clicked(lv_event_t *e)
             lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
             if (ret == 0)
             {
-                lv_obj_t *mbox1 = lv_msgbox_create(NULL, "error", "create error", NULL, true);
+                lv_obj_t *mbox1 = lv_msgbox_create(NULL, TEXT_ERROR, TEXT_ERROR_CREATE, NULL, true);
+                lv_obj_set_style_text_font(mbox1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
                 lv_obj_center(mbox1);
             }
         }
@@ -172,7 +174,9 @@ static void lv_event_clicked(lv_event_t *e)
         {
             var_reload(&g_sensor_param);
             lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)-1);
-            lv_obj_t *mbox1 = lv_msgbox_create(NULL, "restore", "Successfully restore", NULL, true);
+            lv_obj_t *mbox1 = lv_msgbox_create(NULL, TEXT_RESTORE, TEXT_RESTORE_OK, NULL, true);
+            lv_obj_set_style_text_font(mbox1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
             lv_obj_center(mbox1);
         }
         break;
@@ -181,14 +185,16 @@ static void lv_event_clicked(lv_event_t *e)
             int8_t ret = var_save(&g_sensor_param);
             if (ret == 0)
             {
-                lv_obj_t *mbox1 = lv_msgbox_create(NULL, "save", "Successfully saved", NULL, true);
+                lv_obj_t *mbox1 = lv_msgbox_create(lv_obj_get_parent(obj), TEXT_SAVE, TEXT_SAVE_OK, NULL, true);
                 lv_obj_center(mbox1);
             }
             else
             {
 
-                rt_sprintf(buff, "Error code (0x%0X)", ret);
-                lv_obj_t *mbox1 = lv_msgbox_create(NULL, "save", buff, NULL, true);
+                rt_sprintf(buff, "%s (0x%02x)", TEXT_ERROR_CODE, ret);
+                lv_obj_t *mbox1 = lv_msgbox_create(lv_obj_get_parent(obj), TEXT_SAVE, buff, NULL, true);
+                lv_obj_set_style_text_font(mbox1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
                 lv_obj_center(mbox1);
             }
         }
@@ -358,13 +364,17 @@ static void table_event_pressed(lv_event_t *e)
             if (NULL == dd)
             {
                 dd = lv_dropdown_create(lv_layer_top());
+                lv_obj_set_style_text_font(dd, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
+                lv_obj_t *list = lv_dropdown_get_list(dd);
+                lv_obj_set_style_text_font(list, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
                 lv_dropdown_clear_options(dd);
                 for (size_t i = 0; i < SEN_NUM; i++)
                 {
-                    if (rom_sensor_var[i].symbolname)
+                    if (rom_sensor_var[i].fullname)
                     {
                         char strbuff[16];
-                        rt_sprintf(strbuff, "%d-%s", i, rom_sensor_var[i].symbolname);
+                        rt_sprintf(strbuff, "%d-%s", i, rom_sensor_var[i].fullname);
                         lv_dropdown_add_option(dd, strbuff, LV_DROPDOWN_POS_LAST);
                     }
                 }

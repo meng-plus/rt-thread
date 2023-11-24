@@ -69,11 +69,11 @@ static void lv_event_value_update(lv_event_t *e)
         {
             if (gpio_get(OUT_A + i - DEBUG_OUT_A))
             {
-                lv_label_set_text_fmt(sub_obj, "out %d on", i - DEBUG_OUT_A);
+                lv_label_set_text_fmt(sub_obj, "%s %d %s", TEXT_OUTPUT, i - DEBUG_OUT_A + 1, TEXT_ON);
             }
             else
             {
-                lv_label_set_text_fmt(sub_obj, "out %d off", i - DEBUG_OUT_A);
+                lv_label_set_text_fmt(sub_obj, "%s %d %s", TEXT_OUTPUT, i - DEBUG_OUT_A + 1, TEXT_OFF);
             }
         }
     }

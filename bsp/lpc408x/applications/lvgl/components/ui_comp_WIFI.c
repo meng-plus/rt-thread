@@ -57,12 +57,13 @@ lv_obj_t *ui_comp_wifi_set_create(lv_obj_t *parent)
     static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
+    lv_obj_set_style_text_font(obj, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *btn_return = lv_btn_create(obj);
     lv_obj_set_grid_cell(btn_return, LV_GRID_ALIGN_STRETCH, 1, 2,
                          LV_GRID_ALIGN_STRETCH, 5, 1);
     lv_obj_t *lable = lv_label_create(btn_return);
-    lv_label_set_text(lable, " EXIT");
+    lv_label_set_text(lable, TEXT_EXIT);
     lv_obj_align(lable, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_event_cb(btn_return, btn_event_clicked, LV_EVENT_CLICKED, (void *)WIFI_EXIT);
 
