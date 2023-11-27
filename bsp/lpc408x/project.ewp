@@ -2380,6 +2380,9 @@
             <name>$PROJ_DIR$\applications\task_lora.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\thread_Wifi.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\user_gpio.c</name>
         </file>
     </group>
@@ -3488,6 +3491,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_ble.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_edit.c</name>

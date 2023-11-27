@@ -60,6 +60,7 @@ void CommLoraHandler(void);
 void CommLoraTick(void);
 uint8_t GetWLessChnnl(void);
 void CommPrvChnnlConfig(uint8_t chnnl);
+void Wifi_Power_Ctrl(uint8_t state);
 
 #endif
 
