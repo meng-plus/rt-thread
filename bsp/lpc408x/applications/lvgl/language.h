@@ -53,4 +53,9 @@
 #define TEXT_SAVE_OK LANGUAGE("Successfully saved", "保存成功")
 #define TEXT_ERROR_CODE LANGUAGE("Error code", "错误码")
 #define TEXT_ERROR_CREATE LANGUAGE("create error", "创建错误")
+#define TEXT_OPEN LANGUAGE("open", "打开")
+#define TEXT_SEND_MSG LANGUAGE("sendMsg", "发送数据")
+#define TEXT_GET_NAME LANGUAGE("getName", "获取名称")
+#define TEXT_GET_IP LANGUAGE("getIp", "获取ip")
+
 #endif

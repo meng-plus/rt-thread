@@ -3557,6 +3557,9 @@
             <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_heiti24.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_simfang16.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\ui_helpers.c</name>
         </file>
         <file>

@@ -172,7 +172,7 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), 16, 50, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
-    lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLL_CHAIN);
+    lv_obj_set_scroll_dir(obj, LV_DIR_NONE);
 
     lv_obj_t *ui_Chart1 = lv_chart_create(obj);
     lv_obj_set_grid_cell(ui_Chart1, LV_GRID_ALIGN_STRETCH, 0, 1,

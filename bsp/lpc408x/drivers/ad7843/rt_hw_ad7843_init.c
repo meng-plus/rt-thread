@@ -12,7 +12,7 @@ static int rt_hw_ad7843_init(void)
     dev = hw_ad7843_init("sspi1", GET_PIN(2, 23), GET_PIN(0, 12),
                          800, 480,
                          200, 600,
-                         3800, 3500);
+                         3800, 3600);
     if (RT_NULL == dev)
     {
         return -RT_ERROR;

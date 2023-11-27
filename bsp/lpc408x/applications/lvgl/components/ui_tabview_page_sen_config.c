@@ -60,7 +60,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 
         lv_dropdown_set_options(rs485_2_baud_obj, baud_str);
     }
-
+    lv_obj_set_style_text_font(rs485_2_baud_obj, LV_FONT_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_t *rs485_3_en_obj = lv_checkbox_create(obj);
     lv_obj_set_grid_cell(rs485_3_en_obj, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_CENTER, 1, 1);
@@ -87,7 +87,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 
         lv_dropdown_set_options(rs485_3_baud_obj, baud_str);
     }
-
+    lv_obj_set_style_text_font(rs485_3_baud_obj, LV_FONT_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
     /**
      * @addtogroup 传感器表格
      * @{
