@@ -20,7 +20,7 @@ extern "C"
 {
 #endif
 
-#define SOFT_VER ("V1.00 20231023") /* 软件版本号                 	*/
+#define SOFT_VER ("V1.00 20231128") /* 软件版本号                 	*/
 #define HARD_VER ("H1.00 20230828") /* 硬件版本			        	*/
 
     /**

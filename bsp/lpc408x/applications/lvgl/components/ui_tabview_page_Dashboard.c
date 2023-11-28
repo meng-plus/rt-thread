@@ -31,7 +31,7 @@ static void time_update(lv_timer_t *ptime)
     if (offline_last != (pdts->offline > 5))
     { /*!< 掉线刷新显示 */
         offline_last = (pdts->offline > 5);
-        _lv_event_child_notify(obj, LV_EVENT_VALUE_CHANGED, NULL);
+        _lv_event_child_notify(obj, LV_EVENT_NOTIFY_UPDATE, NULL);
     }
     if (0 == pdts->offline)
     {

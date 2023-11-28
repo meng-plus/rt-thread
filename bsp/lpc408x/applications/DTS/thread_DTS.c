@@ -91,7 +91,7 @@ int thread_DTS_init()
     g_var_work.dts = pthread_dts;
 
     pthread_dts->tid = rt_thread_create("th_dts", thread_dts_entry, RT_NULL,
-                                        4096, RT_MAIN_THREAD_PRIORITY, 20);
+                                        4096, RT_MAIN_THREAD_PRIORITY + 3, 16);
     RT_ASSERT(pthread_dts->tid != RT_NULL);
     if (pthread_dts->tid)
     {

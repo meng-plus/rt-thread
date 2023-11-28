@@ -769,7 +769,7 @@
                 </option>
                 <option>
                     <name>CCJLinkCommRadio</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCJLinkTCPIP</name>

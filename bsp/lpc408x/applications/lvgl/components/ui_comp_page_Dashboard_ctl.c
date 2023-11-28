@@ -9,32 +9,50 @@
 #include <stdio.h>
 #include "system_var.h"
 #include "thread_DTS.h"
-static void lv_event_value_changed(lv_event_t *e)
+static void lv_event_notify_page(lv_event_t *e)
 {
-    // char *param = lv_event_get_param(e);
+    static lv_timer_t *timer = 0;
+    /*!< 通知发生了页面也换，可能不是活动状态，将关闭刷新功能 */
+    uint32_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-    lv_obj_t *dd = ui_comp_get_child(obj, DASHBOARD_CTL_CHN_SEL);
-    if (dd && g_var_work.dts)
+    if (code == LV_EVENT_NOTIFY_PAGE_ACT)
     {
-        thread_dts_t *pdts = g_var_work.dts;
-        dts_data_t *pdata = &pdts->data;
-        char buff[128];
-        if (pdts == 0 || pdts->offline == 1 || pdata->system.status == 0)
-        {
-            sprintf(buff, "dts %s", TEXT_OFFLINE);
-            lv_dropdown_set_selected(dd, 0);
-        }
-        else
-        {
-            uint32_t offset = 0;
-            for (size_t i = 0; i < pdata->system.chn_num; i++)
-            {
-                offset += sprintf(buff + offset, "%s%2d\n", TEXT_CHN, i + 1);
-            }
-            buff[offset - 1] = '\0';
-        }
+        lv_event_send(obj, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
+    }
+    if (code == LV_EVENT_NOTIFY_PAGE_CHANGE)
+    {
+    }
+}
+static void lv_event_value_update(lv_event_t *e)
+{
+    uint32_t code = lv_event_get_code(e);
+    lv_obj_t *obj = lv_event_get_target(e);
 
-        lv_dropdown_set_options(dd, buff);
+    if (code == LV_EVENT_NOTIFY_UPDATE)
+    {
+        lv_obj_t *dd = ui_comp_get_child(obj, DASHBOARD_CTL_CHN_SEL);
+        if (dd && g_var_work.dts)
+        {
+            thread_dts_t *pdts = g_var_work.dts;
+            dts_data_t *pdata = &pdts->data;
+            char buff[256];
+            if (pdts == 0 || pdts->offline !=0  || pdata->system.status == 0)
+            {
+                sprintf(buff, "dts %s", TEXT_OFFLINE);
+                lv_dropdown_set_selected(dd, 0);
+            }
+            else
+            {
+                uint32_t offset = 0;
+                for (size_t i = 0; i < pdata->system.chn_num; i++)
+                {
+                    offset += sprintf(buff + offset, "%s%2d\n", TEXT_CHN, i + 1);
+                }
+                buff[offset - 1] = '\0';
+            }
+
+            lv_dropdown_set_options(dd, buff);
+        }
     }
 }
 static void dd_event_handler(lv_event_t *e)
@@ -56,6 +74,10 @@ lv_obj_t *ui_Dashboard_ctl_create(lv_obj_t *comp_parent)
 
     lv_obj_t *obj;
     obj = lv_obj_create(comp_parent);
+    lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
+    lv_obj_add_event_cb(obj, lv_event_notify_page, LV_EVENT_NOTIFY_PAGE_ACT, NULL);
+    lv_obj_add_event_cb(obj, lv_event_value_update, LV_EVENT_NOTIFY_UPDATE, NULL); /*!< 通知刷新后，初始化所有控件 */
+
     lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -74,6 +96,7 @@ lv_obj_t *ui_Dashboard_ctl_create(lv_obj_t *comp_parent)
     lv_obj_set_grid_cell(dd, LV_GRID_ALIGN_START, 1, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_align(dd, LV_ALIGN_TOP_MID, 0, 20);
+    lv_dropdown_set_options(dd, "");
     lv_obj_add_event_cb(dd, dd_event_handler, LV_EVENT_VALUE_CHANGED, NULL);
     lv_obj_t *list = lv_dropdown_get_list(dd);
     lv_obj_set_style_text_font(list, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -84,9 +107,6 @@ lv_obj_t *ui_Dashboard_ctl_create(lv_obj_t *comp_parent)
 
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
-
-    /** add user event */
-    lv_obj_add_event_cb(obj, lv_event_value_changed, LV_EVENT_VALUE_CHANGED, NULL);
 
     return obj;
 }

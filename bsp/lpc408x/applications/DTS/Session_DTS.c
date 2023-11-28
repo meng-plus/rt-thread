@@ -62,7 +62,8 @@ int32_t dts_chn_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
-            session_dts_change(se_handle, DTS_SYS);
+            //session_dts_change(se_handle, DTS_SYS);
+                return 0;
         }
     }
     session_dts_change(se_handle, DTS_PART);
@@ -107,7 +108,7 @@ int32_t dts_part_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
-            session_dts_change(se_handle, DTS_SYS);
+            //session_dts_change(se_handle, DTS_SYS);
             return rc;
         }
         pdts->part_idx += pdts->part_num;
@@ -145,11 +146,6 @@ int32_t session_dts_tick(session_master_t *se_handle)
             pdts->update_flag = 1;
             pdts->offline = 0;
         }
-        else
-        {
-            // session_dts_change(se_handle, DTS_SYS);
-            // pdts->offline++;
-        }
     }
     else
     {
@@ -165,15 +161,15 @@ void session_dts_change(session_master_t *se_handle, DTS_MSG_ID_E id)
     switch (id)
     {
     case DTS_SYS: /*!< 获取设备信息 */
-        if (pdts)
-            memset(&pdts->data.system, 0, sizeof(pdts->data.system));
+        //if (pdts)
+            //memset(&pdts->data.system, 0, sizeof(pdts->data.system));
         break;
     case DTS_CHN: /*!< 读取通道信息 */
-        if (pdts)
+        //if (pdts)
             // memset(pdts->data.channel, 0, sizeof(pdts->data.channel));
             break;
     case DTS_PART: /*!< 读取分区数据 */
-        if (pdts)
+        //if (pdts)
             // memset(pdts->data.partition, 0, sizeof(pdts->data.partition));
             break;
 

@@ -12,7 +12,7 @@
 #include "system_var.h"
 #include "flashdb.h"
 #include <stdlib.h>
-varWork_t g_var_work;
+varWork_t g_var_work = {0};
 product_param_t g_prod_param;
 sensor_param_t g_sensor_param;
 const product_param_t l_prod_param_init =

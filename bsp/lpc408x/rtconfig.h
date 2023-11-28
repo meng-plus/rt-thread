@@ -28,7 +28,6 @@
 #define RT_USING_DEBUG
 #define RT_DEBUGING_COLOR
 #define RT_DEBUGING_CONTEXT
-#define RT_DEBUGING_INIT
 
 /* Inter-Thread communication */
 
@@ -138,6 +137,7 @@
 
 /* C/C++ and POSIX layer */
 
+
 /* ISO-ANSI C layer */
 
 /* Timezone and Daylight Saving Time */
@@ -239,7 +239,7 @@
 #define SEGGER_RTT_MAX_NUM_DOWN_BUFFERS 3
 #define BUFFER_SIZE_UP 2048
 #define BUFFER_SIZE_DOWN 64
-#define SEGGER_RTT_PRINTF_BUFFER_SIZE 128
+#define SEGGER_RTT_PRINTF_BUFFER_SIZE 512
 #define RTT_DEFAULT_BUFFER_INDEX 0
 #define RTT_DEFAULT_TERMINAL_INDEX 0
 #define PKG_USING_SEGGER_RTT_LATEST_VERSION
