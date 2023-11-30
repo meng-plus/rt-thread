@@ -3536,6 +3536,9 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_edit.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_lora.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_page_Dashboard_ctl.c</name>
         </file>
         <file>

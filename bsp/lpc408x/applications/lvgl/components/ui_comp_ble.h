@@ -24,7 +24,7 @@ extern "C"
         BLE_BTN_GET_IP,
         BLE_SW_SEND_MSG,
         // BLE_EDIT_ID,
-        BLE_LABLE_MSG,
+        BLE_LABEL_MSG,
         BLE_BTN_EXIT,
         // BLE_KB, /*!< 键盘 */
         BLE_NUM,

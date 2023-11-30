@@ -10,7 +10,12 @@
 #include <time.h>
 static void time_update(struct _lv_timer_t *ptime)
 {
-
+    time_t nTime = time(NULL);
+    struct tm *curTime = localtime(&nTime);
+    char buff[32];
+    rt_sprintf(buff, "%4d-%02d-%02d %02d:%02d:%02d", curTime->tm_year + 1900, curTime->tm_mon + 1, curTime->tm_mday,
+               curTime->tm_hour, curTime->tm_min, curTime->tm_sec);
+    lv_label_set_text(ptime->user_data, buff);
 }
 static void del_component_timer_event_cb(lv_event_t *e)
 {

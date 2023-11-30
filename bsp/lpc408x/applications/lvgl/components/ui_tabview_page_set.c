@@ -3,6 +3,7 @@
 #include "system_var.h"
 #include "ui_comp_WIFI.h"
 #include "ui_comp_ble.h"
+#include "ui_comp_Lora.h"
 #include "ui_P01main.h"
 static void lv_event_notify_page(lv_event_t *e)
 {
@@ -40,6 +41,10 @@ static void btn_event_clicked(lv_event_t *e)
             break;
         case SET_BTN_BLE:
             sub_obj = ui_comp_get_child(lv_obj_get_parent(obj), SET_PAGE_BLE);
+            break;
+        case SET_BTN_LORA:
+            sub_obj = ui_comp_get_child(lv_obj_get_parent(obj), SET_PAGE_LORA);
+            break;
         default:
             break;
         }
@@ -93,10 +98,24 @@ lv_obj_t *ui_tabview_page_set_create(lv_obj_t *tableview)
     lv_obj_set_grid_cell(obj_page_ble, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_STRETCH, 1, 1);
 
+    lv_obj_t *lora_obj = lv_btn_create(obj);
+    lv_obj_set_grid_cell(lora_obj, LV_GRID_ALIGN_STRETCH, 0, 1,
+                         LV_GRID_ALIGN_STRETCH, 2, 1);
+    lable = lv_label_create(lora_obj);
+    lv_obj_align(lable, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(lable, TEXT_LORA_SET);
+    lv_obj_add_event_cb(lora_obj, btn_event_clicked, LV_EVENT_CLICKED, (void *)SET_BTN_LORA);
+
+    lv_obj_t *obj_page_lora = ui_comp_lora_set_create(lv_obj_get_parent(tableview));
+    lv_obj_add_flag(obj_page_lora, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_grid_cell(obj_page_lora, LV_GRID_ALIGN_STRETCH, 0, 1,
+                         LV_GRID_ALIGN_STRETCH, 1, 1);
+
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SET_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * SET_NUM);
     children[SET_PAGE_BLE] = obj_page_ble;
     children[SET_PAGE_WIFI] = obj_page_wifi;
+    children[SET_PAGE_LORA] = obj_page_lora;
 
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);

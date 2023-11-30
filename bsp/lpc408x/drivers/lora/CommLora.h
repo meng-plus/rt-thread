@@ -43,6 +43,9 @@ typedef struct WIFI_DATA
 
 } WIFI_DATA;
 
+extern char LoraBuf[100];   // 收到新数据的缓存区
+extern uint8_t LoraDipflag; // 收到新数据标识
+extern uint32_t loradata;   // 数据发送标识
 /*
 *********************************************************************************************************
 *                                           类型和宏定义

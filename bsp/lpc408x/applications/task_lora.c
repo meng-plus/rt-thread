@@ -25,6 +25,10 @@ int drv_lora_init()
                                  NULL,
                                  500,
                                  RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER);
+    if (timer_lora)
+    {
+        rt_timer_start(timer_lora);
+    }
     return 0;
 }
 INIT_APP_EXPORT(drv_lora_init);

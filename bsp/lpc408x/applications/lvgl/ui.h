@@ -18,8 +18,7 @@ extern "C"
 #include "ui_comp.h"
 #include "language.h" /*!< 多国语言管理 */
 
-  LV_ATTRIBUTE_MEM_ALIGN LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
-
+  LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
   LV_FONT_DECLARE(lv_font_simhei_14);
   LV_FONT_DECLARE(lv_font_simhei_16);
   LV_FONT_DECLARE(lv_font_simhei_20);

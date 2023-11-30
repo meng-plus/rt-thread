@@ -274,6 +274,15 @@ void LORA1_GpioInit(void)
     LPC_GPIO1->DIR |= 1 << 0;  // lora CS
     LPC_GPIO1->DIR |= 1 << 1;  // lora RES
 
+    // hwx 2023.08.10 add.lora POWER
+    LPC_GPIO2->DIR |= (1 << 21);
+
+    // hwx 2023.08.10 add.//lora POWER
+    LPC_IOCON->P2_21 = (00 << 0) | // IOCON_FUNC0
+                       (2 << 3) |  // pull up
+                       (1 << 5) |
+                       (0 << 10);
+
     // out Value
     // LPC_GPIO1->SET	= 1 << 14;       //clk
     // LPC_GPIO4->CLR	= 1 << 28;      // MOSI  Dout

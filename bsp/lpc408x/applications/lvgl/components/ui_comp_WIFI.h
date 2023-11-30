@@ -24,7 +24,7 @@ extern "C"
         WIFI_BTN_GET_IP,
         WIFI_SW_SEND_MSG,
         WIFI_EDIT_ID,
-        WIFI_LABLE_MSG,
+        WIFI_LABEL_MSG,
         WIFI_BTN_EXIT,
         WIFI_KB, /*!< 键盘 */
         WIFI_NUM,
