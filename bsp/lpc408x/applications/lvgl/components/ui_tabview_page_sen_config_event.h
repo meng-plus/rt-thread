@@ -255,51 +255,6 @@ static void child_event_value_changed(lv_event_t *e)
         }
     }
 }
-static void btnm_event_handler(lv_event_t *e);
-static void ta_event_cb(lv_event_t *e)
-{
-    lv_indev_t *indev = lv_indev_get_act();
-    if (indev == NULL)
-        return;
-    lv_indev_type_t indev_type = lv_indev_get_type(indev);
-
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *ta = lv_event_get_target(e);
-    lv_obj_t *kb = lv_event_get_user_data(e);
-
-    if (code == LV_EVENT_CLICKED &&
-        (LV_INDEV_TYPE_POINTER == indev_type || indev_type == LV_INDEV_TYPE_ENCODER))
-    {
-        if (lv_obj_has_flag(kb, LV_OBJ_FLAG_HIDDEN))
-        {
-            lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
-        }
-        else
-        {
-            lv_obj_remove_event_cb(kb, btnm_event_handler);
-        }
-        lv_obj_add_event_cb(kb, btnm_event_handler, LV_EVENT_VALUE_CHANGED, ta);
-    }
-
-    if (code == LV_EVENT_READY || code == LV_EVENT_CANCEL)
-    {
-        lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_remove_event_cb(kb, btnm_event_handler);
-    }
-}
-static void btnm_event_handler(lv_event_t *e)
-{
-    lv_obj_t *obj = lv_event_get_target(e);
-    lv_obj_t *ta = lv_event_get_user_data(e);
-    const char *txt = lv_btnmatrix_get_btn_text(obj, lv_btnmatrix_get_selected_btn(obj));
-
-    if (strcmp(txt, LV_SYMBOL_BACKSPACE) == 0)
-        lv_textarea_del_char(ta);
-    else if (strcmp(txt, LV_SYMBOL_NEW_LINE) == 0)
-        lv_event_send(ta, LV_EVENT_READY, NULL);
-    else
-        lv_textarea_add_text(ta, txt);
-}
 
 typedef struct table_edit
 {
@@ -347,10 +302,9 @@ static void table_edit_event_cb(lv_event_t *e)
         lv_event_send(lv_obj_get_parent(pedit->obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
     }
 }
-
+static table_edit_t s_edit;
 static void table_event_pressed(lv_event_t *e)
 {
-    static table_edit_t s_edit;
     s_edit.obj = lv_event_get_target(e);
     lv_table_get_selected_cell(s_edit.obj, &s_edit.row, &s_edit.col);
     LOG_D("[%d,%d]", s_edit.row, s_edit.col);
@@ -379,20 +333,18 @@ static void table_event_pressed(lv_event_t *e)
                     }
                 }
                 lv_obj_align(dd, LV_ALIGN_CENTER, 0, 20);
+                lv_obj_add_event_cb(dd, table_edit_event_cb, LV_EVENT_VALUE_CHANGED, &s_edit);
             }
             else
             {
                 lv_obj_clear_flag(dd, LV_OBJ_FLAG_HIDDEN);
-                lv_obj_remove_event_cb(dd, table_edit_event_cb);
             }
-            lv_obj_add_event_cb(dd, table_edit_event_cb, LV_EVENT_VALUE_CHANGED, &s_edit);
         }
         else if (s_edit.col > 0 && s_edit.col < 4)
         {
-            lv_obj_t *kb = ui_edit_create(lv_layer_top());
-            lv_obj_set_size(kb, 800, 480);
-            ui_edit_add_event(kb, table_edit_event_cb, LV_EVENT_READY, &s_edit);
-            ui_edit_pop_with_default(kb, string);
+            lv_obj_t *sub_obj = NULL;
+            sub_obj = ui_comp_get_child(lv_obj_get_parent(s_edit.obj), SEN_CONFIG_KB);
+            ui_edit_pop_with_default(sub_obj, string);
         }
     }
 }

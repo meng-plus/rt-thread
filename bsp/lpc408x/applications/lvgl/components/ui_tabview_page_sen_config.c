@@ -20,20 +20,9 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
+
+#if 0
     char *baud_str = "4800\n9600\n19200\n38400\n115200";
-    static const char *btnm_map[] = {"1", "2", "3", "\n",
-                                     "4", "5", "6", "\n",
-                                     "7", "8", "9", "\n",
-                                     LV_SYMBOL_BACKSPACE, "0", LV_SYMBOL_NEW_LINE, ""};
-    lv_obj_t *btnm = lv_btnmatrix_create(lv_layer_top());
-
-    lv_obj_add_flag(btnm, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_size(btnm, 400, 300);
-    lv_obj_align(btnm, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_btnmatrix_set_one_checked(btnm, 1);
-    lv_obj_clear_flag(btnm, LV_OBJ_FLAG_CLICK_FOCUSABLE); /*To keep the text area focused on button clicks*/
-    lv_btnmatrix_set_map(btnm, btnm_map);
-
     lv_obj_t *rs485_2_en_obj = lv_checkbox_create(obj);
     lv_obj_set_grid_cell(rs485_2_en_obj, LV_GRID_ALIGN_STRETCH, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
@@ -88,6 +77,7 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
         lv_dropdown_set_options(rs485_3_baud_obj, baud_str);
     }
     lv_obj_set_style_text_font(rs485_3_baud_obj, LV_FONT_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
+#endif
     /**
      * @addtogroup 传感器表格
      * @{
@@ -150,19 +140,25 @@ lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
     lv_label_set_text(label, TEXT_SAVE);
     lv_obj_center(label);
 
+    lv_obj_t *kb = ui_edit_create(lv_layer_top());
+    lv_obj_set_size(kb, 800, 480);
+    lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
+    ui_edit_add_event(kb, table_edit_event_cb, LV_EVENT_READY, &s_edit);
+
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * SEN_CONFIG_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * SEN_CONFIG_NUM);
-    children[SEN_CONFIG_RS485_2] = rs485_2_en_obj;
-    children[SEN_CONFIG_RS485_2_ADDR] = rs485_2_addr_obj;
-    children[SEN_CONFIG_RS485_2_BAUD] = rs485_2_baud_obj;
-    children[SEN_CONFIG_RS485_3] = rs485_3_en_obj;
-    children[SEN_CONFIG_RS485_3_ADDR] = rs485_3_addr_obj;
-    children[SEN_CONFIG_RS485_3_BAUD] = rs485_3_baud_obj;
+    //    children[SEN_CONFIG_RS485_2] = rs485_2_en_obj;
+    //    children[SEN_CONFIG_RS485_2_ADDR] = rs485_2_addr_obj;
+    //    children[SEN_CONFIG_RS485_2_BAUD] = rs485_2_baud_obj;
+    //    children[SEN_CONFIG_RS485_3] = rs485_3_en_obj;
+    //    children[SEN_CONFIG_RS485_3_ADDR] = rs485_3_addr_obj;
+    //    children[SEN_CONFIG_RS485_3_BAUD] = rs485_3_baud_obj;
     children[SEN_CONFIG_TABLE] = tab_obj;
     children[SEN_CONFIG_DEL] = btn_del;
     children[SEN_CONFIG_NEW] = btn_new;
     children[SEN_CONFIG_RESTORE] = btn_restore;
     children[SEN_CONFIG_SAVE] = btn_save;
+    children[SEN_CONFIG_KB] = kb;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
 

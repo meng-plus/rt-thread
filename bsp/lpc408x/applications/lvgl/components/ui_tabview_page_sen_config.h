@@ -31,7 +31,7 @@ extern "C"
         SEN_CONFIG_NEW,
         SEN_CONFIG_RESTORE,
         SEN_CONFIG_SAVE,
-
+        SEN_CONFIG_KB,
         SEN_CONFIG_NUM,
     };
     lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview);

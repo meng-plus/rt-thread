@@ -8,19 +8,6 @@
 #include "ui_comp.h"
 #include <stdio.h>
 
-static void btnm_event_handler(lv_event_t *e)
-{
-    lv_obj_t *obj = lv_event_get_target(e);
-    lv_obj_t *ta = lv_event_get_user_data(e);
-    const char *txt = lv_btnmatrix_get_btn_text(obj, lv_btnmatrix_get_selected_btn(obj));
-
-    if (strcmp(txt, LV_SYMBOL_BACKSPACE) == 0)
-        lv_textarea_del_char(ta);
-    else if (strcmp(txt, LV_SYMBOL_NEW_LINE) == 0)
-        lv_event_send(ta, LV_EVENT_READY, NULL);
-    else
-        lv_textarea_add_text(ta, txt);
-}
 static void ta_event_cb(lv_event_t *e)
 {
     lv_indev_t *indev = lv_indev_get_act();
@@ -40,7 +27,6 @@ static void ta_event_cb(lv_event_t *e)
     if (code == LV_EVENT_READY || code == LV_EVENT_CANCEL)
     {
         lv_obj_add_flag(lv_obj_get_parent(ta), LV_OBJ_FLAG_HIDDEN);
-        // lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
     }
 }
 void ui_edit_pop_with_default(lv_obj_t *obj, const char *string)
@@ -55,6 +41,7 @@ void ui_edit_pop_with_default(lv_obj_t *obj, const char *string)
     lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
     // lv_obj_clear_flag(text, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(lv_textarea_get_label(text), string);
+    lv_textarea_set_cursor_pos(text, LV_TEXTAREA_CURSOR_LAST);
     lv_obj_add_state(text, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
 }
 
@@ -83,12 +70,8 @@ const char *ui_edit_get_text(lv_obj_t *obj)
 lv_obj_t *ui_edit_create(lv_obj_t *comp_parent)
 {
 
-    static lv_obj_t *obj = NULL;
-    if (obj != NULL)
-    {
-        lv_obj_set_parent(obj, comp_parent);
-        return obj;
-    }
+    lv_obj_t *obj = NULL;
+
     obj = lv_obj_create(comp_parent);
     lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
     lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -103,30 +86,25 @@ lv_obj_t *ui_edit_create(lv_obj_t *comp_parent)
     lv_obj_t *ui_text = lv_textarea_create(obj);
     lv_obj_set_grid_cell(ui_text, LV_GRID_ALIGN_CENTER, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
-    // lv_obj_add_flag(ui_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_event_cb(ui_text, ta_event_cb, LV_EVENT_READY, NULL);
+    lv_obj_add_event_cb(ui_text, ta_event_cb, LV_EVENT_CANCEL, NULL);
     lv_textarea_set_one_line(ui_text, true);
 
-    static const char *btnm_map[] = {"1", "2", "3", "\n",
-                                     "4", "5", "6", "\n",
-                                     "7", "8", "9", "\n",
-                                     LV_SYMBOL_BACKSPACE, "0", LV_SYMBOL_NEW_LINE, ""};
-    lv_obj_t *btnm = lv_btnmatrix_create(obj);
-    lv_obj_set_grid_cell(btnm, LV_GRID_ALIGN_CENTER, 0, 1,
+    lv_obj_t *kb = lv_keyboard_create(obj);
+    lv_obj_set_grid_cell(kb, LV_GRID_ALIGN_CENTER, 0, 1,
                          LV_GRID_ALIGN_CENTER, 1, 1);
-    // lv_obj_add_flag(btnm, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_size(btnm, 400, 300);
-    lv_obj_align(btnm, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_btnmatrix_set_one_checked(btnm, 1);
-    lv_obj_clear_flag(btnm, LV_OBJ_FLAG_CLICK_FOCUSABLE); /*To keep the text area focused on button clicks*/
-    lv_btnmatrix_set_map(btnm, btnm_map);
-
-    lv_obj_add_event_cb(ui_text, ta_event_cb, LV_EVENT_ALL, btnm);
-    lv_obj_add_event_cb(btnm, btnm_event_handler, LV_EVENT_VALUE_CHANGED, ui_text);
+    lv_keyboard_set_mode(kb, LV_KEYBOARD_MODE_NUMBER);
+    lv_obj_set_style_text_font(kb, LV_FONT_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_keyboard_set_textarea(kb, obj);
+    lv_obj_set_size(kb, 400, 300);
+    lv_obj_center(obj);
+    lv_obj_align(kb, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_keyboard_set_textarea(kb, ui_text);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * EDIT_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * EDIT_NUM);
     children[EDIT_TEXTAREA] = ui_text;
-    children[EDIT_KEYBOARD] = btnm;
+    children[EDIT_KEYBOARD] = kb;
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
 
