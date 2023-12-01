@@ -33,6 +33,13 @@ extern "C"
         uint8_t cmd;     /*!< 命令 */
         uint8_t data[0]; /*!< 柔性数组,  crc16(0x1021)校验高位在前，低位在后 */
     } sdc_data_t;
+
+    enum SDC_STATUS
+    {
+        SDC_OFFLINE = 0, /*!<断线  */
+        SDC_ABNORMALITY, /*!< 探头异常 */
+        SDC_REV, /*!< 未配置此功能 */
+    };
     /**
      * @brief 模拟量传感器响应分站查询（0x90）
      * 4byte 对齐

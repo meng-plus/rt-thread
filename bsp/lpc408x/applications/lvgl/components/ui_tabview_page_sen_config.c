@@ -2,6 +2,7 @@
 #include "ui_comp.h"
 #include "system_var.h"
 #include "ui_tabview_page_sen_config_event.h"
+
 lv_obj_t *ui_tabview_page_sen_config_create(lv_obj_t *tableview)
 {
     lv_obj_t *obj;

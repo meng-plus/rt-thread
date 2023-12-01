@@ -270,7 +270,7 @@ static void table_edit_event_cb(lv_event_t *e)
     if (pedit && (pedit->row > 0) && (pedit->row <= g_sensor_param.sensor_num))
     {
         uint8_t idx = pedit->row - 1;
-
+        uint8_t value = 0;
         const char *string = NULL;
         if (pedit->col)
             string = lv_label_get_text(lv_textarea_get_label(obj));
@@ -287,13 +287,18 @@ static void table_edit_event_cb(lv_event_t *e)
 
         break;
         case 0x01: /*!< chn */
-            g_sensor_param.sen_config[idx].chn = atoi(string);
+            value = atoi(string);
+            if (value < 32)
+                g_sensor_param.sen_config[idx].chn = value;
             break;
         case 0x02: /*!< addr */
-            g_sensor_param.sen_config[idx].addr = atoi(string);
+            value = atoi(string);
+            g_sensor_param.sen_config[idx].addr = value;
             break;
         case 0x03: /*!< dev_addr */
-            g_sensor_param.sen_config[idx].dev_addr = atoi(string);
+            value = atoi(string);
+            if (value < 10)
+                g_sensor_param.sen_config[idx].dev_addr = value;
             break;
         default:
             break;
@@ -307,7 +312,6 @@ static void table_event_pressed(lv_event_t *e)
 {
     s_edit.obj = lv_event_get_target(e);
     lv_table_get_selected_cell(s_edit.obj, &s_edit.row, &s_edit.col);
-    LOG_D("[%d,%d]", s_edit.row, s_edit.col);
     const char *string = lv_table_get_cell_value(s_edit.obj, s_edit.row, s_edit.col);
 
     if ((s_edit.row > 0) && (s_edit.row <= g_sensor_param.sensor_num))

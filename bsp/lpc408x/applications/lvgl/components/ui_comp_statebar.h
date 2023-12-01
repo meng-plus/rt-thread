@@ -21,7 +21,7 @@ extern "C"
         STATE_BAR_NUM,
     };
     lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent);
-
+    void stateBar_update_tips(lv_obj_t *statebar, const char *string);
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

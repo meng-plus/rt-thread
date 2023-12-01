@@ -11,6 +11,7 @@
 #include "system_var.h"
 #include "ui_comp_tabview_main.h"
 
+static lv_obj_t *main;
 lv_obj_t *ui_main_create(lv_obj_t *parent)
 {
     static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -18,6 +19,7 @@ lv_obj_t *ui_main_create(lv_obj_t *parent)
 
     lv_obj_t *obj = NULL;
     obj = lv_obj_create(parent);
+    main = obj;
     lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -48,4 +50,14 @@ lv_obj_t *ui_main_create(lv_obj_t *parent)
     lv_obj_add_event_cb(obj, del_component_child_event_cb, LV_EVENT_DELETE, children);
 
     return obj;
+}
+
+void main_update_tips(const char *string)
+{
+    lv_obj_t *statusBar_obj;
+    if (main)
+    {
+        statusBar_obj = ui_comp_get_child(main, SCREEN_P01_STATE_BAR);
+        stateBar_update_tips(statusBar_obj, string);
+    }
 }

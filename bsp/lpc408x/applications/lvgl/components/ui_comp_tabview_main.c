@@ -11,6 +11,7 @@
 #include "ui_tabview_page_debug.h"
 #include "ui_tabview_page_about.h"
 #include "ui_tabview_page_set.h"
+#include "ui_P01main.h"
 static void btns_value_changed_event_cb(lv_event_t *e)
 { // char *param = lv_event_get_param(e);
     lv_obj_t *obj = lv_event_get_target(e);
@@ -21,6 +22,8 @@ static void btns_value_changed_event_cb(lv_event_t *e)
     _lv_event_child_notify(lv_tabview_get_content(lv_obj_get_parent(obj)), LV_EVENT_NOTIFY_PAGE_CHANGE, NULL);
     uint32_t id = lv_btnmatrix_get_selected_btn(obj);
     lv_event_send(ui_comp_get_child(lv_obj_get_parent(obj), id), LV_EVENT_NOTIFY_PAGE_ACT, NULL);
+
+    main_update_tips(lv_btnmatrix_get_btn_text(obj, id));
 }
 
 lv_obj_t *ui_TabView_main_create(lv_obj_t *comp_parent)

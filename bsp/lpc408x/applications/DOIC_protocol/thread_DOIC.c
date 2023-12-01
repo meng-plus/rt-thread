@@ -102,14 +102,15 @@ void thread_doic_entry(void *param)
             idx = 0;
         }
         uint16_t sdc_len = 0;
-        static uint8_t sen_idx = 0;
+
         sensor_config_t *pSensor_config = &g_sensor_param.sen_config[idx];
         sdc_len = SDC_master_0x10(phander_sdc, pSensor_config->addr, pSensor_config->type, pSensor_config->chn);
-        uint16_t len = DOIC_master_0x4181(phander_doic, g_sensor_param.dev_config[0].addr, pSensor_config->dev_addr, (uint8_t *)phander_sdc->pdata, sdc_len);
+        uint16_t len = DOIC_master_0x4181(phander_doic, 00 /*!< 暂时不做限制 */, pSensor_config->dev_addr, (uint8_t *)phander_sdc->pdata, sdc_len);
 
         idx++;
 
 #else
+        static uint8_t sen_idx = 0;
         const enum SENSOR_DEF table[] = {SEN_ENVI_TEMP, SEN_CO, SEN_SMOG, SOUND_LIGHT_ALARM};
         uint16_t sdc_len = 0;
         static uint8_t sen_idx = 0;

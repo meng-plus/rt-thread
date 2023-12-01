@@ -23,7 +23,7 @@ extern "C"
 
     };
     lv_obj_t *ui_main_create(lv_obj_t *parent);
-
+    void main_update_tips(const char *string);
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
