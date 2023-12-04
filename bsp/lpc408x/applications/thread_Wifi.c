@@ -81,7 +81,7 @@ void thread_Wifi_entry(void *param)
 				lv_obj_t *lable_msg = ui_comp_get_child(pthread_Wifi->obj_ble_wifi, WIFI_LABEL_MSG);
 				if (lable_msg)
 				{
-					lv_label_set_text(lable_msg, pthread_Wifi->Wifi_read_buf);
+					lv_label_set_text(lable_msg, (char const *)pthread_Wifi->Wifi_read_buf);
 				}
 			}
 			else
