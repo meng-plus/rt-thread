@@ -11,7 +11,6 @@
 #include "thread_DTS.h"
 static void lv_event_notify_page(lv_event_t *e)
 {
-    static lv_timer_t *timer = 0;
     /*!< 通知发生了页面也换，可能不是活动状态，将关闭刷新功能 */
     uint32_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);

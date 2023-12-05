@@ -26,12 +26,15 @@ extern "C"
     /**
      * @brief   data in ram  only
      */
-
+#define SENSOR_NUM_MAX 10
     typedef struct _RAM_VAR_WORKING
     {
         uint32_t tick;
-        thread_dts_t *dts;           /*!< 测温主机数据 */
-        sdc_0x90_t Sensor[10];       // Sensor[SEN_NUM];
+        thread_dts_t *dts; /*!< 测温主机数据 */
+
+        /*!< Sensor value */
+        uint32_t Sensor_tick_last[SENSOR_NUM_MAX]; // Sensor[SEN_NUM];
+        sdc_0x90_t Sensor[SENSOR_NUM_MAX];         // Sensor[SEN_NUM];
     } varWork_t;
 
     /**

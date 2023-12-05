@@ -63,6 +63,14 @@ static void lv_event_value_update(lv_event_t *e)
                     sprintf(strbuff, "%.2f%s", g_var_work.Sensor[idx].SenData[0], rom_sensor_var[g_sensor_param.sen_config[idx].type].unit);
                     lv_label_set_text(value_obj, strbuff);
                     idx++;
+                    if (g_var_work.Sensor[idx].SenSat != 0x0F)
+                    {
+                        lv_obj_set_style_text_color(value_obj, lv_palette_main(LV_PALETTE_RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+                    }
+                    else
+                    {
+                        lv_obj_set_style_text_color(value_obj, lv_color_black(), LV_PART_MAIN | LV_STATE_DEFAULT);
+                    }
                 }
                 else
                 {

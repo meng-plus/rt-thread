@@ -157,7 +157,7 @@ int32_t session_dts_tick(session_master_t *se_handle)
 void session_dts_change(session_master_t *se_handle, DTS_MSG_ID_E id)
 {
     se_handle->msg_id = id;
-    thread_dts_t *pdts = (thread_dts_t *)se_handle;
+    //thread_dts_t *pdts = (thread_dts_t *)se_handle;
     switch (id)
     {
     case DTS_SYS: /*!< 获取设备信息 */

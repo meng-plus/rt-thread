@@ -197,7 +197,7 @@ uint8_t sensor_new(sensor_param_t *param)
 {
     if (param == NULL)
         return 0;
-    if (param->sensor_num < 10)
+    if (param->sensor_num < SENSOR_NUM_MAX)
     {
         param->sensor_num++;
         return 1;

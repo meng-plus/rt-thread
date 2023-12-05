@@ -101,6 +101,20 @@ void thread_doic_entry(void *param)
         {
             idx = 0;
         }
+
+        {
+            /**
+             * @brief check offline
+             *
+             */
+            rt_tick_t tick_cur;
+            tick_cur = rt_tick_get_millisecond();
+            if (g_var_work.Sensor_tick_last[idx] &&
+                (tick_cur - g_var_work.Sensor_tick_last[idx] > 1000))
+            {
+                g_var_work.Sensor[idx].SenSat = SDC_OFFLINE;
+            }
+        }
         uint16_t sdc_len = 0;
 
         sensor_config_t *pSensor_config = &g_sensor_param.sen_config[idx];

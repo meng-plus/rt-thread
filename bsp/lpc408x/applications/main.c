@@ -24,5 +24,5 @@ int main(void)
         CommLoraHandler();
         rt_thread_mdelay(100);
     }
-    return RT_EOK;
+    //return RT_EOK;
 }
