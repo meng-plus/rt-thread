@@ -62,10 +62,25 @@ static void time_update(lv_timer_t *ptime)
         lv_chart_set_point_count(pchart, pdata->channel[chn_sel].partition); // 设置X轴范围（示例中设置为0到100）
         lv_chart_set_range(pchart, LV_CHART_AXIS_PRIMARY_X, 0, pdata->channel[chn_sel].partition);
 
+        lv_coord_t max = INT16_MIN;
+        lv_coord_t min = INT16_MAX;
+#define LV_MATH_MAX(a, b) ((a) > (b) ? (a) : (b))
+#define LV_MATH_MIN(a, b) ((a) < (b) ? (a) : (b))
+
         for (size_t i = 0; i < pdata->channel[chn_sel].partition; i++)
         {
-            lv_chart_set_next_value(pchart, pser, (lv_coord_t)(pdata->partition[chn_sel][i].temp_max_real * 0.01 - 200));
-            // lv_chart_set_next_value2(pchart, pser, i, pdata->partition[chn_sel][i].temp_max_real);
+            lv_coord_t value = (lv_coord_t)(pdata->partition[chn_sel][i].temp_max_real - 20000); // temp_max_real * 0.01 - 200
+                                                                                                 // lv_chart_set_next_value(pchart, pser,value );
+            lv_chart_set_next_value2(pchart, pser, i, value);
+
+            max = LV_MATH_MAX(max, value);
+            min = LV_MATH_MIN(min, value);
+        }
+        if (max != min)
+        { // Adjust max and min if needed
+            max = (max < 10000) ? 10000 : max;
+            min = (min > 0) ? 0 : min;
+            lv_chart_set_range(pchart, LV_CHART_AXIS_PRIMARY_Y, min, max);
         }
     }
 }
@@ -75,7 +90,7 @@ static void event_cb(lv_event_t *e)
     static int32_t last_id = -1;
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-
+    lv_obj_draw_part_dsc_t *dsc = lv_event_get_draw_part_dsc(e);
     if (code == LV_EVENT_VALUE_CHANGED)
     {
         last_id = lv_chart_get_pressed_point(obj);
@@ -84,9 +99,17 @@ static void event_cb(lv_event_t *e)
             lv_chart_set_cursor_point(obj, cursor, NULL, last_id);
         }
     }
+    else if (code == LV_EVENT_DRAW_PART_BEGIN)
+    {
+        if (!lv_obj_draw_part_check_type(dsc, &lv_chart_class, LV_CHART_DRAW_PART_TICK_LABEL))
+            return;
+        if (dsc->text && dsc->id == LV_CHART_AXIS_PRIMARY_Y)
+        {
+            snprintf(dsc->text, dsc->text_length, "%d", dsc->value / 100);
+        }
+    }
     else if (code == LV_EVENT_DRAW_PART_END)
     {
-        lv_obj_draw_part_dsc_t *dsc = lv_event_get_draw_part_dsc(e);
         if (!lv_obj_draw_part_check_type(dsc, &lv_chart_class, LV_CHART_DRAW_PART_CURSOR))
             return;
         if (dsc->p1 == NULL || dsc->p2 == NULL || dsc->p1->y != dsc->p2->y || last_id < 0)
@@ -185,10 +208,10 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     lv_obj_set_style_pad_left(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
-    // lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_SCATTER);
-
-    // lv_chart_set_point_count(ui_Chart1, 125);
+    // lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
+    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_SCATTER);
+    lv_chart_set_range(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 0, 10000);
+    lv_chart_set_point_count(ui_Chart1, 125);
     lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 5, 2, true, 50);
     lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 5, 2, true, 50);
     // lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_SECONDARY_Y, 10, 5, 5, 2, true, 50);

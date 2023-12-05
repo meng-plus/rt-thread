@@ -40,7 +40,7 @@ lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
     lv_obj_set_grid_cell(cui_tips, LV_GRID_ALIGN_START, 0, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_set_style_text_font(cui_tips, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_label_set_text(cui_tips, "system tips");
+    lv_label_set_text(cui_tips, "");
     lv_obj_set_style_pad_top(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
