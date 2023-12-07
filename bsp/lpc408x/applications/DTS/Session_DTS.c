@@ -144,7 +144,10 @@ int32_t session_dts_tick(session_master_t *se_handle)
         if (0 == session_dts_response(se_handle, se_handle->msg_id))
         {
             pdts->update_flag = 1;
-            pdts->offline = 0;
+            if(se_handle->msg_id == DTS_PART)
+            {
+                pdts->offline = 0;
+            }
         }
     }
     else

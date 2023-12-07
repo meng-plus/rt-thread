@@ -70,16 +70,33 @@ static void time_update(lv_timer_t *ptime)
         for (size_t i = 0; i < pdata->channel[chn_sel].partition; i++)
         {
             lv_coord_t value = (lv_coord_t)(pdata->partition[chn_sel][i].temp_max_real - 20000); // temp_max_real * 0.01 - 200
-                                                                                                 // lv_chart_set_next_value(pchart, pser,value );
-            lv_chart_set_next_value2(pchart, pser, i, value);
+            lv_chart_set_next_value(pchart, pser, value);
+            // lv_chart_set_next_value2(pchart, pser, i, value);
 
             max = LV_MATH_MAX(max, value);
             min = LV_MATH_MIN(min, value);
         }
         if (max != min)
         { // Adjust max and min if needed
-            max = (max < 10000) ? 10000 : max;
-            min = (min > 0) ? 0 : min;
+            uint32_t range = (max - min) * 0.3;
+
+            if (max < 5000)
+            {
+                max = 5000;
+            }
+            else
+            {
+                max = max + range;
+            }
+
+            if (min > 0)
+            {
+                min = 0;
+            }
+            else
+            {
+                min = min - range;
+            }
             lv_chart_set_range(pchart, LV_CHART_AXIS_PRIMARY_Y, min, max);
         }
     }
@@ -117,15 +134,15 @@ static void event_cb(lv_event_t *e)
         lv_chart_series_t *pser = lv_chart_get_series_next(obj, NULL);
         //        lv_coord_t *data_array = lv_chart_get_y_array(obj, pser);
         //        lv_coord_t v = data_array[last_id];
-        char buf[16];
+        char buf[18];
 
         dts_data_t *pdata = NULL;
         thread_DTS_control(TH_DTS_GET_DATA, &pdata);
         thread_dts_t *pdts = g_var_work.dts;
-        snprintf(buf, sizeof(buf), "%dm\r\n%.2f", pdata->partition[pdts->sel_chn][last_id].loc_max_real, pdata->partition[pdts->sel_chn][last_id].temp_max_real * 0.01 - 200);
+        snprintf(buf, sizeof(buf), "%dm\r\n%.2f%s", pdata->partition[pdts->sel_chn][last_id].loc_max_real, pdata->partition[pdts->sel_chn][last_id].temp_max_real * 0.01 - 200, SYMBOL_TEMP);
 
         lv_point_t size;
-        lv_txt_get_size(&size, buf, LV_FONT_DEFAULT, 0, 0, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
+        lv_txt_get_size(&size, buf, &ui_font_simfang16, 0, 0, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
 
         lv_area_t a;
         a.y2 = dsc->p1->y - 5;
@@ -143,6 +160,7 @@ static void event_cb(lv_event_t *e)
         lv_draw_label_dsc_t draw_label_dsc;
         lv_draw_label_dsc_init(&draw_label_dsc);
         draw_label_dsc.color = lv_color_white();
+        draw_label_dsc.font = &ui_font_simfang16;
         a.x1 += 5;
         a.x2 -= 5;
         a.y1 += 5;
@@ -194,8 +212,8 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_ITEMS | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 0, LV_PART_ITEMS | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(obj, 0, LV_PART_ITEMS | LV_STATE_DEFAULT);
-    static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), 16, 100, LV_GRID_TEMPLATE_LAST};
-    static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), 16, 50, LV_GRID_TEMPLATE_LAST};
+    static const lv_coord_t col_dsc[] = {LV_GRID_FR(1), 12, 100, LV_GRID_TEMPLATE_LAST};
+    static const lv_coord_t row_dsc[] = {LV_GRID_FR(1), 12, 50, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
     lv_obj_set_scroll_dir(obj, LV_DIR_NONE);
@@ -207,12 +225,13 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     lv_obj_set_style_pad_bottom(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Chart1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    // lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
-    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_SCATTER);
+    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
+    // lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_SCATTER);
     lv_chart_set_range(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 0, 10000);
     lv_chart_set_point_count(ui_Chart1, 125);
-    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 5, 2, true, 50);
+    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 10, 2, true, 50);
     lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 5, 2, true, 50);
     // lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_SECONDARY_Y, 10, 5, 5, 2, true, 50);
     lv_obj_set_style_size(ui_Chart1, 0, LV_PART_INDICATOR);

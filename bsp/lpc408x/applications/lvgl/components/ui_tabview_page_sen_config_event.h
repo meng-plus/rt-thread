@@ -185,14 +185,15 @@ static void lv_event_clicked(lv_event_t *e)
             int8_t ret = var_save(&g_sensor_param);
             if (ret == 0)
             {
-                lv_obj_t *mbox1 = lv_msgbox_create(lv_obj_get_parent(obj), TEXT_SAVE, TEXT_SAVE_OK, NULL, true);
+                lv_obj_t *mbox1 = lv_msgbox_create(NULL, TEXT_SAVE, TEXT_SAVE_OK, NULL, true);
+                lv_obj_set_style_text_font(mbox1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
                 lv_obj_center(mbox1);
             }
             else
             {
 
                 rt_sprintf(buff, "%s (0x%02x)", TEXT_ERROR_CODE, ret);
-                lv_obj_t *mbox1 = lv_msgbox_create(lv_obj_get_parent(obj), TEXT_SAVE, buff, NULL, true);
+                lv_obj_t *mbox1 = lv_msgbox_create(NULL, TEXT_SAVE, buff, NULL, true);
                 lv_obj_set_style_text_font(mbox1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
                 lv_obj_center(mbox1);
@@ -265,8 +266,10 @@ typedef struct table_edit
 
 static void table_edit_event_cb(lv_event_t *e)
 {
+    lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
     table_edit_t *pedit = (table_edit_t *)lv_event_get_user_data(e);
+
     if (pedit && (pedit->row > 0) && (pedit->row <= g_sensor_param.sensor_num))
     {
         uint8_t idx = pedit->row - 1;
@@ -282,7 +285,7 @@ static void table_edit_event_cb(lv_event_t *e)
             char buf[16];
             lv_dropdown_get_selected_str(obj, buf, sizeof(buf));
             g_sensor_param.sen_config[idx].type = atoi(buf);
-            lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(lv_obj_get_parent(obj), LV_OBJ_FLAG_HIDDEN);
         }
 
         break;
@@ -321,7 +324,19 @@ static void table_event_pressed(lv_event_t *e)
             static lv_obj_t *dd = NULL;
             if (NULL == dd)
             {
-                dd = lv_dropdown_create(lv_layer_top());
+                lv_obj_t *parent = NULL;
+                bool auto_parent = false;
+                if (parent == NULL)
+                {
+                    auto_parent = true;
+                    parent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
+                    LV_ASSERT_MALLOC(parent);
+                    lv_obj_class_init_obj(parent);
+                    lv_obj_clear_flag(parent, LV_OBJ_FLAG_IGNORE_LAYOUT);
+                    lv_obj_set_size(parent, LV_PCT(100), LV_PCT(100));
+                }
+
+                dd = lv_dropdown_create(parent);
                 lv_obj_set_style_text_font(dd, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
                 lv_obj_t *list = lv_dropdown_get_list(dd);
                 lv_obj_set_style_text_font(list, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -338,11 +353,13 @@ static void table_event_pressed(lv_event_t *e)
                 }
                 lv_obj_align(dd, LV_ALIGN_CENTER, 0, 20);
                 lv_obj_add_event_cb(dd, table_edit_event_cb, LV_EVENT_VALUE_CHANGED, &s_edit);
+                lv_obj_add_event_cb(dd, table_edit_event_cb, LV_EVENT_DEFOCUSED, NULL);
             }
             else
             {
-                lv_obj_clear_flag(dd, LV_OBJ_FLAG_HIDDEN);
+                lv_obj_clear_flag(lv_obj_get_parent(dd), LV_OBJ_FLAG_HIDDEN);
             }
+            lv_dropdown_open(dd);
         }
         else if (s_edit.col > 0 && s_edit.col < 4)
         {
