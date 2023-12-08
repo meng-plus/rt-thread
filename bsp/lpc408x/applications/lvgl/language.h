@@ -68,5 +68,7 @@
 #define TEXT_FOREPUMP LANGUAGE("", "预抽泵")
 #define TEXT_IDLE LANGUAGE("IDLE", "待机")
 #define TEXT_MEAS LANGUAGE("MEAS", "测量")
+#define TEXT_RUN LANGUAGE("run", "运行")
+#define TEXT_WARING LANGUAGE("waring", "警告")
 
 #endif

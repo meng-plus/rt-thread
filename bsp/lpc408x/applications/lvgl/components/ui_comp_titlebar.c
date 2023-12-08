@@ -11,8 +11,19 @@
 #include "ui_comp_edit.h"
 uint32_t LV_EVENT_SET_TITLE;
 uint32_t LV_EVENT_SET_LED_MODE;
-uint32_t LV_EVENT_SET_LED_Value;
-uint32_t LV_EVENT_SET_LED_Value;
+
+uint8_t getsensorSat(enum SDC_STATUS SenSat)
+{
+    uint8_t num = 0;
+    for (size_t i = 0; i < g_sensor_param.sensor_num; i++)
+    {
+        if (g_var_work.Sensor[i].SenSat == SenSat)
+        {
+            num++;
+        }
+    }
+    return num;
+}
 
 static void update_led(void *parent, int32_t bar_value)
 {
@@ -24,19 +35,37 @@ static void update_led(void *parent, int32_t bar_value)
         return;
     }
 
-    if (bar_value % 1 == 0)
-    {
-        lv_led_toggle(led_y);
-    }
+    // if (bar_value % 1 == 0)
+    // {
+    //     lv_led_toggle(led_y);
+    // }
 
     if (bar_value % 5 == 0)
     {
         lv_led_toggle(led_g);
     }
-
-    if (bar_value % 10 == 0)
+    uint8_t num = getsensorSat(SDC_NORMAL);
+    if ((g_var_work.dts && g_var_work.dts->offline) &&
+        (num != g_sensor_param.sensor_num))
     {
-        lv_led_toggle(led_r);
+        lv_led_on(led_r);
+    }
+    else
+    {
+        lv_led_off(led_r);
+    }
+    // if (bar_value % 10 == 0)
+    // {
+    //     lv_led_toggle(led_r);
+    // }
+}
+static void btn_event_clicked(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *obj = lv_event_get_target(e);
+    // enum UI_COMP_DEBUG comp_id = (enum UI_COMP_DEBUG)((uint32_t)lv_event_get_user_data(e));
+    if (obj && code == LV_EVENT_CLICKED)
+    {
     }
 }
 static void lv_event_set_title(lv_event_t *e)
@@ -61,14 +90,15 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    static lv_coord_t col_dsc[] = {LV_GRID_FR(1), 16, 16, 16, LV_GRID_TEMPLATE_LAST};
-    static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+    static lv_coord_t col_dsc[] = {LV_GRID_FR(1), 8, 8, 8, 8, 8, 8, 8, 8, 8, LV_GRID_TEMPLATE_LAST};
+    static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(2), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
     lv_obj_center(obj);
+    lv_obj_set_style_text_font(obj, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *ui_title = lv_label_create(obj);
     lv_obj_set_grid_cell(ui_title, LV_GRID_ALIGN_START, 0, 1,
-                         LV_GRID_ALIGN_CENTER, 0, 1);
+                         LV_GRID_ALIGN_CENTER, 0, 2);
     lv_obj_set_width(ui_title, 429);
     lv_obj_set_height(ui_title, 30);
     lv_obj_set_align(ui_title, LV_ALIGN_LEFT_MID);
@@ -77,29 +107,58 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_text_opa(ui_title, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_title, &ui_font_heiti24, (lv_part_t)LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_t *led_y = lv_led_create(obj);
-    lv_obj_set_grid_cell(led_y, LV_GRID_ALIGN_START, 1, 1,
-                         LV_GRID_ALIGN_CENTER, 0, 1);
-    lv_led_set_brightness(led_y, 255);
-    lv_obj_set_style_shadow_spread(led_y, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_led_set_color(led_y, lv_palette_main(LV_PALETTE_YELLOW));
-    lv_obj_set_size(led_y, 16, 16);
-
     lv_obj_t *led_g = lv_led_create(obj);
     lv_obj_set_grid_cell(led_g, LV_GRID_ALIGN_START, 2, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_led_set_brightness(led_g, 255);
     lv_obj_set_style_shadow_spread(led_g, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_led_set_color(led_g, lv_palette_main(LV_PALETTE_GREEN));
-    lv_obj_set_size(led_g, 16, 16);
+    lv_obj_set_size(led_g, 8, 8);
+    lv_led_off(led_g);
+    lv_obj_t *obj_label = lv_label_create(obj);
+    lv_obj_set_grid_cell(obj_label, LV_GRID_ALIGN_CENTER, 1, 3,
+                         LV_GRID_ALIGN_CENTER, 1, 1);
+    lv_obj_center(obj_label);
+    lv_label_set_text(obj_label, TEXT_RUN);
+
+    lv_obj_t *led_y = lv_led_create(obj);
+    lv_obj_set_grid_cell(led_y, LV_GRID_ALIGN_START, 5, 1,
+                         LV_GRID_ALIGN_CENTER, 0, 1);
+    lv_led_set_brightness(led_y, 255);
+    lv_obj_set_style_shadow_spread(led_y, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_led_set_color(led_y, lv_palette_main(LV_PALETTE_YELLOW));
+    lv_obj_set_size(led_y, 8, 8);
+    lv_led_off(led_y);
+    obj_label = lv_label_create(obj);
+    lv_obj_set_grid_cell(obj_label, LV_GRID_ALIGN_CENTER, 4, 3,
+                         LV_GRID_ALIGN_CENTER, 1, 1);
+    lv_obj_center(obj_label);
+    lv_label_set_text(obj_label, TEXT_WARING);
 
     lv_obj_t *led_r = lv_led_create(obj);
-    lv_obj_set_grid_cell(led_r, LV_GRID_ALIGN_START, 3, 1,
+    lv_obj_set_grid_cell(led_r, LV_GRID_ALIGN_START, 8, 1,
                          LV_GRID_ALIGN_CENTER, 0, 1);
     lv_led_set_brightness(led_r, 255);
     lv_obj_set_style_shadow_spread(led_r, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_led_set_color(led_r, lv_palette_main(LV_PALETTE_RED));
-    lv_obj_set_size(led_r, 16, 16);
+    lv_obj_set_size(led_r, 8, 8);
+    lv_led_off(led_r);
+    obj_label = lv_label_create(obj);
+    lv_obj_set_grid_cell(obj_label, LV_GRID_ALIGN_CENTER, 7, 3,
+                         LV_GRID_ALIGN_CENTER, 1, 1);
+    lv_obj_center(obj_label);
+    lv_label_set_text(obj_label, TEXT_ERROR);
+
+    lv_obj_t *obj_btn = lv_btn_create(obj);
+    lv_obj_set_grid_cell(obj_btn, LV_GRID_ALIGN_STRETCH, 1, 9,
+                         LV_GRID_ALIGN_STRETCH, 0, 2);
+    lv_obj_set_style_radius(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_add_event_cb(obj_btn, btn_event_clicked, LV_EVENT_CLICKED, NULL);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * TITLE_BAR_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * TITLE_BAR_NUM);

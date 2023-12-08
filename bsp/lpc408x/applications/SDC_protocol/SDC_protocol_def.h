@@ -36,9 +36,18 @@ extern "C"
 
     enum SDC_STATUS
     {
-        SDC_OFFLINE = 0, /*!<断线  */
-        SDC_ABNORMALITY, /*!< 探头异常 */
-        SDC_REV, /*!< 未配置此功能 */
+        SDC_OFFLINE = 0,     /*!<断线  */
+        SDC_COM_ARMBNOALITY, /*!< 探头异常 */
+        SDC_REV,             /*!< 未配置此功能 */
+        SDC_WARING_I = 7,
+        SDC_WARING_II,
+        SDC_WARING_III,
+        SDC_WARING_IV,
+        SDC_PROBE_ABNORMALITY,    /*!< 探头异常 */
+        SDC_WARING_DATA_MUTATION, /*!< 数据突变 */
+        SDC_WARING_LIMIT_LOWER,   /*!< 下限报警 */
+        SDC_WARING_LIMIT_UP,      /*!< 上限报警 */
+        SDC_NORMAL,               /*!< NORMAL */
     };
     /**
      * @brief 模拟量传感器响应分站查询（0x90）
