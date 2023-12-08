@@ -78,7 +78,7 @@ static void time_update(lv_timer_t *ptime)
         }
         if (max != min)
         { // Adjust max and min if needed
-            uint32_t range = (max - min) * 0.3;
+            uint32_t range = (uint32_t)((max - min) * 0.3);
 
             if (max < 5000)
             {
@@ -227,13 +227,12 @@ lv_obj_t *ui_tabview_page_dashboard_create(lv_obj_t *tableview)
     lv_obj_set_style_pad_right(obj, 40, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Chart1, &ui_font_simfang16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
+    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE); /*!< 设置图表样式 */
     // lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_SCATTER);
     lv_chart_set_range(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 0, 10000);
     lv_chart_set_point_count(ui_Chart1, 125);
     lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 10, 2, true, 50);
     lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 5, 2, true, 50);
-    // lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_SECONDARY_Y, 10, 5, 5, 2, true, 50);
     lv_obj_set_style_size(ui_Chart1, 0, LV_PART_INDICATOR);
     lv_obj_add_event_cb(ui_Chart1, event_cb, LV_EVENT_ALL, NULL);
     lv_chart_series_t *ui_Chart1_series_1 = lv_chart_add_series(ui_Chart1, lv_palette_main(LV_PALETTE_GREEN), LV_CHART_AXIS_PRIMARY_Y);

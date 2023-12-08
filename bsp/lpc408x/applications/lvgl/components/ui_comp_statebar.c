@@ -31,6 +31,7 @@ lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     static lv_coord_t col_dsc[] = {LV_GRID_FR(50), LV_GRID_FR(50), LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
@@ -45,6 +46,7 @@ lv_obj_t *ui_stateBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_pad_bottom(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(cui_tips, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_side(obj, LV_BORDER_SIDE_NONE, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *cui_date = lv_label_create(obj);
     lv_obj_set_grid_cell(cui_date, LV_GRID_ALIGN_END, 1, 1,

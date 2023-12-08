@@ -15,7 +15,7 @@
 /*********************
  *      DEFINES
  *********************/
-
+// #define  LV_MOUSE_ENABEL
 /**********************
  *      TYPEDEFS
  **********************/
@@ -29,18 +29,19 @@ static void touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
 static bool touchpad_is_pressed(void);
 static void touchpad_get_xy(lv_coord_t *x, lv_coord_t *y);
 
+#ifdef LV_MOUSE_ENABEL
 static void mouse_init(void);
 static void mouse_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
 static bool mouse_is_pressed(void);
 static void mouse_get_xy(lv_coord_t *x, lv_coord_t *y);
-
+#endif
 static void keypad_init(void);
 static void keypad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
 static uint32_t keypad_get_key(void);
 
 static void encoder_init(void);
 static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
-static void encoder_handler(void);
+//static void encoder_handler(void);
 
 static void button_init(void);
 static void button_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
@@ -51,9 +52,12 @@ static bool button_is_pressed(uint8_t id);
  *  STATIC VARIABLES
  **********************/
 lv_indev_t *indev_touchpad;
+#ifdef LV_MOUSE_ENABEL
 lv_indev_t *indev_mouse;
-lv_indev_t *indev_keypad;
+#endif
 lv_indev_t *indev_encoder;
+lv_indev_t *indev_keypad;
+
 lv_indev_t *indev_button;
 
 static int32_t encoder_diff;
@@ -99,7 +103,7 @@ void lv_port_indev_init(void)
     /*------------------
      * Mouse
      * -----------------*/
-
+#ifdef LV_MOUSE_ENABEL
     /*Initialize your mouse if you have*/
     mouse_init();
     static lv_indev_drv_t mouse_indev_drv;
@@ -113,7 +117,7 @@ void lv_port_indev_init(void)
     lv_obj_t *mouse_cursor = lv_img_create(lv_scr_act());
     lv_img_set_src(mouse_cursor, LV_SYMBOL_HOME);
     lv_indev_set_cursor(indev_mouse, mouse_cursor);
-
+#endif
     /*------------------
      * Keypad
      * -----------------*/
@@ -222,8 +226,8 @@ static void touchpad_init(void)
             return;
         }
         hw_ad7843_calibration(g_screen_param.min_raw_x,
-                                   g_screen_param.min_raw_y,
-                                   g_screen_param.max_raw_x, g_screen_param.max_raw_y);
+                              g_screen_param.min_raw_y,
+                              g_screen_param.max_raw_x, g_screen_param.max_raw_y);
     }
 }
 /*Will be called by the library to read the touchpad*/
@@ -276,7 +280,7 @@ static void touchpad_get_xy(lv_coord_t *x, lv_coord_t *y)
 /*------------------
  * Mouse
  * -----------------*/
-
+#ifdef LV_MOUSE_ENABEL
 /*Initialize your mouse*/
 static void mouse_init(void)
 {
@@ -307,7 +311,7 @@ static bool mouse_is_pressed(void)
 
     return false;
 }
-
+#endif
 /*Get the x and y coordinates if the mouse is pressed*/
 static void mouse_get_xy(lv_coord_t *x, lv_coord_t *y)
 {
@@ -495,13 +499,13 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 }
 
 /*Call this function in an interrupt to process encoder events (turn, press)*/
-static void encoder_handler(void)
-{
-    /*Your code comes here*/
-
-    encoder_diff += 0;
-    encoder_state = LV_INDEV_STATE_REL;
-}
+//static void encoder_handler(void)
+//{
+//    /*Your code comes here*/
+//
+//    encoder_diff += 0;
+//    encoder_state = LV_INDEV_STATE_REL;
+//}
 
 /*------------------
  * Button

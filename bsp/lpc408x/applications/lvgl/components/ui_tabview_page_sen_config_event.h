@@ -325,10 +325,8 @@ static void table_event_pressed(lv_event_t *e)
             if (NULL == dd)
             {
                 lv_obj_t *parent = NULL;
-                bool auto_parent = false;
                 if (parent == NULL)
                 {
-                    auto_parent = true;
                     parent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
                     LV_ASSERT_MALLOC(parent);
                     lv_obj_class_init_obj(parent);

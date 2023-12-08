@@ -60,6 +60,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     static lv_coord_t col_dsc[] = {LV_GRID_FR(1), 16, 16, 16, LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(obj, col_dsc, row_dsc);
@@ -131,4 +132,3 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
 
     return obj;
 }
-
