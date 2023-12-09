@@ -105,7 +105,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
     lv_label_set_text(ui_title, "");
     lv_obj_set_style_text_color(ui_title, lv_color_hex(0x00B2B2), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_title, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_title, &ui_font_heiti24, (lv_part_t)LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_title, &ui_font_simhei24, (lv_part_t)LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *led_g = lv_led_create(obj);
     lv_obj_set_grid_cell(led_g, LV_GRID_ALIGN_START, 2, 1,

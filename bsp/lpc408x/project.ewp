@@ -3463,15 +3463,6 @@
     <group>
         <name>LVGL-SquareLine</name>
         <file>
-            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_montserratMedium_12.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_montserratMedium_16.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\applications\lvgl\fonts\lv_font_simhei_16.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\packages\LVGL-v8.3.5\env_support\rt-thread\squareline\lv_ui_entry.c</name>
         </file>
         <file>
@@ -3502,6 +3493,9 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_statebar.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_status.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_tabview_main.c</name>
         </file>
         <file>
@@ -3511,10 +3505,10 @@
             <name>$PROJ_DIR$\applications\lvgl\components\ui_comp_WIFI.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_heiti24.c</name>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_simfang16.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_simfang16.c</name>
+            <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_simhei24.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\applications\lvgl\fonts\ui_font_Small_Font.c</name>
