@@ -19,8 +19,8 @@ extern "C"
 #include "language.h" /*!< 多国语言管理 */
 
   LV_IMG_DECLARE(ui_img_gltech_png); // assets\gltech.png
-  LV_FONT_DECLARE(ui_font_simhei24);
   LV_FONT_DECLARE(ui_font_simfang16);
+  LV_FONT_DECLARE(ui_font_simhei24);
 
   extern uint32_t LV_EVENT_NOTIFY_PAGE_CHANGE; /*!< page页面发生了切换 */
   extern uint32_t LV_EVENT_NOTIFY_PAGE_ACT;    /*!< page页面被激活 */

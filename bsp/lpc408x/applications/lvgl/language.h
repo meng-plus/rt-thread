@@ -60,6 +60,7 @@
 #define TEXT_SEND_MSG LANGUAGE("sendMsg", "发送数据")
 #define TEXT_GET_NAME LANGUAGE("getName", "获取名称")
 #define TEXT_GET_IP LANGUAGE("getIp", "获取ip")
+#define TEXT_GET_ADDR LANGUAGE("getIp", "获取地址")
 #define TEXT_WORK_MODE LANGUAGE("", "工作状态")
 #define TEXT_CAL_PUMP LANGUAGE("", "测量泵")
 #define TEXT_GAS_TANK_PRESSURE LANGUAGE("", "气罐压力")
@@ -70,5 +71,6 @@
 #define TEXT_MEAS LANGUAGE("MEAS", "测量")
 #define TEXT_RUN LANGUAGE("run", "运行")
 #define TEXT_WARING LANGUAGE("waring", "警告")
+#define TEXT_STATUS_MSG LANGUAGE("status messages", "状态消息")
 
 #endif

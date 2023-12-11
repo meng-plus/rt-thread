@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include "system_var.h"
 #include "ui_comp_edit.h"
+#include "ui_comp_status.h"
+
 uint32_t LV_EVENT_SET_TITLE;
 uint32_t LV_EVENT_SET_LED_MODE;
 
@@ -66,6 +68,8 @@ static void btn_event_clicked(lv_event_t *e)
     // enum UI_COMP_DEBUG comp_id = (enum UI_COMP_DEBUG)((uint32_t)lv_event_get_user_data(e));
     if (obj && code == LV_EVENT_CLICKED)
     {
+        lv_obj_t *obj_status = ui_comp_status_create(NULL);
+
     }
 }
 static void lv_event_set_title(lv_event_t *e)

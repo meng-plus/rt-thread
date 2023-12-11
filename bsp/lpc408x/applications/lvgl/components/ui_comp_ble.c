@@ -145,7 +145,7 @@ lv_obj_t *ui_comp_ble_set_create(lv_obj_t *parent)
     lv_obj_set_grid_cell(btn_getIp, LV_GRID_ALIGN_STRETCH, 2, 1,
                          LV_GRID_ALIGN_STRETCH, 3, 1);
     label = lv_label_create(btn_getIp);
-    lv_label_set_text(label, TEXT_GET_IP);
+    lv_label_set_text(label, TEXT_GET_ADDR);
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_event_cb(btn_getIp, btn_event_clicked, LV_EVENT_CLICKED, (void *)BLE_BTN_GET_IP);
 
