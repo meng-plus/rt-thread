@@ -61,15 +61,14 @@ static void update_led(void *parent, int32_t bar_value)
     //     lv_led_toggle(led_r);
     // }
 }
-static void btn_event_clicked(lv_event_t *e)
+static void btn_event_long_pressed(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
     // enum UI_COMP_DEBUG comp_id = (enum UI_COMP_DEBUG)((uint32_t)lv_event_get_user_data(e));
-    if (obj && code == LV_EVENT_CLICKED)
+    if (obj && code == LV_EVENT_LONG_PRESSED)
     {
         lv_obj_t *obj_status = ui_comp_status_create(NULL);
-
     }
 }
 static void lv_event_set_title(lv_event_t *e)
@@ -162,7 +161,7 @@ lv_obj_t *ui_titleBar_create(lv_obj_t *comp_parent)
     lv_obj_set_style_shadow_opa(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_spread(obj_btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_add_event_cb(obj_btn, btn_event_clicked, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_event_cb(obj_btn, btn_event_long_pressed, LV_EVENT_LONG_PRESSED, NULL);
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * TITLE_BAR_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * TITLE_BAR_NUM);

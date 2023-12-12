@@ -72,5 +72,7 @@
 #define TEXT_RUN LANGUAGE("run", "运行")
 #define TEXT_WARING LANGUAGE("waring", "警告")
 #define TEXT_STATUS_MSG LANGUAGE("status messages", "状态消息")
+#define TEXT_INDEX LANGUAGE("index", "序号")
+#define TEXT_ERR_MSG LANGUAGE(" description", "描述")
 
 #endif
