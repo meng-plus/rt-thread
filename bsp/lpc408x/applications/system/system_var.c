@@ -12,6 +12,7 @@
 #include "system_var.h"
 #include "flashdb.h"
 #include <stdlib.h>
+#include "rt_err_code.h"
 varWork_t g_var_work = {0};
 product_param_t g_prod_param;
 sensor_param_t g_sensor_param;
@@ -154,7 +155,15 @@ uint8_t var_save(void *param)
         fdb_blob_make(&blob, &g_sensor_param, sizeof(sensor_param_t) - (10 - g_sensor_param.sensor_num) * sizeof(sensor_config_t));
         err = fdb_kv_set_blob(&kj428_kvdb, param_table[SENSOR_PARAM_ID].name, &blob);
     }
-
+    error_code_t *ptr = er_code_find_system_var();
+    if (err != FDB_NO_ERR)
+    {
+        error_code_set_flag(ptr);
+    }
+    else
+    {
+        error_code_clear_flag(ptr);
+    }
     return err;
 }
 

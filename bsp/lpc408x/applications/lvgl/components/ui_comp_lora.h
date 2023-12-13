@@ -19,7 +19,6 @@ extern "C"
 #endif
     enum UI_COMP_LORA
     {
-        LORA_LABLE_EN,
         LORA_SW_SEND,
         LORA_LABEL_MSG,
         LORA_BTN_EXIT,

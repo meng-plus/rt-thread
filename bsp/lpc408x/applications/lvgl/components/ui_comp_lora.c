@@ -42,20 +42,7 @@ static void lv_event_value_update(lv_event_t *e)
     uint32_t mask = (uint32_t)lv_event_get_param(e);
     if (code == LV_EVENT_NOTIFY_UPDATE)
     {
-        lv_obj_t *sub_obj = ui_comp_get_child(obj, LORA_LABLE_EN);
-        if (sub_obj && (mask & (0x01 << LORA_LABLE_EN)))
-        {
-            lv_label_set_text(sub_obj, loradata ? TEXT_SEND : TEXT_REC);
-            sub_obj = ui_comp_get_child(obj, LORA_SW_SEND);
-            if (loradata)
-            {
-                lv_obj_add_state(sub_obj, LV_STATE_CHECKED);
-            }
-            else
-            {
-                lv_obj_clear_state(sub_obj, LV_STATE_CHECKED);
-            }
-        }
+        lv_obj_t *sub_obj;
         sub_obj = ui_comp_get_child(obj, LORA_LABEL_MSG);
         if (sub_obj && (mask & (0x01 << LORA_LABEL_MSG)))
         {
@@ -91,9 +78,10 @@ static void lv_event_value_update(lv_event_t *e)
                 strbuff[offset] = '\0';
                 lv_label_set_text(sub_obj, strbuff);
             }
-            else
+            sub_obj = ui_comp_get_child(obj, LORA_SW_SEND);
+            if (sub_obj && (mask & (0x01 << LORA_SW_SEND)))
             {
-                // lv_label_set_text(sub_obj, "");
+                lv_dropdown_set_selected(obj, loradata != 0 ? 1 : 0);
             }
         }
     }
@@ -131,7 +119,7 @@ static void child_event_value_changed(lv_event_t *e)
         {
         case LORA_SW_SEND:
         {
-            if (lv_obj_has_state(obj, LV_STATE_CHECKED))
+            if (lv_dropdown_get_selected(obj) == 1)
             {
                 loradata = 1;
             }
@@ -139,7 +127,6 @@ static void child_event_value_changed(lv_event_t *e)
             {
                 loradata = 0;
             }
-            lv_event_send(lv_obj_get_parent(obj), LV_EVENT_NOTIFY_UPDATE, (void *)(0x01 << LORA_LABLE_EN));
         }
         break;
         }
@@ -173,11 +160,20 @@ lv_obj_t *ui_comp_lora_set_create(lv_obj_t *parent)
     lv_obj_set_grid_cell(label_sw, LV_GRID_ALIGN_STRETCH, 1, 1,
                          LV_GRID_ALIGN_CENTER, 5, 1);
     lv_obj_align(label_sw, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(label_sw, TEXT_WORK_MODE);
 
-    lv_obj_t *btn_sw = lv_switch_create(obj);
-    lv_obj_set_grid_cell(btn_sw, LV_GRID_ALIGN_STRETCH, 2, 1,
+    lv_obj_t *drop_sw = lv_dropdown_create(obj);
+    lv_obj_set_grid_cell(drop_sw, LV_GRID_ALIGN_STRETCH, 2, 1,
                          LV_GRID_ALIGN_STRETCH, 5, 1);
-    lv_obj_add_event_cb(btn_sw, child_event_value_changed, LV_EVENT_VALUE_CHANGED, (void *)LORA_SW_SEND);
+    uint32_t offset = 0;
+    char buff[16];
+    offset += sprintf(buff + offset, "%s\n", TEXT_REC);
+    offset += sprintf(buff + offset, "%s\n", TEXT_SEND);
+    buff[offset - 1] = '\0';
+    lv_dropdown_set_options(drop_sw, buff);
+    lv_obj_set_style_text_font(lv_dropdown_get_list(drop_sw), lv_obj_get_style_text_font(drop_sw, LV_PART_MAIN | LV_STATE_DEFAULT), LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(drop_sw, child_event_value_changed, LV_EVENT_VALUE_CHANGED, (void *)LORA_SW_SEND);
 
     lv_obj_t *btn_return = lv_btn_create(obj);
     lv_obj_set_grid_cell(btn_return, LV_GRID_ALIGN_STRETCH, 1, 2,
@@ -189,8 +185,7 @@ lv_obj_t *ui_comp_lora_set_create(lv_obj_t *parent)
 
     lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * LORA_NUM);
     lv_memset_00(children, sizeof(lv_obj_t *) * LORA_NUM);
-    children[LORA_LABLE_EN] = label_sw;
-    children[LORA_SW_SEND] = btn_sw;
+    children[LORA_SW_SEND] = drop_sw;
     children[LORA_LABEL_MSG] = label_msg;
 
     lv_obj_add_event_cb(obj, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);

@@ -358,6 +358,7 @@
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\widgets\meter</state>
                     <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\widgets\span</state>
+                    <state>$PROJ_DIR$\applications\error_code</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\layouts\grid</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\draw</state>
                     <state>$PROJ_DIR$\drivers\key_Ird</state>
@@ -1524,6 +1525,7 @@
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\widgets\meter</state>
                     <state>$PROJ_DIR$\..\..\libcpu\arm\common</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\widgets\span</state>
+                    <state>$PROJ_DIR$\applications\error_code</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\extra\layouts\grid</state>
                     <state>$PROJ_DIR$\packages\LVGL-v8.3.5\src\draw</state>
                     <state>$PROJ_DIR$\drivers\key_Ird</state>
@@ -2594,6 +2596,15 @@
         </file>
         <file>
             <name>$PROJ_DIR$\applications\DTS\transport_DTS.c</name>
+        </file>
+    </group>
+    <group>
+        <name>error_code</name>
+        <file>
+            <name>$PROJ_DIR$\applications\error_code\error_code.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\error_code\rt_err_code_init.c</name>
         </file>
     </group>
     <group>

@@ -6,12 +6,13 @@
 #define LOG_TAG __FILE__
 #define LOG_LVL LOG_LVL_DBG
 #include "rtdbg.h"
+
+#include "ui_comp_status_event.h"
 lv_obj_t *win = NULL;
 static void event_handler(lv_event_t *e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
     uint8_t id = lv_obj_get_index(obj);
-    LOG_I("Button %d clicked", id);
     if (3 == id)
     {
         lv_obj_del(win);
@@ -58,27 +59,6 @@ static void draw_part_event_cb(lv_event_t *e)
     }
 }
 
-static void lv_event_notify_page(lv_event_t *e)
-{
-    /*!< 通知发生了页面也换，可能不是活动状态，将关闭刷新功能 */
-    uint32_t code = lv_event_get_code(e);
-    lv_obj_t *obj = lv_event_get_target(e);
-    if (code == LV_EVENT_NOTIFY_PAGE_ACT)
-    {
-        lv_event_send(obj, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
-    }
-    if (code == LV_EVENT_NOTIFY_PAGE_CHANGE)
-    {
-    }
-}
-
-static void lv_event_value_update(lv_event_t *e)
-{
-    lv_obj_t *obj = lv_event_get_target(e);
-    // 更新设备状态
-
-
-}
 lv_obj_t *ui_comp_status_create(lv_obj_t *obj)
 {
     win = lv_win_create(lv_scr_act(), 40);
@@ -111,6 +91,7 @@ lv_obj_t *ui_comp_status_create(lv_obj_t *obj)
                          LV_GRID_ALIGN_STRETCH, 1, 1);
     lv_obj_align(tab_obj, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_style_outline_width(tab_obj, 2, LV_PART_ITEMS);
+    lv_obj_set_scroll_dir(tab_obj, LV_DIR_VER);
     lv_obj_add_event_cb(tab_obj, draw_part_event_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
 
     lv_table_set_row_cnt(tab_obj, 2); /*Not required but avoids a lot of memory reallocation lv_table_set_set_value*/
@@ -122,11 +103,20 @@ lv_obj_t *ui_comp_status_create(lv_obj_t *obj)
     lv_table_set_cell_value(tab_obj, 0, 0, TEXT_INDEX);
     lv_table_set_cell_value(tab_obj, 0, 1, TEXT_ERROR_CODE);
     lv_table_set_cell_value(tab_obj, 0, 2, TEXT_TIME);
-    lv_table_set_cell_value(tab_obj, 0, 3, TEXT_ERR_MSG);
-    lv_table_set_col_width(tab_obj, 0, 16 * 6);
-    lv_table_set_col_width(tab_obj, 1, 16 * 8);
-    lv_table_set_col_width(tab_obj, 2, 16 * 10);
-    lv_table_set_col_width(tab_obj, 3, 16 * 20); // 16 * 20
+    lv_table_set_cell_value(tab_obj, 0, 3, TEXT_ERR_CNT);
+    lv_table_set_cell_value(tab_obj, 0, 4, TEXT_ERR_MSG);
+    lv_table_set_col_width(tab_obj, 0, 16 * 4);
+    lv_table_set_col_width(tab_obj, 1, 16 * 6);
+    lv_table_set_col_width(tab_obj, 2, 16 * 12);
+    lv_table_set_col_width(tab_obj, 3, 16 * 8);
+    lv_table_set_col_width(tab_obj, 4, 16 * 18); // 16 * 20
+
+    lv_obj_t **children = lv_mem_alloc(sizeof(lv_obj_t *) * STATUS_NUM);
+    lv_memset_00(children, sizeof(lv_obj_t *) * STATUS_NUM);
+    children[STATUS_TABLE] = tab_obj;
+
+    lv_obj_add_event_cb(win, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
+    lv_obj_add_event_cb(win, del_component_child_event_cb, LV_EVENT_DELETE, children);
 
     lv_timer_t *time_data_update = lv_timer_create(time_update, 1000, win);
 
