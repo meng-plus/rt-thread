@@ -19,12 +19,13 @@ extern "C"
 #endif
     enum UI_COMP_BLE
     {
+        BLE_LABEL_MSG,
         BLE_SW_ENABLE,
         BLE_BTN_GET_NAME,
         BLE_BTN_GET_IP,
         BLE_SW_SEND_MSG,
         // BLE_EDIT_ID,
-        BLE_LABEL_MSG,
+
         BLE_BTN_EXIT,
         // BLE_KB, /*!< 键盘 */
         BLE_NUM,

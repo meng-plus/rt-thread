@@ -104,7 +104,7 @@ static void child_event_value_changed(lv_event_t *e)
             }
             else
             {
-                WIFICloseStep = 0;
+                WIFISend_Flag = 0;
             }
             break;
         }

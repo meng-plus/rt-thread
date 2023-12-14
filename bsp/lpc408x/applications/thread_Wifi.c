@@ -314,10 +314,13 @@ static void WIFISendTask(void)
 
 	if (WIFISend_Flag == 2)
 	{
-		if ((uint32_t)(rt_tick_get_millisecond() - NetSend_Timer) < 500)
+		if ((uint32_t)(rt_tick_get_millisecond() - NetSend_Timer) < 1000)
 			return;
-		Wifi_PutString("Wifi Communication \r\n");
-		NetComm_Timer = rt_tick_get_millisecond();
+		Wifi_PutString("Wifi Communication\r\n");
+		NetSend_Timer = rt_tick_get_millisecond();
+                
+                Wifi_PutString("\\0");
+                WIFISend_Flag=1;
 	}
 }
 

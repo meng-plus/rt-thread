@@ -19,12 +19,12 @@ extern "C"
 #endif
     enum UI_COMP_WIFI
     {
+        WIFI_LABEL_MSG,
         WIFI_SW_ENABLE,
         WIFI_BTN_GET_NAME,
         WIFI_BTN_GET_IP,
         WIFI_SW_SEND_MSG,
         WIFI_EDIT_ID,
-        WIFI_LABEL_MSG,
         WIFI_BTN_EXIT,
         WIFI_KB, /*!< 键盘 */
         WIFI_NUM,
