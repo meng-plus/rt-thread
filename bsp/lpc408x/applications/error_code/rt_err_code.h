@@ -19,6 +19,8 @@ extern "C"
 #endif
 
     error_code_t *er_code_find_system_var();
+    error_code_t *er_code_find_DTS();
+    error_code_t *rt_err_code_find(uint32_t code);
 #ifdef __cplusplus
 }
 #endif

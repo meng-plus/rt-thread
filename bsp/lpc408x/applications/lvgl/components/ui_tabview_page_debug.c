@@ -35,7 +35,7 @@ lv_obj_t *ui_tabview_page_debug_create(lv_obj_t *tableview)
         lv_obj_set_size(led_input, 32, 32);
         children[i] = led_input;
     }
-    for (size_t i = DEBUG_OUT_A; i <= DEBUG_PUMP_AIR; i++)
+    for (size_t i = DEBUG_OUT_A; i < DEBUG_PUMP_AIR; i++)
     {
         uint8_t idx = i - DEBUG_OUT_A;
         lv_obj_t *btn_out = lv_btn_create(obj);

@@ -2604,7 +2604,7 @@
             <name>$PROJ_DIR$\applications\error_code\error_code.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\applications\error_code\rt_err_code_init.c</name>
+            <name>$PROJ_DIR$\applications\error_code\rt_err_code.c</name>
         </file>
     </group>
     <group>

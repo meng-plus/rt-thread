@@ -124,7 +124,7 @@ void error_code_clear_flag(error_code_t *obj)
     obj->cnt = 0; // 设置错误结束标志
 }
 
-uint8_t error_code_is_error(error_code_t *obj)
+uint8_t error_code_is_error(const error_code_t *obj)
 {
     // 检查是否发生错误
     return obj->cnt_max <= obj->cnt;

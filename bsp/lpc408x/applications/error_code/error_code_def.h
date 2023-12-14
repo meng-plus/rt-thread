@@ -23,12 +23,12 @@ extern "C"
         error_code_t *prev; /*!< if NULL is root */
         error_code_t *next;
 
-        uint32_t code;      /*!< 错误码 */
-        uint16_t cnt;       /*!< 累计错误计数 */
-        uint16_t cnt_max;   /*!< 报错计数 cnt >cnt_max 则为真正的报错*/
+        uint32_t code;    /*!< 错误码 */
+        uint16_t cnt;     /*!< 累计错误计数 */
+        uint16_t cnt_max; /*!< 报错计数 cnt >cnt_max 则为真正的报错*/
         uint16_t err_cnt; /*!< 实际发生报错的次数统计 */
-        uint32_t err_st;    /*!< 报错开始时间 */
-        uint32_t err_ed;    /*!< 报错结束时间 */
+        uint32_t err_st;  /*!< 报错开始时间 */
+        uint32_t err_ed;  /*!< 报错结束时间 */
 
         const char *description; /*!< 错误描述 */
     };

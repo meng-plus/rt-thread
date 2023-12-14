@@ -9,6 +9,30 @@ editors: mengplus
 
 设备故障码统一管理框架，为解决设备运行过程由于外界干扰等问题，导致部分协作组件出现异常无法工作问题，设计故障管理框架，方便在开发过程中，增减故障信息标签，便于友好展示与记录。
 
+## 功能规划
+
+1. C99语言规划，无内存申请，兼容更多平台
+
+2. 故障码动态注册与注销，避免浪费资源(晚绑定)
+
+3. 支持故障时间和次数计数
+4. 无平台限制，结构简约
+5. 所有注册集中在一个文件，方便维护（工厂模式）
+6. 故障统计功能，可以记录故障次数和时间点
+
+### 存在问题
+
+- [ ] 未进行结构体指针保护，有被非法操作风险
+- [ ] 无线程安全
+- [ ] 时间接口调用了time.h，使用需要修复这个接口，或者修改为系统tick
+- [ ] 工程配置功能
+
+### 未规划功能
+
+- [ ] 故障分级，故障分组
+- [ ] 线程安全
+- [ ] 故障信息主动推送功能(订阅模式)
+
 
 ## 文件目录
 
@@ -36,8 +60,8 @@ typedef struct _ERROR_CODE_DEF error_code_t;
         error_code_t *next;
 
         uint32_t code;      /*!< 错误码 */
-        uint16_t cnt;       /*!< 累计错误计数 */
-        uint16_t cnt_max;   /*!< 报错计数 cnt >cnt_max 则为真正的报错*/
+        uint16_t cnt;       /*!< 连续错误计数 */
+        uint16_t cnt_max;   /*!< 最大报错计数 cnt >cnt_max 则为真正的报错*/
         uint16_t cnt_tolal; /*!< 实际发生报错的次数统计 */
         uint32_t err_st;    /*!< 报错开始时间 */
         uint32_t err_ed;    /*!< 报错结束时间 */
@@ -76,13 +100,13 @@ typedef struct _ERROR_CODE_DEF error_code_t;
    // 示例代码
    error_code_t er_code_obj = {.code = 305, .description = "EEPRom 异常"};
    uint16_t registration_result = error_code_register(&er_code_obj);
-   
+
    if (registration_result == 0) {
        // 注册成功
    } else {
        // 注册失败，可能是错误码重复等原因
    }
-   
+
    ```
 
 3. 新增异常
@@ -132,5 +156,5 @@ typedef struct _ERROR_CODE_DEF error_code_t;
    }
    ```
 
-   
+
 

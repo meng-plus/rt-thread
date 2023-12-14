@@ -66,7 +66,7 @@ extern "C"
      * @param obj 错误码对象
      * @return 发生错误返回非零，否则返回0
      */
-    uint8_t error_code_is_error(error_code_t *obj);
+    uint8_t error_code_is_error(const error_code_t *obj);
 
     /**
      * @brief 根据错误码查找对应的错误码对象

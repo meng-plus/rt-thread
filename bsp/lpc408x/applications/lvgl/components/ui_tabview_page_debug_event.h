@@ -62,7 +62,7 @@ static void lv_event_value_update(lv_event_t *e)
                 lv_led_on(sub_obj);
             }
     }
-    for (size_t i = DEBUG_OUT_A; i <= DEBUG_PUMP_AIR; i++)
+    for (size_t i = DEBUG_OUT_A; i < DEBUG_PUMP_AIR; i++)
     {
         sub_obj = ui_comp_get_child(obj, i);
         if (sub_obj && (mask & (1 << i)))

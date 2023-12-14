@@ -10,22 +10,10 @@
 #include "system_var.h"
 #include "ui_comp_edit.h"
 #include "ui_comp_status.h"
+#include "rt_err_code.h"
 
 uint32_t LV_EVENT_SET_TITLE;
 uint32_t LV_EVENT_SET_LED_MODE;
-
-uint8_t getsensorSat(enum SDC_STATUS SenSat)
-{
-    uint8_t num = 0;
-    for (size_t i = 0; i < g_sensor_param.sensor_num; i++)
-    {
-        if (g_var_work.Sensor[i].SenSat == SenSat)
-        {
-            num++;
-        }
-    }
-    return num;
-}
 
 static void update_led(void *parent, int32_t bar_value)
 {
@@ -46,9 +34,18 @@ static void update_led(void *parent, int32_t bar_value)
     {
         lv_led_toggle(led_g);
     }
-    uint8_t num = getsensorSat(SDC_NORMAL);
-    if ((g_var_work.dts && g_var_work.dts->offline) &&
-        (num != g_sensor_param.sensor_num))
+    // 示例代码
+    error_code_t *current_error = error_code_get_list();
+    uint8_t error_cnt = 0;
+    while (current_error != NULL)
+    {
+        if (error_code_is_error(current_error))
+        {
+            error_cnt++;
+        }
+        current_error = error_code_get_next_list(current_error);
+    }
+    if (error_cnt)
     {
         lv_led_on(led_r);
     }

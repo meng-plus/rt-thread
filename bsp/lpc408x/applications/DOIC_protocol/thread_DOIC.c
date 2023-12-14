@@ -12,7 +12,7 @@
 #include <rtdevice.h>
 #include "system_var.h"
 #include "thread_DOIC.h"
-
+#include "rt_err_code.h"
 thread_doic_t *pthread_doic;
 
 static rt_err_t finsh_rx_ind(rt_device_t dev, rt_size_t size)
@@ -109,10 +109,10 @@ void thread_doic_entry(void *param)
              */
             rt_tick_t tick_cur;
             tick_cur = rt_tick_get_millisecond();
-            if (g_var_work.Sensor_tick_last[idx] &&
-                (tick_cur - g_var_work.Sensor_tick_last[idx] > 1000))
+            if (tick_cur - g_var_work.Sensor_tick_last[idx] > 1000)
             {
                 g_var_work.Sensor[idx].SenSat = SDC_OFFLINE;
+                error_code_set_flag(rt_err_code_find(g_sensor_param.sen_config[idx].type));
             }
         }
         uint16_t sdc_len = 0;

@@ -105,7 +105,7 @@ lv_obj_t *ui_comp_status_create(lv_obj_t *obj)
     lv_table_set_cell_value(tab_obj, 0, 2, TEXT_TIME);
     lv_table_set_cell_value(tab_obj, 0, 3, TEXT_ERR_CNT);
     lv_table_set_cell_value(tab_obj, 0, 4, TEXT_ERR_MSG);
-    lv_table_set_col_width(tab_obj, 0, 16 * 4);
+    lv_table_set_col_width(tab_obj, 0, 16 * 6);
     lv_table_set_col_width(tab_obj, 1, 16 * 6);
     lv_table_set_col_width(tab_obj, 2, 16 * 12);
     lv_table_set_col_width(tab_obj, 3, 16 * 8);
@@ -123,5 +123,6 @@ lv_obj_t *ui_comp_status_create(lv_obj_t *obj)
     /** add user event */
     lv_obj_add_event_cb(win, del_component_timer_event_cb, LV_EVENT_DELETE, time_data_update);
 
+    lv_event_send(win, LV_EVENT_NOTIFY_UPDATE, (void *)-1);
     return obj;
 }

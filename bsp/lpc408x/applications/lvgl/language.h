@@ -76,5 +76,6 @@
 #define TEXT_STATUS_MSG LANGUAGE("status messages", "状态消息")
 #define TEXT_INDEX LANGUAGE("index", "序号")
 #define TEXT_ERR_MSG LANGUAGE(" description", "描述")
+#define TEXT_DTS_ERROR LANGUAGE(" DTS error", "测温主机通信异常")
 
 #endif

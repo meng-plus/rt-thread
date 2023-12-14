@@ -9,7 +9,7 @@
  *
  */
 #include "Session_DTS.h"
-
+#include "rt_err_code.h"
 #define LOG_TAG __FILE__
 #define LOG_LVL LOG_LVL_DBG
 #include "rtdbg.h"
@@ -62,8 +62,8 @@ int32_t dts_chn_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
-            //session_dts_change(se_handle, DTS_SYS);
-                return 0;
+            // session_dts_change(se_handle, DTS_SYS);
+            return 0;
         }
     }
     session_dts_change(se_handle, DTS_PART);
@@ -108,7 +108,7 @@ int32_t dts_part_res(session_master_t *se_handle, uint8_t *buff, uint16_t len)
             LOG_W("Receive failed.");
             if (rc != -1)
                 LOG_W("Error code:%d", -128 - rc);
-            //session_dts_change(se_handle, DTS_SYS);
+            // session_dts_change(se_handle, DTS_SYS);
             return rc;
         }
         pdts->part_idx += pdts->part_num;
@@ -144,9 +144,10 @@ int32_t session_dts_tick(session_master_t *se_handle)
         if (0 == session_dts_response(se_handle, se_handle->msg_id))
         {
             pdts->update_flag = 1;
-            if(se_handle->msg_id == DTS_PART)
+            if (se_handle->msg_id == DTS_PART)
             {
                 pdts->offline = 0;
+                error_code_clear_flag(er_code_find_DTS());
             }
         }
     }
@@ -154,27 +155,28 @@ int32_t session_dts_tick(session_master_t *se_handle)
     {
         session_dts_change(se_handle, DTS_SYS);
         pdts->offline++;
+        error_code_set_flag(er_code_find_DTS());
     }
     return res;
 }
 void session_dts_change(session_master_t *se_handle, DTS_MSG_ID_E id)
 {
     se_handle->msg_id = id;
-    //thread_dts_t *pdts = (thread_dts_t *)se_handle;
+    // thread_dts_t *pdts = (thread_dts_t *)se_handle;
     switch (id)
     {
     case DTS_SYS: /*!< 获取设备信息 */
-        //if (pdts)
-            //memset(&pdts->data.system, 0, sizeof(pdts->data.system));
+        // if (pdts)
+        // memset(&pdts->data.system, 0, sizeof(pdts->data.system));
         break;
     case DTS_CHN: /*!< 读取通道信息 */
-        //if (pdts)
-            // memset(pdts->data.channel, 0, sizeof(pdts->data.channel));
-            break;
+                  // if (pdts)
+        //  memset(pdts->data.channel, 0, sizeof(pdts->data.channel));
+        break;
     case DTS_PART: /*!< 读取分区数据 */
-        //if (pdts)
-            // memset(pdts->data.partition, 0, sizeof(pdts->data.partition));
-            break;
+                   // if (pdts)
+        //  memset(pdts->data.partition, 0, sizeof(pdts->data.partition));
+        break;
 
     default:
         break;
