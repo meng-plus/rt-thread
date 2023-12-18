@@ -399,7 +399,7 @@ static void WIFISendTask(void)
 {
 	if (WIFISend_Flag == 1)
 	{
-		uint16_t len = showData_fmt(pthread_Wifi->Wifi_send_buf, sizeof(pthread_Wifi->Wifi_send_buf));
+		uint16_t len = showData_fmt((char *)pthread_Wifi->Wifi_send_buf, sizeof(pthread_Wifi->Wifi_send_buf));
 		char buff[32];
 		snprintf(buff, sizeof(buff), "AT+CIPSENDEX=0,%d\r\n", len);
 		Wifi_PutString(buff);
@@ -411,7 +411,7 @@ static void WIFISendTask(void)
 	{
 		if ((uint32_t)(rt_tick_get_millisecond() - NetSend_Timer) < 1000)
 			return;
-		Wifi_PutString(pthread_Wifi->Wifi_send_buf);
+		Wifi_PutString((char *)pthread_Wifi->Wifi_send_buf);
 		NetSend_Timer = rt_tick_get_millisecond();
 
 		Wifi_PutString("\\0");
@@ -575,13 +575,15 @@ static void BLESendTask(void)
 	}
 	if (BLESend_Flag == 1)
 	{
-		len = showData_fmt(pthread_Wifi->Wifi_send_buf, sizeof(pthread_Wifi->Wifi_send_buf));
+		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 1000)
+			return;
+		len = showData_fmt((char *)pthread_Wifi->Wifi_send_buf, sizeof(pthread_Wifi->Wifi_send_buf));
 		offset = 0;
 		BLESend_Flag = 2;
 	}
 	else if (BLESend_Flag == 2)
 	{
-		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 500)
+		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 100)
 			return;
 		if (len > offset)
 		{
@@ -599,9 +601,9 @@ static void BLESendTask(void)
 	}
 	else if (BLESend_Flag == 3)
 	{
-		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 500)
+		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 100)
 			return;
-		esp32_PutStringBuff(pthread_Wifi->Wifi_send_buf + offset, sendlen);
+		esp32_PutStringBuff((char *)pthread_Wifi->Wifi_send_buf + offset, sendlen);
 		offset += sendlen;
 		BlueComm_Timer = rt_tick_get_millisecond();
 		BLESend_Flag = 2;
