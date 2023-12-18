@@ -151,7 +151,7 @@ lv_obj_t *ui_comp_wifi_set_create(lv_obj_t *parent)
     /////////////////////////////////////////////////////////
     lv_obj_t *label_msg = lv_label_create(obj);
     lv_obj_set_grid_cell(label_msg, LV_GRID_ALIGN_STRETCH, 0, 1,
-                         LV_GRID_ALIGN_STRETCH, 0, 4);
+                         LV_GRID_ALIGN_STRETCH, 0, 6);
     lv_obj_align(label_msg, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_label_set_text(label_msg, "");
 

@@ -25,13 +25,13 @@ extern "C"
         rt_device_t device;
 #endif
         rt_thread_t tid;
-
-        uint8_t status;          /*!< 0: stop 1:init 2:read 3:error */
+        uint8_t workmode;        /*!< 0:NONE 1:WIFI 2:BLE */
+        uint8_t status;          /*!< 0: ready 1:wait connet 2:connect ,3:send data*/
         uint8_t offline;         /*!< 1: 掉线*/
         uint8_t update_flag : 1; /*!< 1: 数据有刷新通知*/
 
         /** modbus config */
-        uint8_t Wifi_send_buf[256];
+        uint8_t Wifi_send_buf[512];
         uint8_t Wifi_read_buf[256];
         uint32_t read_len;
         uint32_t delayms; /*!< 刷新周期 0为最快 */

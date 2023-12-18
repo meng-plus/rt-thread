@@ -92,8 +92,8 @@ static const char g_systemCopyright[] = "Zhengzhou GL. TECH Co.,Ltd";
 ** 输入参数: port			电源模块接口
 ** 输出参数: 无
 ** 返    回: 电源模块状态。
-				0		关闭
-				1		打开
+                0		关闭
+                1		打开
 **********************************************************************************
 */
 
@@ -106,12 +106,11 @@ static const char g_systemCopyright[] = "Zhengzhou GL. TECH Co.,Ltd";
 ==================================================================*/
 void Lora_Power_Ctrl(uint8_t state)
 {
-  if (state == 0)
-	LPC_GPIO2->CLR = (1ul << 21);
-	else
-	LPC_GPIO2->SET = (1ul << 21);
+    if (state == 0)
+        LPC_GPIO2->CLR = (1ul << 21);
+    else
+        LPC_GPIO2->SET = (1ul << 21);
 }
-
 
 /*
 *********************************************************************************
@@ -120,18 +119,17 @@ void Lora_Power_Ctrl(uint8_t state)
 ** 输入参数: port			电源模块接口
 ** 输出参数: 无
 ** 返    回: 电源模块状态。
-				0		关闭
-				1		打开
+                0		关闭
+                1		打开
 **********************************************************************************
 */
 uint8_t LoraPower_GetState(void)
 {
-  if ((LPC_GPIO2->PIN & (1ul << 21)) == 0)
-		return 0;
-	else
-		return 1;
+    if ((LPC_GPIO2->PIN & (1ul << 21)) == 0)
+        return 0;
+    else
+        return 1;
 }
-
 
 /*==================================================================
 ** 函数名称：
@@ -142,12 +140,11 @@ uint8_t LoraPower_GetState(void)
 ==================================================================*/
 void Wifi_Power_Ctrl(uint8_t state)
 {
-  if (state == 0)
-	LPC_GPIO0->CLR = (1ul << 4);
-	else
-	LPC_GPIO0->SET = (1ul << 4);
+    if (state == 0)
+        LPC_GPIO0->CLR = (1ul << 4);
+    else
+        LPC_GPIO0->SET = (1ul << 4);
 }
-
 
 /*
 *********************************************************************************
@@ -156,16 +153,16 @@ void Wifi_Power_Ctrl(uint8_t state)
 ** 输入参数: port			电源模块接口
 ** 输出参数: 无
 ** 返    回: 电源模块状态。
-				0		关闭
-				1		打开
+                0		关闭
+                1		打开
 **********************************************************************************
 */
 uint8_t WifiPower_GetState(void)
 {
-  if ((LPC_GPIO0->PIN & (1ul << 4)) == 0)
-		return 0;
-	else
-		return 1;
+    if ((LPC_GPIO0->PIN & (1ul << 4)) == 0)
+        return 0;
+    else
+        return 1;
 }
 /*
 *********************************************************************************
@@ -179,7 +176,7 @@ uint8_t WifiPower_GetState(void)
 void CommLoraInit(void)
 {
     Lora_Power_Ctrl(1); // Lora模块 5V3板
-    //DelayMs(50);
+    // DelayMs(50);
 
     g_loraTestConfig.frequency = (900 + 2) * 1000000;
 
@@ -280,7 +277,7 @@ void CommLoraHandler(void)
 ** 返    回:
 **********************************************************************************
 */
-
+uint16_t showData_fmt(char *buff, uint16_t len);
 void CommLoraTick(void)
 {
     if (LoraPower_GetState() == 0)
@@ -288,27 +285,10 @@ void CommLoraTick(void)
 
     if (loradata == 0)
         return;
-
-    WIFI_DATA Wifi_Data_Temp;
-    //
-    //    Wifi_Data_Temp.len = sizeof(WIFI_DATA);
-    //    Wifi_Data_Temp.workMode = workMode;
-    //    Wifi_Data_Temp.workChnnl = workChnnl;
-    //    Wifi_Data_Temp.pree_pump_state = pumpMp.state.pree;
-    //    Wifi_Data_Temp.pree_pump_Err = pumpMp.state.preeErr;
-    //
-    //    Wifi_Data_Temp.msr_pump_state = pumpMp.state.msr;
-    //    Wifi_Data_Temp.msr_pump_Err = pumpMp.state.msrErr;
-    //
-    //    Wifi_Data_Temp.Press_state = pumpPress.state.msrAct;
-    //    Wifi_Data_Temp.Press_Value = pumpPress.state.press;
-    //
-    //    Wifi_Data_Temp.cntWorkTime = cntWorkTime;
-    //
-    //    Wifi_Data_Temp.chnnlFlowAvail = chnnlFlowAvail;
-    //    Wifi_Data_Temp.chnnlFlow = chnnlFlow;
-
-    LORA_SendDataLora((uint8_t *)(&Wifi_Data_Temp), sizeof(WIFI_DATA), 0);
+    static uint16_t len;
+    static char strbuff[512];
+    len = showData_fmt(strbuff, sizeof(strbuff));
+    LORA_SendDataLora(strbuff, len, 0);
 }
 
 /*

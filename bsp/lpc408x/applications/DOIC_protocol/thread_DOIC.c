@@ -13,6 +13,10 @@
 #include "system_var.h"
 #include "thread_DOIC.h"
 #include "rt_err_code.h"
+#define LOG_TAG "DOIC"
+#define LOG_LVL LOG_LVL_DBG
+#include <ulog.h>
+
 thread_doic_t *pthread_doic;
 
 static rt_err_t finsh_rx_ind(rt_device_t dev, rt_size_t size)

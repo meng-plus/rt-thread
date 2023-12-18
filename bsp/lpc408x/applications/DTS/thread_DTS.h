@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include "Session_DTS.h"
+#include <rtthread.h>
 #ifdef __cplusplus
 extern "C"
 {

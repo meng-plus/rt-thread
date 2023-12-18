@@ -15,9 +15,7 @@
 
 #include "dts.h"
 #include "agile_modbus.h"
-#define LOG_TAG __FILE__
-#define LOG_LVL LOG_LVL_DBG
-#include "rtdbg.h"
+
 
 #ifdef __cplusplus
 extern "C"

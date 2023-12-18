@@ -8,12 +8,19 @@
  * @copyright Copyright (c) 2023
  *
  */
+
 #include <rtthread.h>
 #include <rtdevice.h>
 #include "system_var.h"
 #include "thread_Wifi.h"
 #include "CommLora.h"
+#include <string.h>
+#include <stdio.h>
 #include "drv_pin.h"
+
+#define LOG_TAG "ESP32"
+#define LOG_LVL LOG_LVL_DBG
+#include <ulog.h>
 //////////////////////////////
 thread_Wifi_t *pthread_Wifi;
 
@@ -50,6 +57,9 @@ static void BLESendTask(void);
 
 static void Wifi_PutString(char *pdt);
 
+static void esp32_deal(const char *buff, uint16_t len);
+
+uint16_t showData_fmt(char *buff, uint16_t len);
 /**********************************************************************************
 ** 函数名称:
 ** 功    能:
@@ -88,6 +98,7 @@ void thread_Wifi_entry(void *param)
 			{
 				LOG_D(" wifi msg :\r\n%s\r\n", pthread_Wifi->Wifi_read_buf);
 			}
+			esp32_deal((char const *)pthread_Wifi->Wifi_read_buf, pthread_Wifi->read_len);
 		}
 		rt_thread_yield();
 		if (pthread_Wifi->delayms)
@@ -227,8 +238,86 @@ static void Wifi_PutString(char *pdt)
 {
 	thread_Wifi_t *pTr = pthread_Wifi;
 	size_t len = strlen(pdt);
-	memcpy(pTr->Wifi_send_buf, pdt, len);
-	rt_device_write(pTr->device, 0, pTr->Wifi_send_buf, len);
+	rt_device_write(pTr->device, 0, pdt, len);
+}
+static void esp32_PutStringBuff(char *pdt, uint16_t len)
+{
+	thread_Wifi_t *pTr = pthread_Wifi;
+	rt_device_write(pTr->device, 0, pdt, len);
+}
+
+void esp32_deal(const char *buff, uint16_t len)
+{
+	static char value[128];
+	if (pthread_Wifi->workmode == 1)
+	{
+	}
+	else if (pthread_Wifi->workmode == 2)
+	{ /*!< BLE */
+		switch (pthread_Wifi->status)
+		{
+		case 1: // 1:wait connet
+
+			// example :+BLECONN:0,"7b:a7:1a:0d:59:6d"
+			if (strstr(buff, "BLECONN"))
+			{
+				sscanf(strstr(buff, "BLECONN"), "BLECONN:0,%s", value);
+				pthread_Wifi->status = 2;
+				LOG_D("BLECONN:%s", value);
+			}
+			break;
+		case 2: // 2:connect
+			// example :+BLEDISCONN:0,"7b:a7:1a:0d:59:6d"
+			if (strstr(buff, "BLEDISCONN"))
+			{
+				pthread_Wifi->status = 1;
+				BLESetStep = 1;
+				sscanf(strstr(buff, "BLEDISCONN"), "BLECONN:0,%s", value);
+				LOG_D("BLEDISCONN:%s", value);
+			}
+			// example :+WRITE:0,1,3,,5,12589
+			else if (strstr(buff, "WRITE"))
+			{ // WRITE:<conn_index>,<srv_index>,<char_index>,[<desc_index>],<len>, <value>。
+				uint32_t conn_index, srv_index, char_index, len;
+
+				sscanf(strstr(buff, "WRITE"), "WRITE:%d,%d,%d,,%d,%s", &conn_index, &srv_index, &char_index, &len, value);
+				LOG_D("BLE WRITE:<%d>%s", len, value);
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+#include "user_gpio.h"
+#include "sensor_var.h"
+uint16_t showData_fmt(char *buff, uint16_t len)
+{
+	uint16_t datalen = 0;
+	datalen += snprintf(buff + datalen, len - datalen, "\r\n#show value\r\n");
+	datalen += snprintf(buff + datalen, len - datalen, "1.Input\r\n");
+	for (size_t i = 0; i < INPUT_NUM; i++)
+	{
+		datalen += snprintf(buff + datalen, len - datalen, "\t%d:%s\r\n", i, gpio_read(INPUT_S1 + i) == 0 ? "on" : "off");
+	}
+
+	datalen += snprintf(buff + datalen, len - datalen, "2.OutPut\r\n");
+	for (size_t i = 0; i < OUT_NUM; i++)
+	{
+		datalen += snprintf(buff + datalen, len - datalen, "\t%d:%s\r\n", i, gpio_get(OUT_A + i) ? "on" : "off");
+	}
+	datalen += snprintf(buff + datalen, len - datalen, "3.sensor\r\n");
+	for (size_t i = 0; i < g_sensor_param.sensor_num; i++)
+	{
+		datalen += snprintf(buff + datalen, len - datalen, "\t%d:%d\t", i, g_var_work.Sensor[i].SenSat & 0x0f);
+		datalen += snprintf(buff + datalen, len - datalen, "-%s", rom_sensor_var[g_sensor_param.sen_config[i].type].symbolname);
+		datalen += snprintf(buff + datalen, len - datalen, "\t%.2f %s\r\n", g_var_work.Sensor[i].SenData[0], rom_sensor_var[g_var_work.Sensor[i].SenName].unit);
+		/* code */
+	}
+
+	datalen += snprintf(buff + datalen, len - datalen, "\r\n#end show\r\n");
+	return datalen;
 }
 
 /**********************************************************************************
@@ -249,6 +338,8 @@ static void WIFISetLCloseTask(void)
 
 		NetComm_Timer = rt_tick_get_millisecond();
 		WIFICloseStep = 2;
+		pthread_Wifi->workmode = 0;
+		pthread_Wifi->status = 0;
 	}
 	else if (WIFICloseStep == 2)
 	{
@@ -276,6 +367,7 @@ static void WIFISetOpenTask(void)
 
 		NetComm_Timer = rt_tick_get_millisecond();
 		WIFISetStep = 2;
+		pthread_Wifi->workmode = 1;
 	}
 	else if (WIFISetStep == 2)
 	{
@@ -291,7 +383,7 @@ static void WIFISetOpenTask(void)
 		if ((uint32_t)(rt_tick_get_millisecond() - NetComm_Timer) < 1000)
 			return;
 		Wifi_PutString("AT+CIPSERVER=1,4001\r\n");
-
+		pthread_Wifi->status = 1;
 		WIFISetStep = 0;
 	}
 }
@@ -307,7 +399,10 @@ static void WIFISendTask(void)
 {
 	if (WIFISend_Flag == 1)
 	{
-		Wifi_PutString("AT+CIPSENDEX=0,140\r\n");
+		uint16_t len = showData_fmt(pthread_Wifi->Wifi_send_buf, sizeof(pthread_Wifi->Wifi_send_buf));
+		char buff[32];
+		snprintf(buff, sizeof(buff), "AT+CIPSENDEX=0,%d\r\n", len);
+		Wifi_PutString(buff);
 		WIFISend_Flag = 2;
 		NetSend_Timer = rt_tick_get_millisecond();
 	}
@@ -316,11 +411,11 @@ static void WIFISendTask(void)
 	{
 		if ((uint32_t)(rt_tick_get_millisecond() - NetSend_Timer) < 1000)
 			return;
-		Wifi_PutString("Wifi Communication\r\n");
+		Wifi_PutString(pthread_Wifi->Wifi_send_buf);
 		NetSend_Timer = rt_tick_get_millisecond();
-                
-                Wifi_PutString("\\0");
-                WIFISend_Flag=1;
+
+		Wifi_PutString("\\0");
+		WIFISend_Flag = 1;
 	}
 }
 
@@ -401,6 +496,9 @@ static void BLESetLCloseTask(void)
 
 		BlueComm_Timer = rt_tick_get_millisecond();
 		BLECloseStep = 2;
+
+		pthread_Wifi->workmode = 0;
+		pthread_Wifi->status = 0;
 	}
 	else if (BLECloseStep == 2)
 	{
@@ -429,6 +527,8 @@ static void BLESetOpenTask(void)
 
 		BlueComm_Timer = rt_tick_get_millisecond();
 		BLESetStep = 2;
+		pthread_Wifi->workmode = 2;
+		pthread_Wifi->status = 0;
 	}
 	else if (BLESetStep == 2)
 	{
@@ -453,7 +553,7 @@ static void BLESetOpenTask(void)
 		if ((uint32_t)(rt_tick_get_millisecond() - BlueComm_Timer) < 1000)
 			return;
 		Wifi_PutString("AT+BLEADVSTART\r\n");
-
+		pthread_Wifi->status = 1;
 		BLESetStep = 0;
 	}
 }
@@ -467,19 +567,44 @@ static void BLESetOpenTask(void)
 ***********************************************************************************/
 static void BLESendTask(void)
 {
+	static uint16_t len, sendlen;
+	static uint16_t offset;
+	if ((pthread_Wifi->status != 2) && (pthread_Wifi->status != 3))
+	{
+		return;
+	}
 	if (BLESend_Flag == 1)
 	{
-		Wifi_PutString("AT+BLEGATTSNTFY=0,1,6,140\r\n");
+		len = showData_fmt(pthread_Wifi->Wifi_send_buf, sizeof(pthread_Wifi->Wifi_send_buf));
+		offset = 0;
 		BLESend_Flag = 2;
-		BLESend_Timer = rt_tick_get_millisecond();
 	}
-
-	if (BLESend_Flag == 2)
+	else if (BLESend_Flag == 2)
 	{
 		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 500)
 			return;
-		Wifi_PutString("BLUE Communication \r\n");
+		if (len > offset)
+		{
+			char buff[64];
+			sendlen = len - offset > 20 ? 20 : len - offset;
+			sprintf(buff, "AT+BLEGATTSNTFY=0,1,6,%d\r\n", sendlen);
+			Wifi_PutString(buff);
+			BLESend_Flag = 3;
+		}
+		else
+		{
+			BLESend_Flag = 1;
+		}
+		BLESend_Timer = rt_tick_get_millisecond();
+	}
+	else if (BLESend_Flag == 3)
+	{
+		if ((uint32_t)(rt_tick_get_millisecond() - BLESend_Timer) < 500)
+			return;
+		esp32_PutStringBuff(pthread_Wifi->Wifi_send_buf + offset, sendlen);
+		offset += sendlen;
 		BlueComm_Timer = rt_tick_get_millisecond();
+		BLESend_Flag = 2;
 	}
 }
 

@@ -13,6 +13,10 @@
 #include "Session_DTS.h"
 #include "system_var.h"
 #include "thread_DTS.h"
+
+#define LOG_TAG "DTS"
+#define LOG_LVL LOG_LVL_DBG
+#include <ulog.h>
 thread_dts_t *pthread_dts;
 
 static rt_err_t finsh_rx_ind(rt_device_t dev, rt_size_t size)

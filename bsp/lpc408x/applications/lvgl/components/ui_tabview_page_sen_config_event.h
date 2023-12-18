@@ -306,7 +306,6 @@ static void table_edit_event_cb(lv_event_t *e)
         default:
             break;
         }
-        LOG_D("[%d,%d]:%s", pedit->row, pedit->col, string);
         lv_event_send(lv_obj_get_parent(pedit->obj), LV_EVENT_NOTIFY_UPDATE, (void *)(1 << SEN_CONFIG_TABLE));
     }
 }
