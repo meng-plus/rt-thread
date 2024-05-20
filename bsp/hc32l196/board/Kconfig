@@ -8,7 +8,10 @@ config MCU_HC32L196
     default y
 
 menu "Onboard Peripheral Drivers"
-
+    config BSP_USING_FAL_ON_CHIP
+        bool "Enable Fal on chip"
+        select RT_USING_PIN
+        default y
 endmenu
 
 menu "On-chip Peripheral Drivers"
@@ -30,11 +33,38 @@ menu "On-chip Peripheral Drivers"
                 bool "Enable UART1"
                 default n
         endif
+    menuconfig BSP_USING_SOFT_SPI
+        bool "Enable SOFT SPI"
+        default y
+        select RT_USING_SPI
+        if BSP_USING_SOFT_SPI
+            config BSP_USING_SOFT_SPI1
+                bool "Enable SOFT SPI1"
+                default y
+                if BSP_USING_SOFT_SPI1
+                    comment "Notice: PA0 --> 0; PA1--> 1; PA2 --> 2"
+                    config BSP_S_SPI1_SCK_PIN
+                        int "sspi1 SCL pin number"
+                        range 0 79
+                        default 0
+                    config BSP_S_SPI1_MOSI_PIN
+                        int "sspi1 MISO pin number"
+                        range 0 79
+                        default 1
+                    config BSP_S_SPI1_MISO_PIN
+                        int "sspi1 MOSI pin number"
+                        range 1 79
+                        default 2
+                endif
+            # config BSP_USING_SOFT_SPI2
+            #     bool "Enable SOFT SPI2"
+            #     default n
+        endif
 
 endmenu
 
-menu "Board extended module Drivers"
+# menu "Board extended module Drivers"
 
-endmenu
+# endmenu
 
 endmenu

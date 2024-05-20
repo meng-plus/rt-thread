@@ -9,6 +9,8 @@ src = Split('''
 board.c
 board_config.c
 ''')
+if GetDepend(['BSP_USING_FAL_ON_CHIP']):
+    src += ['fal_flash_hc32l19x_port.c']
 
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = CPPPATH)
 

@@ -12,21 +12,11 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
-#define LED_PIN                 GET_PIN(C, 13)
-#define LED_PERIOD              (RT_TICK_PER_SECOND / 5)
-
-#define KEY_PIN                 GET_PIN(B, 12)
-
-void key_handle(void *args)
-{
-    rt_kprintf("key pressed!\n");
-}
+#define LED_PIN                 GET_PIN(B, 13)
+#define LED_PERIOD              (RT_TICK_PER_SECOND / 2)
 
 int main(void)
 {
-    rt_pin_mode(KEY_PIN, PIN_MODE_INPUT_PULLUP);
-    rt_pin_attach_irq(KEY_PIN, PIN_IRQ_MODE_FALLING, key_handle, RT_NULL);
-    rt_pin_irq_enable(KEY_PIN, PIN_IRQ_ENABLE);
 
     rt_pin_mode(LED_PIN, PIN_MODE_OUTPUT);
 

@@ -79,6 +79,10 @@
 
 /* DFS: device virtual file system */
 
+#define RT_USING_FAL
+#define FAL_DEBUG_CONFIG
+#define FAL_DEBUG 1
+#define FAL_PART_HAS_TABLE_CFG
 
 /* Device Drivers */
 
@@ -173,6 +177,16 @@
 
 /* tools packages */
 
+#define PKG_USING_SEGGER_RTT
+#define SEGGER_RTT_ENABLE
+#define SEGGER_RTT_MAX_NUM_UP_BUFFERS 3
+#define SEGGER_RTT_MAX_NUM_DOWN_BUFFERS 3
+#define BUFFER_SIZE_UP 1024
+#define BUFFER_SIZE_DOWN 16
+#define SEGGER_RTT_PRINTF_BUFFER_SIZE 64
+#define RTT_DEFAULT_BUFFER_INDEX 0
+#define RTT_DEFAULT_TERMINAL_INDEX 0
+#define PKG_USING_SEGGER_RTT_LATEST_VERSION
 
 /* system packages */
 
@@ -187,6 +201,16 @@
 
 /* Micrium: Micrium software products porting for RT-Thread */
 
+#define PKG_USING_FLASHDB
+#define FDB_USING_KVDB
+#define FDB_KV_AUTO_UPDATE
+#define FDB_USING_FAL_MODE
+#define FDB_WRITE_GRAN_32BITS
+#define FDB_WRITE_GRAN 32
+#define FDB_NOT_USING_FILE_MODE
+#define FDB_DEBUG_ENABLE
+#define PKG_USING_FLASHDB_V10102
+#define PKG_FLASHDB_VER_NUM 0x10102
 
 /* peripheral libraries and drivers */
 
@@ -203,6 +227,14 @@
 
 /* touch drivers */
 
+#define PKG_USING_RS485
+#define RS485_USING_SAMPLE_MASTER
+#define RS485_SAMPLE_MASTER_SERIAL "uart2"
+#define RS485_SAMPLE_MASTER_BAUDRATE 9600
+#define RS485_SAMPLE_MASTER_PARITY 0
+#define RS485_SAMPLE_MASTER_PIN -1
+#define RS485_SAMPLE_MASTER_LVL 0
+#define PKG_USING_RS485_LATEST_VERSION
 
 /* AI packages */
 
@@ -260,14 +292,21 @@
 
 /* Onboard Peripheral Drivers */
 
+#define BSP_USING_FAL_ON_CHIP
+
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART0
 #define BSP_USING_UART1
+#define BSP_USING_SOFT_SPI
+#define BSP_USING_SOFT_SPI1
 
-/* Board extended module Drivers */
+/* Notice: PA0 --> 0; PA1--> 1; PA2 --> 2 */
 
+#define BSP_S_SPI1_SCK_PIN 0
+#define BSP_S_SPI1_MOSI_PIN 1
+#define BSP_S_SPI1_MISO_PIN 2
 
 #endif
