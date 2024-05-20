@@ -107,6 +107,8 @@ void rt_hw_board_init()
 
 #if defined(RT_USING_CONSOLE) && defined(RT_USING_DEVICE)
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
+    int rt_hw_jlink_console_init(void);
+    rt_hw_jlink_console_init();
 #endif
 
 }
