@@ -33,22 +33,22 @@ extern "C" {
 /* version */
 /* 软件版本号                 	*/
 #define APP_VERSION      APP_VERSION_CHECK(APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_PATCH)
-#define HF_VERSION       HEX_VERSION_CHECK(23, 12, 2)  /* 硬件版本			        	*/
-#define PROTOCOL_VERSION HEX_VERSION_CHECK(24, 02, 01) /* 协议版本			        	*/
+#define HF_VERSION       HEX_VERSION_CHECK(HF_VERSION_MAJOR, HF_VERSION_MINOR, HF_VERSION_PATCH) /* 硬件版本			        	*/
+#define PROTOCOL_VERSION HEX_VERSION_CHECK(24, 02, 01)                                           /* 协议版本			        	*/
 
 /* str  */
 #define NUM2STR(num)           #num
 #define VERSTR4NUM(ma, mi, pa) NUM2STR(ma) "." NUM2STR(mi) "." NUM2STR(pa)
 
 #define APP_VERSION_STR      VERSTR4NUM(APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_PATCH)
-#define HF_VERSION_STR       VERSTR4NUM(24, 12, 2)  /* 硬件版本			        	*/
-#define PROTOCOL_VERSION_STR VERSTR4NUM(24, 02, 01) /* 协议版本			        	*/
+#define HF_VERSION_STR       VERSTR4NUM(HF_VERSION_MAJOR, HF_VERSION_MINOR, HF_VERSION_PATCH) /* 硬件版本			        	*/
+#define PROTOCOL_VERSION_STR VERSTR4NUM(24, 05, 17)                                           /* 协议版本			        	*/
 
 
 typedef struct _RAM_VAR_WORKING
 {
     uint32_t tick;
-    uint16_t addr;          /*!< 当前设备的地址 */
+    uint16_t addr; /*!< 当前设备的地址 */
 
 } varWork_t;
 
@@ -81,6 +81,7 @@ typedef struct __FLASH_PRODUCT_PARAMETER
 {
     header_param_t header; /*!<版本标识*/
     uint8_t ad5161_value;  /*!< 配置数据 */
+    uint16_t dac_value;    /*!< 配置数据 */
 } product_param_t;
 
 extern varWork_t g_var_work;

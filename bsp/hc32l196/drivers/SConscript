@@ -15,6 +15,8 @@ if GetDepend(['RT_USING_SERIAL']):
 
 if GetDepend(['BSP_USING_SOFT_SPI']):
     src += ['drv_soft_spi.c']
+if GetDepend(['BSP_USING_DAC1']):
+    src += ['drv_dac.c']
 
 CPPPATH = [cwd]
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = CPPPATH)

@@ -43,6 +43,28 @@ static int rt_hw_ad5161_init(void)
 /* 导出到自动初始化 */
 INIT_DEVICE_EXPORT(rt_hw_ad5161_init);
 
+
+void ad5161_set(rt_uint8_t value)
+{
+    struct rt_spi_device *spi_dev_ad5161;
+
+    /* 查找 spi 设备获取设备句柄 */
+    spi_dev_ad5161 = (struct rt_spi_device *)rt_device_find(AD5161_SPI_DEVICE_NAME);
+    if (!spi_dev_ad5161)
+    {
+        LOG_E("spi sample run failed! can't find %s device!", AD5161_SPI_DEVICE_NAME);
+        return;
+    }
+    struct rt_spi_message msg1;
+    msg1.send_buf   = &value;
+    msg1.recv_buf   = RT_NULL;
+    msg1.length     = 1;
+    msg1.cs_take    = 1;
+    msg1.cs_release = 1;
+    msg1.next       = RT_NULL;
+    rt_spi_transfer_message(spi_dev_ad5161, &msg1);
+}
+
 #ifdef RT_USING_FINSH
 #include <string.h>
 #include <stdlib.h>
@@ -50,6 +72,7 @@ INIT_DEVICE_EXPORT(rt_hw_ad5161_init);
 #include <finsh.h>
 #include <msh_parse.h>
 
+#include "system_var.h"
 static void _ad5161_cmd_print_usage(void)
 {
     rt_kprintf("ad5161 [option] value\n");
@@ -63,7 +86,7 @@ static void spi_ad5161_cmd(int argc, char *argv[])
 {
     struct rt_spi_device *spi_dev_ad5161;
     char name[RT_NAME_MAX];
-    if (argc < 2)
+    if (argc <= 2)
     {
         _ad5161_cmd_print_usage();
         return;
@@ -71,22 +94,42 @@ static void spi_ad5161_cmd(int argc, char *argv[])
     if (rt_strcmp(argv[1], "write") == 0)
     {
         if (msh_isint(argv[2]) == RT_TRUE)
-        { /* 查找 spi 设备获取设备句柄 */
+        {
+            int32_t i32 = atoi(argv[2]);
+
+            if (i32 > 255)
+            {
+                rt_kprintf("value(%d) >255  out of range\n", i32);
+                return;
+            }
+            rt_uint8_t write_value = i32;
+
+
+            /* 查找 spi 设备获取设备句柄 */
             spi_dev_ad5161 = (struct rt_spi_device *)rt_device_find(AD5161_SPI_DEVICE_NAME);
             if (!spi_dev_ad5161)
             {
                 rt_kprintf("spi sample run failed! can't find %s device!\n", name);
             }
-            rt_uint8_t w25x_write_value = atoi(argv[2]);
+
             struct rt_spi_message msg1;
-            msg1.send_buf   = &w25x_write_value;
+            msg1.send_buf   = &write_value;
             msg1.recv_buf   = RT_NULL;
             msg1.length     = 1;
             msg1.cs_take    = 1;
-            msg1.cs_release = 0;
+            msg1.cs_release = 1;
             msg1.next       = RT_NULL;
             rt_spi_transfer_message(spi_dev_ad5161, &msg1);
+            if (g_prod_param.ad5161_value != write_value)
+            {
+                g_prod_param.ad5161_value = write_value;
+                var_save(&g_prod_param);
+            }
         }
+    }
+    else
+    {
+        _ad5161_cmd_print_usage();
     }
 }
 /* 导出到 msh 命令列表中 */

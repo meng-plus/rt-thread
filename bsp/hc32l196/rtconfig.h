@@ -92,6 +92,7 @@
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
 #define RT_SERIAL_RB_BUFSZ 64
+#define RT_USING_DAC
 #define RT_USING_SPI
 #define RT_USING_SPI_BITOPS
 #define RT_USING_PIN
@@ -228,11 +229,6 @@
 /* touch drivers */
 
 #define PKG_USING_RS485
-#define RS485_SAMPLE_MASTER_SERIAL "uart0"
-#define RS485_SAMPLE_MASTER_BAUDRATE 9600
-#define RS485_SAMPLE_MASTER_PARITY 0
-#define RS485_SAMPLE_MASTER_PIN -1
-#define RS485_SAMPLE_MASTER_LVL 0
 #define PKG_USING_RS485_LATEST_VERSION
 
 /* AI packages */
@@ -291,11 +287,13 @@
 
 /* Onboard Peripheral Drivers */
 
-#define BSP_USING_FAL_ON_CHIP
+#define BSP_USING_AD5161
 
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
+#define BSP_USING_FAL_ON_CHIP
+#define BSP_USING_DAC1
 #define BSP_USING_UART
 #define BSP_USING_UART0
 #define BSP_USING_UART1

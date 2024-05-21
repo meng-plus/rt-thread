@@ -15,6 +15,7 @@ HC32L196_StdPeriph_Driver/src/hc32l196_ddl.c
 HC32L196_StdPeriph_Driver/src/hc32l196_gpio.c
 HC32L196_StdPeriph_Driver/src/hc32l196_sysctrl.c
 HC32L196_StdPeriph_Driver/src/hc32l196_flash.c
+HC32L196_StdPeriph_Driver/src/hc32l196_dac.c
 """)
 
 if GetDepend(['RT_USING_SERIAL']):

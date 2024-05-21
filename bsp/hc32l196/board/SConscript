@@ -11,6 +11,12 @@ board_config.c
 ''')
 if GetDepend(['BSP_USING_FAL_ON_CHIP']):
     src += ['fal_flash_hc32l19x_port.c']
+if GetDepend(['BSP_USING_FAL_ON_CHIP']):
+    src += ['fal_flash_hc32l19x_port.c']
+if GetDepend(['BSP_USING_DAC1']):
+    src += ['drv_dac_out.c']
+if GetDepend(['BSP_USING_AD5161']):
+    src += ['drv_ad5161.c']
 
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = CPPPATH)
 

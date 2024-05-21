@@ -82,8 +82,11 @@ const product_param_t l_prod_param_init =
         .header = {
                    .ver = FLASH_PRO_PARAMETER_VER,
                    },
+        .ad5161_value = 0, /*!< 配置数据 */
+        .dac_value    = 0, /*!< 配置数据 */
 };
-const var_init_t g_var_init = {.product_name="laser_mode",
+const var_init_t g_var_init = {
+    .product_name = "laser_mode",
 
 };
 

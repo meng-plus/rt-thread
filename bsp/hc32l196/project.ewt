@@ -2441,6 +2441,9 @@
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\condvar.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\components\drivers\misc\dac.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\components\drivers\ipc\dataqueue.c</name>
         </file>
         <file>
@@ -2486,7 +2489,7 @@
             <name>$PROJ_DIR$\board\board_config.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\board\drv_ad5161.c</name>
+            <name>$PROJ_DIR$\drivers\drv_dac.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_gpio.c</name>
@@ -2554,6 +2557,9 @@
     </group>
     <group>
         <name>HC32_StdPeriph</name>
+        <file>
+            <name>$PROJ_DIR$\Libraries\HC32L196_StdPeriph_Driver\src\hc32l196_dac.c</name>
+        </file>
         <file>
             <name>$PROJ_DIR$\Libraries\HC32L196_StdPeriph_Driver\src\hc32l196_ddl.c</name>
         </file>
