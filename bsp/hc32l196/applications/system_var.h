@@ -22,9 +22,12 @@ extern "C" {
 #define APP_VERSION_MINOR 0 /**< Minor version number (x.X.x) */
 #define APP_VERSION_PATCH 0 /**< Patch version number (x.x.X) */
 /* hardware version information */
-#define HF_VERSION_MAJOR 1 /**< Major version number (X.x.x) */
-#define HF_VERSION_MINOR 0 /**< Minor version number (x.X.x) */
-#define HF_VERSION_PATCH 0 /**< Patch version number (x.x.X) */
+#define HF_VERSION_MAJOR  1 /**< Major version number (X.x.x) */
+#define HF_VERSION_MINOR  0 /**< Minor version number (x.X.x) */
+#define HF_VERSION_PATCH  0 /**< Patch version number (x.x.X) */
+#define RELEASE_TIME_YEAR 2024
+#define RELEASE_TIME_DAY  21
+#define RELEASE_TIME_MON  05
 
 /* e.g. #if RTTHREAD_VERSION >= RT_VERSION_CHECK(4, 1, 0) */
 #define APP_VERSION_CHECK(major, minor, revise) ((major * 10000) + (minor * 100) + revise)
@@ -43,7 +46,7 @@ extern "C" {
 #define APP_VERSION_STR      VERSTR4NUM(APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_PATCH)
 #define HF_VERSION_STR       VERSTR4NUM(HF_VERSION_MAJOR, HF_VERSION_MINOR, HF_VERSION_PATCH) /* 硬件版本			        	*/
 #define PROTOCOL_VERSION_STR VERSTR4NUM(24, 05, 17)                                           /* 协议版本			        	*/
-
+#define RELEASE_TIME_STR     VERSTR4NUM(RELEASE_TIME_YEAR, RELEASE_TIME_MON, RELEASE_TIME_DAY)
 
 typedef struct _RAM_VAR_WORKING
 {
@@ -67,7 +70,7 @@ typedef struct _ROM_VAR_INIT
 typedef struct _FLASH_HEADER_PARAMETER
 {
     uint16_t ver;
-    uint16_t reserve[3];
+    uint16_t reserve[1];
 } header_param_t;
 /**
  * @brief  Do not modify it unless you want to reset the parameters

@@ -17,6 +17,7 @@ void laser_dac_out(rt_uint32_t value)
             return;
         }
     }
+    rt_dac_enable(dac_device, 1);
     rt_dac_write(dac_device, 1, value);
 }
 #ifdef RT_USING_FINSH
@@ -46,9 +47,9 @@ static int laser_dac_cmd(int argc, char **argv)
     {
         if (dac_device == RT_NULL)
         {
-            dac_device = (rt_dac_device_t)rt_device_find(argv[2]);
+            dac_device = (rt_dac_device_t)rt_device_find(DAC_DEVICE_NAME);
             result_str = (dac_device == RT_NULL) ? "failure" : "success";
-            rt_kprintf("probe %s %s \n", argv[2], result_str);
+            rt_kprintf("probe %s %s \n", DAC_DEVICE_NAME, result_str);
         }
 
         if (dac_device == RT_NULL)
@@ -71,14 +72,14 @@ static int laser_dac_cmd(int argc, char **argv)
         }
         else if (!strcmp(argv[1], "write"))
         {
-            if (argc == 4)
+            if (argc == 3)
             {
                 int32_t i32 = atoi(argv[2]);
 
                 if (i32 > 4096)
                 {
                     rt_kprintf("value(%d) >255  out of range\n", i32);
-                      return -RT_ERROR;
+                    return -RT_ERROR;
                 }
                 rt_uint16_t write_value = i32;
                 rt_dac_write(dac_device, 1, write_value);
@@ -120,6 +121,6 @@ static int laser_dac_cmd(int argc, char **argv)
     }
     return RT_EOK;
 }
-MSH_CMD_EXPORT(laser_dac_cmd, laser_dac control out);
-
+/* 导出到 msh 命令列表中 */
+MSH_CMD_EXPORT_ALIAS(laser_dac_cmd, laser_dac, laser_dac control out);
 #endif /* RT_USING_FINSH */

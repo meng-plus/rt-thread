@@ -24,14 +24,17 @@ extern void ad5161_set(rt_uint8_t value);
 extern void laser_dac_out(rt_uint32_t value);
 int main(void)
 {
-    LOG_D("HF_version %s,SF_version %s", HF_VERSION_STR, APP_VERSION_STR);
+    LOG_D("HF_version %s,SF_version %s\nrelease:%s\n", HF_VERSION_STR, APP_VERSION_STR, RELEASE_TIME_STR);
     rt_pin_mode(LED_PIN, PIN_MODE_OUTPUT);
 
     ad5161_set(g_prod_param.ad5161_value);
-    LOG_I("ad5161_value %d", g_prod_param.ad5161_value);
+    LOG_I("ad5161 %d", g_prod_param.ad5161_value);
     laser_dac_out(g_prod_param.dac_value);
-    LOG_I("dac_value %d", g_prod_param.dac_value);
+    LOG_I("laser_dac %d", g_prod_param.dac_value);
 
+    rt_kprintf("\nUsage: \n");
+    rt_kprintf("\tad5161 write <value>       - range 0~255\n");
+    rt_kprintf("\tlaser_dac write <value>    - range 0~4096\n\n");
     while (1)
     {
         rt_pin_write(LED_PIN, PIN_HIGH);
