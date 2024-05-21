@@ -127,3 +127,11 @@ void rt_hw_us_delay(rt_uint32_t us)
     }
     while (delta < us_tick * us);
 }
+#ifdef RT_USING_FINSH
+#include <finsh.h>
+static void reboot(uint8_t argc, char **argv)
+{
+    rt_hw_cpu_reset();
+}
+MSH_CMD_EXPORT(reboot, Reboot System);
+#endif /* RT_USING_FINSH */

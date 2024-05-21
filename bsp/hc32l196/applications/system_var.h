@@ -41,47 +41,15 @@ extern "C" {
 #define VERSTR4NUM(ma, mi, pa) NUM2STR(ma) "." NUM2STR(mi) "." NUM2STR(pa)
 
 #define APP_VERSION_STR      VERSTR4NUM(APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_PATCH)
-#define HF_VERSION_STR       VERSTR4NUM(23, 12, 2)  /* 硬件版本			        	*/
+#define HF_VERSION_STR       VERSTR4NUM(24, 12, 2)  /* 硬件版本			        	*/
 #define PROTOCOL_VERSION_STR VERSTR4NUM(24, 02, 01) /* 协议版本			        	*/
 
-enum DEVICE_LIST
-{
-    DEVICE_COLOR_0 = 0x01 << 0,
-    DEVICE_COLOR_1 = 0x01 << 1,
-    DEVICE_RESERVE = 0x01 << 31,
-};
-/**
-     * @brief   data in ram  only
-     */
-typedef struct _MOTOR_CTL
-{
-    uint16_t cmd; // @ref MOTOR_COMMAND_E
-} motor_ctl_t;
-typedef struct _STEPMOTOR_CTL
-{
-    uint16_t cmd; // @ref MOTOR_COMMAND_E
-} stepmotor_ctl_t;
+
 typedef struct _RAM_VAR_WORKING
 {
     uint32_t tick;
     uint16_t addr;          /*!< 当前设备的地址 */
-    uint32_t device_status; /*!< 外设状态,置1 则为可用状态 @ref enum DEVICE_LIST */
-    uint16_t carton_sel;    /*!<地址  */
-    uint16_t paper_boxs;
-    uint16_t paper_rolls;
-    motor_ctl_t motor;
-    stepmotor_ctl_t stepmotor;
-    /**
-         * @brief 颜色传感器
-         *
-         */
-    struct IRGB
-    {
-        uint32_t ir;
-        uint32_t green;
-        uint32_t red;
-        uint32_t blue;
-    } nIRGB[2];
+
 } varWork_t;
 
 /**
@@ -91,7 +59,7 @@ typedef struct _RAM_VAR_WORKING
 typedef struct _ROM_VAR_INIT
 {
     const char *product_name;
-    
+
 } var_init_t;
 
 /*!< 设备的配置参数 flash中存储 */
@@ -109,28 +77,10 @@ typedef struct _FLASH_HEADER_PARAMETER
      * @brief data in  flash
      *
      */
-typedef struct __STEP_MOTOR_CONFIG
-{
-    uint8_t lv_num;    /*!< 速度分级数量 */
-    uint8_t rev;
-    uint16_t speed[2]; /*!< 速度分级数量 */
-    uint16_t time;     /*!< 步进电机ms 加速度时间 */
-    float rpm_mm;      /*!< 步进电机mm mm/rpm */
-
-} step_motor_config_t;
-
 typedef struct __FLASH_PRODUCT_PARAMETER
 {
-    header_param_t header;   /*!<版本标识*/
-    uint16_t debug      : 1; /*!< 启动日志调试 */
-    uint16_t protection : 1; /*!< 保护模式，仅通信 */
-    // 当硬件配置0x00地址时看它
-    uint16_t addr;            /*!< 本机地址 0x01为主机，0x02~0x04 为从机地址，顺序增加当前最多规划3个 */
-    uint32_t motor_period;    /*!< 裁纸刀电机频率 */
-    uint16_t motor_ratio_max; /*!< 裁纸刀最大功率 (0,100]% */
-    uint16_t color_period_ms; /*!< 颜色模块的周期颜色采集速度 */
-    step_motor_config_t step_motor_config[2];
-    uint32_t per_circle;      /*!< 步进电机细分800 1600 3200 */
+    header_param_t header; /*!<版本标识*/
+    uint8_t ad5161_value;  /*!< 配置数据 */
 } product_param_t;
 
 extern varWork_t g_var_work;

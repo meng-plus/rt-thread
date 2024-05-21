@@ -27,10 +27,10 @@ extern const struct fal_flash_dev hc32l19x_onchip_flash;
 #ifdef FAL_PART_HAS_TABLE_CFG
 /* partition table */
 #define FAL_PART_TABLE                                                               \
-    {                                                                                \
-        {FAL_PART_MAGIC_WORD, "app", "hc32_onchip", 0, 128 * 1024, 0},               \
-            {FAL_PART_MAGIC_WORD, "kvdb", "hc32_onchip", 128 * 1024, 256 * 1024, 0}, \
-    }
+{                                                                                    \
+    {FAL_PART_MAGIC_WORD,        "app",    "hc32_onchip",         0,   128*1024, 0}, \
+    {FAL_PART_MAGIC_WORD,       "kvdb",    "hc32_onchip",   128*1024,  128*1024, 0}, \
+}
 #endif /* FAL_PART_HAS_TABLE_CFG */
 
 #endif /* _FAL_CFG_H_ */

@@ -2374,6 +2374,12 @@
         <file>
             <name>$PROJ_DIR$\applications\main.c</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\applications\system_upload.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\applications\system_var.c</name>
+        </file>
     </group>
     <group>
         <name>Compiler</name>
@@ -2478,6 +2484,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\board\board_config.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\board\drv_ad5161.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\drivers\drv_gpio.c</name>

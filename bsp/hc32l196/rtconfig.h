@@ -305,7 +305,7 @@
 /* Notice: PA0 --> 0; PA1--> 1; PA2 --> 2 */
 
 #define BSP_S_SPI1_SCK_PIN 0
-#define BSP_S_SPI1_MOSI_PIN 1
-#define BSP_S_SPI1_MISO_PIN 2
+#define BSP_S_SPI1_MOSI_PIN 2
+#define BSP_S_SPI1_MISO_PIN 1
 
 #endif

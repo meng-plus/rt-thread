@@ -1,13 +1,15 @@
-/*
- * Copyright (c) 2006-2018, RT-Thread Development Team
+/**
+ * @file fal_flash_hc32l19x_port.c
+ * @author mengplus (chengmeng_2@outlook.com)
+ * @brief hc32L19x 内部flash操作说明
+ * 根据官方文档要求，操作flash的代码段必须在前32k内，否则会报错
+ * 具体操作方式修改link.icf文件，限制flash操作在0x00000000-0x0001FFFF内
+ * @version 0.1
+ * @date 2024-05-21
  *
- * SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (c) 2024
  *
- * Change Logs:
- * Date           Author       Notes
- * 2018-01-26     armink       the first version
  */
-
 #include <fal.h>
 
 #include <hc32l196_flash.h>
@@ -63,7 +65,6 @@ static int write(long offset, const uint8_t *buf, size_t size)
     uint32_t read_data;
     uint32_t addr = hc32l19x_onchip_flash.addr + offset;
 
-    Flash_UnlockAll();
     for (i = 0; i < size; i++, buf++, addr++)
     {
         /* write data */
@@ -75,7 +76,6 @@ static int write(long offset, const uint8_t *buf, size_t size)
             return -1;
         }
     }
-    Flash_LockAll();
 
     return size;
 }
@@ -87,8 +87,6 @@ static int erase(long offset, size_t size)
     uint32_t cur_erase_sector;
     uint32_t addr = hc32l19x_onchip_flash.addr + offset;
 
-    /* start erase */
-    Flash_UnlockAll();
     /* it will stop when erased size is greater than setting size */
     while (erased_size < size)
     {
@@ -100,15 +98,13 @@ static int erase(long offset, size_t size)
         }
         erased_size += stm32_get_sector_size(cur_erase_sector);
     }
-    Flash_LockAll();
-
     return size;
 }
 
 const struct fal_flash_dev hc32l19x_onchip_flash =
     {
         .name       = "hc32_onchip",
-        .addr       = 0x08000000,
+        .addr       = 0x00000000,
         .len        = 256 * 1024,
         .blk_size   = 512,
         .ops        = {init, read, write, erase},
