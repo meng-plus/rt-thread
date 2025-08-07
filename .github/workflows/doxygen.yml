@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'doc-page'
+  workflow_dispatch:  # 允许手动触发
 
 permissions:
   contents: write
@@ -13,50 +14,122 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: doxygen_doc generate
+    timeout-minutes: 30  # 设置超时时间
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
           fetch-depth: 0
+      
       - name: Install Tools
         shell: bash
         run: |
           # 使用默认源安装工具
           sudo apt-get update
-          sudo apt-get -qq install doxygen graphviz zip openjdk-11-jre
+          sudo apt-get -qq install doxygen graphviz zip
+          # 验证安装
+          doxygen --version
+          dot -V
+      
       - name: Set Environment Variables
         shell: bash
         run: |
-          echo "BUILD_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          # 设置时区为 UTC+8
+          export TZ='Asia/Shanghai'
+          echo "TZ=Asia/Shanghai" >> $GITHUB_ENV
+          
+          echo "BUILD_DATE=$(TZ='Asia/Shanghai' date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "BUILD_TIME=$(TZ='Asia/Shanghai' date +'%H%M%S')" >> $GITHUB_ENV
+          echo "BUILD_DATETIME=$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_ENV
           echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
           # 如果是标签触发则提取版本号
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
             echo "VERSION=${VERSION/v/}" >> $GITHUB_ENV
+          else
+            # 使用时间戳避免标签重复
+            echo "VERSION=nightly-$(TZ='Asia/Shanghai' date +'%Y%m%d')" >> $GITHUB_ENV
           fi
-      - name: generate doxygen html
+          echo "VERSION: ${{ env.VERSION }}"
+          echo "BUILD_DATE: ${{ env.BUILD_DATE }}"
+          echo "BUILD_TIME: ${{ env.BUILD_TIME }}"
+          echo "SHORT_SHA: ${{ env.SHORT_SHA }}"
+
+      - name: Generate Doxygen HTML
         shell: bash
-        continue-on-error: true
         run: |
           cd documentation
-          # 临时禁用 PlantUML 以避免错误
+          echo "Starting Doxygen generation..."
+          
+          # 备份原始 Doxyfile
+          cp Doxyfile Doxyfile.backup
+          
+          # 优化 Doxygen 配置
           sed -i 's/PLANTUML_JAR_PATH.*/PLANTUML_JAR_PATH = /' Doxyfile
           sed -i 's/HAVE_DOT.*/HAVE_DOT = NO/' Doxyfile
+          sed -i 's/GENERATE_HTMLHELP.*/GENERATE_HTMLHELP = NO/' Doxyfile
+          sed -i 's/GENERATE_LATEX.*/GENERATE_LATEX = NO/' Doxyfile
+          sed -i 's/GENERATE_RTF.*/GENERATE_RTF = NO/' Doxyfile
+          sed -i 's/GENERATE_MAN.*/GENERATE_MAN = NO/' Doxyfile
+          sed -i 's/GENERATE_XML.*/GENERATE_XML = NO/' Doxyfile
+          sed -i 's/GENERATE_DOCBOOK.*/GENERATE_DOCBOOK = NO/' Doxyfile
+          
+          # 性能优化设置
+          sed -i 's/OPTIMIZE_OUTPUT_FOR_C.*/OPTIMIZE_OUTPUT_FOR_C = YES/' Doxyfile
+          sed -i 's/BUILTIN_STL_SUPPORT.*/BUILTIN_STL_SUPPORT = YES/' Doxyfile
+          sed -i 's/CPP_CLI_SUPPORT.*/CPP_CLI_SUPPORT = YES/' Doxyfile
+          
+          echo "Doxyfile configured, starting generation..."
           if ! doxygen Doxyfile; then
             echo "Doxygen failed, but workflow will continue."
+            echo "Restoring original Doxyfile..."
+            cp Doxyfile.backup Doxyfile
           fi
-      - name: Package doxygen html
+          
+          # 检查生成结果
+          if [ -d "html" ]; then
+            echo "✅ HTML documentation generated successfully."
+          else
+            echo "❌ Warning: HTML directory not found."
+            echo "Restoring original Doxyfile and retrying..."
+            cp Doxyfile.backup Doxyfile
+            doxygen Doxyfile || echo "Retry also failed"
+          fi
+      
+      - name: Package Documentation
         shell: bash
         run: |
           cd documentation
-          zip -r ../doxygen-html.zip html
+          if [ -d "html" ]; then
+            echo "Creating documentation package..."
+            zip -r ../doxygen-html.zip html
+            echo "✅ Documentation package created: doxygen-html.zip"
+          else
+            echo "❌ Error: HTML directory not found, cannot create package."
+            exit 1
+          fi
+      
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.VERSION || format('nightly-{0}', env.BUILD_DATE) }}
-          name: ${{ format('{0} Build', env.VERSION || 'Nightly') }} (${{ env.BUILD_DATE }})
+          tag_name: ${{ env.VERSION }}
+          name: "Release ${{ env.VERSION }} (${{ env.BUILD_DATE }})"
           body: |
-            自动发布于 ${{ env.BUILD_DATE }}
-             Commit: [${{ env.SHORT_SHA }}](${{ github.repository }}/commit/${{ github.sha }})
+            ## RT-Thread RTOS Documentation
+            
+            自动发布于 ${{ env.BUILD_DATETIME }}
+            Commit: [${{ env.SHORT_SHA }}](/commit/${{ github.sha }})
+            
+            ### 📦 包含内容
+            - 完整的 API 文档
+            - HTML 格式，支持搜索和导航
+            - 适用于离线查看
+            
+            ### 🔧 生成信息
+            - 构建时间: ${{ env.BUILD_DATETIME }}
+            - 提交哈希: ${{ env.SHORT_SHA }}
+            - 分支: ${{ github.ref_name }}
           files: doxygen-html.zip
-          prerelease: ${{ !env.VERSION }}
+          prerelease: ${{ contains(env.VERSION, 'nightly') }}
+          draft: false
