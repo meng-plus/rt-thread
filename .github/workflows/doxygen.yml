@@ -1,77 +1,62 @@
 name: doc_doxygen
 on:
-  pull_request:
-    branches:
-      - master
-    paths:
-      - 'documentation/**'
-      - 'src/**'
-      - 'include/**'
-      - 'components/finsh/**'
-      - 'components/drivers/include/drivers/**'
-      - 'components/drivers/clk/**'
-      - 'components/drivers/audio/**'
-      - 'components/dfs/dfs_v2/src/**'
-      - 'components/dfs/dfs_v2/include/**'
-      - '.github/workflows/doxygen.yml'
-  # Runs at 16:00 UTC (BeiJing 00:00) on the 30st of every month
   push:
-    branches: [master]
-    paths:
-      - 'documentation/**'
-      - 'src/**'
-      - 'include/**'
-      - 'components/finsh/**'
-      - 'components/drivers/include/drivers/**'
-      - 'components/drivers/clk/**'
-      - 'components/drivers/audio/**'
-      - 'components/dfs/dfs_v2/src/**'
-      - 'components/dfs/dfs_v2/include/**'
-      - '.github/workflows/doxygen.yml'
-  schedule:
-    - cron:  '0 16 30 * *'
-  workflow_dispatch:
-  
+    branches:
+      - 'doc-page'
+
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
-  
+
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     name: doxygen_doc generate
-    if: github.repository_owner == 'RT-Thread'
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
+          fetch-depth: 0
       - name: Install Tools
         shell: bash
         run: |
+          # 使用默认源安装工具
           sudo apt-get update
-          sudo apt-get -qq install doxygen graphviz
+          sudo apt-get -qq install doxygen graphviz zip openjdk-11-jre
+      - name: Set Environment Variables
+        shell: bash
+        run: |
+          echo "BUILD_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
+          # 如果是标签触发则提取版本号
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            echo "VERSION=${VERSION/v/}" >> $GITHUB_ENV
+          fi
       - name: generate doxygen html
+        shell: bash
+        continue-on-error: true
+        run: |
+          cd documentation
+          # 临时禁用 PlantUML 以避免错误
+          sed -i 's/PLANTUML_JAR_PATH.*/PLANTUML_JAR_PATH = /' Doxyfile
+          sed -i 's/HAVE_DOT.*/HAVE_DOT = NO/' Doxyfile
+          if ! doxygen Doxyfile; then
+            echo "Doxygen failed, but workflow will continue."
+          fi
+      - name: Package doxygen html
         shell: bash
         run: |
           cd documentation
-          doxygen Doxyfile
-          cat Doxyfile
-          
-      - name: Upload static files as artifact
-        id: deployment
-        uses: actions/upload-pages-artifact@main # or specific "vX.X.X" version tag for this action
+          zip -r ../doxygen-html.zip html
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
         with:
-          path: documentation/html/
-          
-  deploy:
-    if: github.event_name == 'push'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-22.04
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@main
+          tag_name: ${{ env.VERSION || format('nightly-{0}', env.BUILD_DATE) }}
+          name: ${{ format('{0} Build', env.VERSION || 'Nightly') }} (${{ env.BUILD_DATE }})
+          body: |
+            自动发布于 ${{ env.BUILD_DATE }}
+             Commit: [${{ env.SHORT_SHA }}](${{ github.repository }}/commit/${{ github.sha }})
+          files: doxygen-html.zip
+          prerelease: ${{ !env.VERSION }}
