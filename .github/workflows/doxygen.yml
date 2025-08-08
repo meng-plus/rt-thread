@@ -21,24 +21,24 @@ jobs:
         with:
           submodules: 'recursive'
           fetch-depth: 0
-      
+
       - name: Install Tools
         shell: bash
         run: |
           # 使用默认源安装工具
-          sudo apt-get update
-          sudo apt-get -qq install doxygen graphviz zip
+          apt-get update
+          apt-get -qq install doxygen graphviz zip
           # 验证安装
           doxygen --version
-          dot -V
-      
+            dot -V
+
       - name: Set Environment Variables
         shell: bash
         run: |
           # 设置时区为 UTC+8
           export TZ='Asia/Shanghai'
           echo "TZ=Asia/Shanghai" >> $GITHUB_ENV
-          
+
           echo "BUILD_DATE=$(TZ='Asia/Shanghai' date +'%Y%m%d')" >> $GITHUB_ENV
           echo "BUILD_TIME=$(TZ='Asia/Shanghai' date +'%H%M%S')" >> $GITHUB_ENV
           echo "BUILD_DATETIME=$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_ENV
@@ -61,10 +61,10 @@ jobs:
         run: |
           cd documentation
           echo "Starting Doxygen generation..."
-          
+
           # 备份原始 Doxyfile
           cp Doxyfile Doxyfile.backup
-          
+
           # 优化 Doxygen 配置
           sed -i 's/PLANTUML_JAR_PATH.*/PLANTUML_JAR_PATH = /' Doxyfile
           sed -i 's/HAVE_DOT.*/HAVE_DOT = NO/' Doxyfile
@@ -74,19 +74,19 @@ jobs:
           sed -i 's/GENERATE_MAN.*/GENERATE_MAN = NO/' Doxyfile
           sed -i 's/GENERATE_XML.*/GENERATE_XML = NO/' Doxyfile
           sed -i 's/GENERATE_DOCBOOK.*/GENERATE_DOCBOOK = NO/' Doxyfile
-          
+          sed -i 's/PROJECT_NUMBER.*/PROJECT_NUMBER = ${VERSION}/' Doxyfile
           # 性能优化设置
           sed -i 's/OPTIMIZE_OUTPUT_FOR_C.*/OPTIMIZE_OUTPUT_FOR_C = YES/' Doxyfile
           sed -i 's/BUILTIN_STL_SUPPORT.*/BUILTIN_STL_SUPPORT = YES/' Doxyfile
           sed -i 's/CPP_CLI_SUPPORT.*/CPP_CLI_SUPPORT = YES/' Doxyfile
-          
+
           echo "Doxyfile configured, starting generation..."
           if ! doxygen Doxyfile; then
             echo "Doxygen failed, but workflow will continue."
             echo "Restoring original Doxyfile..."
             cp Doxyfile.backup Doxyfile
           fi
-          
+
           # 检查生成结果
           if [ -d "html" ]; then
             echo "✅ HTML documentation generated successfully."
@@ -96,20 +96,19 @@ jobs:
             cp Doxyfile.backup Doxyfile
             doxygen Doxyfile || echo "Retry also failed"
           fi
-      
+
       - name: Package Documentation
         shell: bash
         run: |
           cd documentation
           if [ -d "html" ]; then
             echo "Creating documentation package..."
-            zip -r ../doxygen-html.zip html
-            echo "✅ Documentation package created: doxygen-html.zip"
+            zip -r ../doxygen-html-${VERSION}.zip html
+            echo "✅ Documentation package created: doxygen-html-${VERSION}.zip"
           else
             echo "❌ Error: HTML directory not found, cannot create package."
             exit 1
           fi
-      
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
@@ -117,19 +116,20 @@ jobs:
           name: "Release ${{ env.VERSION }} (${{ env.BUILD_DATE }})"
           body: |
             ## RT-Thread RTOS Documentation
-            
+
             自动发布于 ${{ env.BUILD_DATETIME }}
             Commit: [${{ env.SHORT_SHA }}](/commit/${{ github.sha }})
-            
+
             ### 📦 包含内容
             - 完整的 API 文档
             - HTML 格式，支持搜索和导航
             - 适用于离线查看
-            
+
             ### 🔧 生成信息
             - 构建时间: ${{ env.BUILD_DATETIME }}
             - 提交哈希: ${{ env.SHORT_SHA }}
             - 分支: ${{ github.ref_name }}
-          files: doxygen-html.zip
+          files: |
+            doxygen-html-${{ env.VERSION }}.zip
           prerelease: ${{ contains(env.VERSION, 'nightly') }}
           draft: false
