@@ -63,7 +63,6 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     name: ${{ matrix.platform.UTEST }} :${{ matrix.config_file }}
-    if: github.repository_owner == 'RT-Thread'
     strategy:
       fail-fast: false
       matrix:
@@ -160,108 +159,169 @@ jobs:
       UTEST_CONFIG_ROOT: .github/utest/configs
     steps:
       - uses: actions/checkout@main
+        with:
+          fetch-depth: 1
 
       - name: Install Tools
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get -yqq install scons qemu-system git device-tree-compiler
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install scons qemu-system git device-tree-compiler
           pip3 install kconfiglib
 
-      - name: Install ToolChains
+      # Resolve one toolchain per matrix cell so later jobs can hit actions/cache.
+      # cpp11 uses a separate cache key because it mutates toolchain headers in place.
+      - name: Select toolchain
+        id: toolchain
         shell: bash
         run: |
-          TOOLCHAIN_INSTALLED=""
+          set -euo pipefail
+          ARCH="${{ matrix.platform.QEMU_ARCH }}"
+          KERNEL="${{ matrix.platform.KERNEL }}"
+          UTEST="${{ matrix.platform.UTEST }}"
+          CFG="${{ matrix.config_file }}"
 
-          # Install Arm ToolChains
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "arm" && "${{ matrix.platform.KERNEL }}" == "standard" ]]; then
-            echo "Starting install Arm ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.3/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
-            sudo tar xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 -C /opt
-            /opt/gcc-arm-none-eabi-10-2020-q4-major/bin/arm-none-eabi-gcc --version
-            echo "RTT_EXEC_PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin" >> $GITHUB_ENV
-            echo "RTT_CC_PREFIX=arm-none-eabi-" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=arm" >> $GITHUB_ENV
+          ID=""
+          URL=""
+          DIR=""
+          PREFIX=""
+          BIN=""
+          FMT=""
+          NAME=""
+
+          if [[ "$UTEST" == "XUANTIE-rtsmart" && "$ARCH" == "riscv64" && "$KERNEL" == "rtsmart" ]]; then
+            ID="xuantie-900-gcc-linux-6.6.0-musl64-V3.0.2"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.9/Xuantie-900-gcc-linux-6.6.0-musl64-x86_64-V3.0.2.tar.gz"
+            DIR="/opt/Xuantie-900-gcc-linux-6.6.0-musl64-x86_64-V3.0.2"
+            PREFIX="riscv64-unknown-linux-musl-"
+            BIN="riscv64-unknown-linux-musl-gcc"
+            FMT="tar.gz"
+            NAME="riscv-musl"
+          elif [[ "$ARCH" == "arm" && "$KERNEL" == "standard" ]]; then
+            ID="gcc-arm-none-eabi-10-2020-q4-major"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.3/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2"
+            DIR="/opt/gcc-arm-none-eabi-10-2020-q4-major"
+            PREFIX="arm-none-eabi-"
+            BIN="arm-none-eabi-gcc"
+            FMT="tar.bz2"
+            NAME="arm"
+            if [[ "$CFG" == "cpp11/cpp11.cfg" ]]; then
+              ID="${ID}-cpp11"
+            fi
+          elif [[ "$ARCH" == "arm" && "$KERNEL" == "rtsmart" ]]; then
+            ID="arm-linux-musleabi-stable"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.7/arm-linux-musleabi_for_x86_64-pc-linux-gnu_stable.tar.bz2"
+            DIR="/opt/arm-linux-musleabi_for_x86_64-pc-linux-gnu"
+            PREFIX="arm-linux-musleabi-"
+            BIN="arm-linux-musleabi-gcc"
+            FMT="tar.bz2"
+            NAME="arm-musl"
+          elif [[ "$ARCH" == "riscv64" && "$KERNEL" == "standard" ]]; then
+            ID="riscv64-unknown-elf-10.2.0-2020.12.8"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.4/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14.tar.gz"
+            DIR="/opt/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14"
+            PREFIX=""
+            BIN="riscv64-unknown-elf-gcc"
+            FMT="tar.gz"
+            NAME="riscv"
+          elif [[ "$ARCH" == "riscv64" && "$KERNEL" == "rtsmart" ]]; then
+            ID="riscv64-linux-musleabi-latest"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.7/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu_latest.tar.bz2"
+            DIR="/opt/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu"
+            PREFIX="riscv64-unknown-linux-musl-"
+            BIN="riscv64-unknown-linux-musl-gcc"
+            FMT="tar.bz2"
+            NAME="riscv-musl"
+          elif [[ "$ARCH" == "aarch64" && "$KERNEL" == "standard" ]]; then
+            ID="gcc-arm-10.2-2020.11-aarch64-none-elf"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.6/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf.tar.xz"
+            DIR="/opt/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf"
+            PREFIX="aarch64-none-elf-"
+            BIN="aarch64-none-elf-gcc"
+            FMT="tar.xz"
+            NAME="aarch64"
+          elif [[ "$ARCH" == "aarch64" && "$KERNEL" == "rtsmart" ]]; then
+            ID="aarch64-linux-musleabi-stable"
+            URL="https://github.com/RT-Thread/toolchains-ci/releases/download/v1.7/aarch64-linux-musleabi_for_x86_64-pc-linux-gnu_stable.tar.bz2"
+            DIR="/opt/aarch64-linux-musleabi_for_x86_64-pc-linux-gnu"
+            PREFIX="aarch64-linux-musleabi-"
+            BIN="aarch64-linux-musleabi-gcc"
+            FMT="tar.bz2"
+            NAME="aarch64-musl"
+          else
+            echo "No valid toolchain mapping for ARCH=$ARCH KERNEL=$KERNEL UTEST=$UTEST"
+            exit 1
           fi
 
-          # Install Arm Musl ToolChains
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "arm" && "${{ matrix.platform.KERNEL }}" == "rtsmart" ]]; then
-            echo "Starting install Arm Musl ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.7/arm-linux-musleabi_for_x86_64-pc-linux-gnu_stable.tar.bz2
-            sudo tar xjf arm-linux-musleabi_for_x86_64-pc-linux-gnu_stable.tar.bz2 -C /opt
-            /opt/arm-linux-musleabi_for_x86_64-pc-linux-gnu/bin/arm-linux-musleabi-gcc --version
-            echo "RTT_EXEC_PATH=/opt/arm-linux-musleabi_for_x86_64-pc-linux-gnu/bin" >> $GITHUB_ENV
-            echo "RTT_CC_PREFIX=arm-linux-musleabi-" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=arm-musl" >> $GITHUB_ENV
+          {
+            echo "id=$ID"
+            echo "url=$URL"
+            echo "dir=$DIR"
+            echo "prefix=$PREFIX"
+            echo "bin=$BIN"
+            echo "fmt=$FMT"
+            echo "name=$NAME"
+          } >> "$GITHUB_OUTPUT"
+          echo "Selected toolchain: $ID -> $DIR"
+
+      - name: Cache toolchain
+        id: cache-toolchain
+        uses: actions/cache@main
+        with:
+          path: ${{ steps.toolchain.outputs.dir }}
+          key: ${{ runner.os }}-utest-tc-${{ steps.toolchain.outputs.id }}
+
+      - name: Download toolchain
+        if: steps.cache-toolchain.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="${{ steps.toolchain.outputs.url }}"
+          FMT="${{ steps.toolchain.outputs.fmt }}"
+          ARCHIVE="$(basename "$URL")"
+          echo "Downloading $ARCHIVE"
+          wget -q "$URL" -O "$ARCHIVE"
+          case "$FMT" in
+            tar.bz2) sudo tar xjf "$ARCHIVE" -C /opt ;;
+            tar.gz)  sudo tar xzf "$ARCHIVE" -C /opt ;;
+            tar.xz)  sudo tar xf "$ARCHIVE" -C /opt ;;
+            *) echo "Unknown archive format: $FMT"; exit 1 ;;
+          esac
+          rm -f "$ARCHIVE"
+
+      - name: Setup toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          DIR="${{ steps.toolchain.outputs.dir }}"
+          PREFIX="${{ steps.toolchain.outputs.prefix }}"
+          BIN="${{ steps.toolchain.outputs.bin }}"
+          NAME="${{ steps.toolchain.outputs.name }}"
+          CFG="${{ matrix.config_file }}"
+          ARCH="${{ matrix.platform.QEMU_ARCH }}"
+          KERNEL="${{ matrix.platform.KERNEL }}"
+
+          if [[ ! -x "$DIR/bin/$BIN" ]]; then
+            echo "Toolchain binary missing: $DIR/bin/$BIN"
+            exit 1
           fi
 
-          # Install RISC-V ToolChains
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "riscv64" && "${{ matrix.platform.KERNEL }}" == "standard" ]]; then
-            echo "Starting install RISC-V ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.4/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14.tar.gz
-            sudo tar zxvf riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14.tar.gz -C /opt
-            /opt/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14/bin/riscv64-unknown-elf-gcc --version
-            echo "RTT_EXEC_PATH=/opt/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14/bin" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=riscv" >> $GITHUB_ENV
+          "$DIR/bin/$BIN" --version
+          echo "RTT_EXEC_PATH=$DIR/bin" >> "$GITHUB_ENV"
+          if [[ -n "$PREFIX" ]]; then
+            echo "RTT_CC_PREFIX=$PREFIX" >> "$GITHUB_ENV"
           fi
+          echo "TOOLCHAIN_INSTALLED=$NAME" >> "$GITHUB_ENV"
 
-          # Install RISC-V Musl ToolChains
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "riscv64" && "${{ matrix.platform.KERNEL }}" == "rtsmart" ]]; then
-            echo "Starting install RISC-V Musl ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.7/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu_latest.tar.bz2
-            sudo tar xjf riscv64-linux-musleabi_for_x86_64-pc-linux-gnu_latest.tar.bz2 -C /opt
-            /opt/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/riscv64-unknown-linux-musl-gcc --version
-            echo "RTT_EXEC_PATH=/opt/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin" >> $GITHUB_ENV
-            echo "RTT_CC_PREFIX=riscv64-unknown-linux-musl-" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=riscv-musl" >> $GITHUB_ENV
-          fi
-
-          # Install RISC-V XUANTIE Musl ToolChains
-          if [[ "${{ matrix.platform.UTEST }}" == "XUANTIE-rtsmart" && "${{ matrix.platform.QEMU_ARCH }}" == "riscv64" && "${{ matrix.platform.KERNEL }}" == "rtsmart" ]]; then
-            echo "Starting install RISC-V XUANTIE Musl ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.9/Xuantie-900-gcc-linux-6.6.0-musl64-x86_64-V3.0.2.tar.gz
-            sudo tar zxvf Xuantie-900-gcc-linux-6.6.0-musl64-x86_64-V3.0.2.tar.gz -C /opt
-            /opt/Xuantie-900-gcc-linux-6.6.0-musl64-x86_64-V3.0.2/bin/riscv64-unknown-linux-musl-gcc --version
-            echo "RTT_EXEC_PATH=/opt/Xuantie-900-gcc-linux-6.6.0-musl64-x86_64-V3.0.2/bin" >> $GITHUB_ENV
-            echo "RTT_CC_PREFIX=riscv64-unknown-linux-musl-" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=riscv-musl" >> $GITHUB_ENV
-          fi
-
-          # Install AARCH64 ToolChains
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "aarch64" && "${{ matrix.platform.KERNEL }}" == "standard" ]]; then
-            echo "Starting install AARCH64 ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.6/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf.tar.xz
-            sudo tar -xvJf gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf.tar.xz -C /opt
-            /opt/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf/bin/aarch64-none-elf-gcc --version
-            echo "RTT_EXEC_PATH=/opt/gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf/bin" >> $GITHUB_ENV
-            echo "RTT_CC_PREFIX=aarch64-none-elf-" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=aarch64" >> $GITHUB_ENV
-          fi
-
-          # Install AARCH64 Musl ToolChains
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "aarch64" && "${{ matrix.platform.KERNEL }}" == "rtsmart" ]]; then
-            echo "Starting install AARCH64 Musl ToolChains"
-            wget -q https://github.com/RT-Thread/toolchains-ci/releases/download/v1.7/aarch64-linux-musleabi_for_x86_64-pc-linux-gnu_stable.tar.bz2
-            sudo tar xjf aarch64-linux-musleabi_for_x86_64-pc-linux-gnu_stable.tar.bz2 -C /opt
-            /opt/aarch64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/aarch64-linux-musleabi-gcc --version
-            echo "RTT_EXEC_PATH=/opt/aarch64-linux-musleabi_for_x86_64-pc-linux-gnu/bin" >> $GITHUB_ENV
-            echo "RTT_CC_PREFIX=aarch64-linux-musleabi-" >> $GITHUB_ENV
-            echo "TOOLCHAIN_INSTALLED=aarch64-musl" >> $GITHUB_ENV
-          fi
-
-          # Install CPP11 Preprocessing Toolchain
-          if [[ "${{ matrix.platform.QEMU_ARCH }}" == "arm" && "${{ matrix.config_file }}" == "cpp11/cpp11.cfg" && "${{ matrix.platform.KERNEL }}" == "standard" ]]; then
-            sudo rm -f /opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/c++/10.2.1/thread
-            sudo rm -f /opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/c++/10.2.1/mutex
-            sudo rm -f /opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/c++/10.2.1/condition_variable
-            sudo rm -f /opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/c++/10.2.1/future
-            sudo rm -f /opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/pthread.h
-            sudo cat /dev/null > /opt/gcc-arm-none-eabi-10-2020-q4-major/arm-none-eabi/include/sys/_pthreadtypes.h
-            sed -i 's/-fno-exceptions/ /g' $TEST_BSP_ROOT/rtconfig.py
-          fi
-
-          if [ "$TOOLCHAIN_INSTALLED" == "None" ]; then
-            echo "No valid toolchain installed, stopping the workflow."
+          # cpp11 mutates headers; cache key already isolates this variant.
+          if [[ "$ARCH" == "arm" && "$CFG" == "cpp11/cpp11.cfg" && "$KERNEL" == "standard" ]]; then
+            sudo rm -f "$DIR/arm-none-eabi/include/c++/10.2.1/thread"
+            sudo rm -f "$DIR/arm-none-eabi/include/c++/10.2.1/mutex"
+            sudo rm -f "$DIR/arm-none-eabi/include/c++/10.2.1/condition_variable"
+            sudo rm -f "$DIR/arm-none-eabi/include/c++/10.2.1/future"
+            sudo rm -f "$DIR/arm-none-eabi/include/pthread.h"
+            sudo cat /dev/null > "$DIR/arm-none-eabi/include/sys/_pthreadtypes.h"
+            sed -i 's/-fno-exceptions/ /g' "$TEST_BSP_ROOT/rtconfig.py"
           fi
 
       - name: Build BSP
@@ -282,6 +342,58 @@ jobs:
           scons --pyconfig-silent -C $TEST_BSP_ROOT
           scons -j$(nproc) --strict -C $TEST_BSP_ROOT
 
+      - name: Cache Xuantie QEMU
+        if: ${{ matrix.platform.UTEST == 'XUANTIE-rtsmart' && env.TOOLCHAIN_INSTALLED != '' && success() }}
+        id: cache-xuantie-qemu
+        uses: actions/cache@main
+        with:
+          path: ${{ github.workspace }}/xuantie-qemu
+          key: ${{ runner.os }}-xuantie-qemu-V5.0.5-B20250108-0335
+
+      - name: Install Xuantie QEMU
+        if: ${{ matrix.platform.UTEST == 'XUANTIE-rtsmart' && env.TOOLCHAIN_INSTALLED != '' && success() && steps.cache-xuantie-qemu.outputs.cache-hit != 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install dos2unix libcapstone-dev libbrlapi-dev
+          ARCHIVE="Xuantie-qemu-x86_64-Ubuntu-20.04-V5.0.5-B20250108-0335.tar.gz"
+          wget -q "https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1736318325160/${ARCHIVE}" -O "$ARCHIVE"
+          tar xzf "$ARCHIVE"
+          rm -f "$ARCHIVE"
+          dos2unix ./install/qemu_post_install_small.sh
+          sudo chmod +x ./install/qemu_post_install_small.sh
+          sudo ./install/qemu_post_install_small.sh
+          mkdir -p xuantie-qemu
+          rm -rf xuantie-qemu/install
+          mv install xuantie-qemu/install
+
+      - name: Prepare Xuantie QEMU runtime
+        if: ${{ matrix.platform.UTEST == 'XUANTIE-rtsmart' && env.TOOLCHAIN_INSTALLED != '' && success() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Shared libs are not in cache; ensure they exist on every run.
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install libcapstone-dev libbrlapi-dev
+          if [[ ! -d xuantie-qemu/install && -d install ]]; then
+            mkdir -p xuantie-qemu
+            mv install xuantie-qemu/install
+          fi
+          QEMU_BIN="xuantie-qemu/install/bin/qemu-system-${TEST_QEMU_ARCH}"
+          if [[ ! -f "$QEMU_BIN" ]]; then
+            echo "ERROR: $QEMU_BIN not found."
+            exit 1
+          fi
+          tmp_output=$(mktemp)
+          ldd "$QEMU_BIN" > "$tmp_output" 2>&1 || true
+          missing_libs=$(grep "not found" "$tmp_output" | awk '{print $1}' || true)
+          rm -f "$tmp_output"
+          for lib in $missing_libs; do
+            base_lib=$(echo "$lib" | sed -E 's/\.so.*/\.so/')
+            echo "Fix missing library link: $lib -> $base_lib"
+            sudo ln -sfn "/usr/lib/x86_64-linux-gnu/$base_lib" "/usr/lib/x86_64-linux-gnu/$lib"
+          done
+          echo "XUANTIE_QEMU_BIN=$QEMU_BIN" >> "$GITHUB_ENV"
+
       - name: QEMU Run Test
         if: ${{ env.TOOLCHAIN_INSTALLED != '' && success() }}
         run: |
@@ -290,8 +402,7 @@ jobs:
             mkfs.fat $TEST_BSP_ROOT/sd.bin
           fi
 
-          if [[ "${{ matrix.platform.QEMU_ARCH }}"  == "aarch64" ]]; then 
-            sudo apt-get -yqq install device-tree-compiler
+          if [[ "${{ matrix.platform.QEMU_ARCH }}"  == "aarch64" ]]; then
             if [[ "${{ matrix.platform.QEMU_MACHINE }}"  == "virt" ]]; then
               qemu-system-$TEST_QEMU_ARCH -M virt -cpu max -smp 4 -m 128M -kernel $TEST_BSP_ROOT/rtthread.bin -nographic \
               -append "console=ttyAMA0 earlycon cma=8M coherent_pool=2M root=vda0 rootfstype=elm rootwait rw" \
@@ -311,49 +422,27 @@ jobs:
               > qemu_output_$TEST_QEMU_ARCH.log  2>&1 &
             fi
           elif [[ "${{ matrix.platform.UTEST }}"  == "XUANTIE-rtsmart" ]]; then
-            sudo apt-get install -y dos2unix libcapstone-dev libbrlapi-dev
-            wget -q https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1736318325160/Xuantie-qemu-x86_64-Ubuntu-20.04-V5.0.5-B20250108-0335.tar.gz
-            tar zxvf  Xuantie-qemu-x86_64-Ubuntu-20.04-V5.0.5-B20250108-0335.tar.gz
-            dos2unix ./install/qemu_post_install_small.sh
-            sudo chmod +x ./install/qemu_post_install_small.sh
-            sudo ./install/qemu_post_install_small.sh
-
-            QEMU_BIN="./install/bin/qemu-system-$TEST_QEMU_ARCH"
-            [ ! -f "$QEMU_BIN" ] && echo "ERROR: $QEMU_BIN not found." && exit 1
-
-            tmp_output=$(mktemp)
-            ldd "$QEMU_BIN" > "$tmp_output" 2>&1
-            missing_libs=$(grep "not found" "$tmp_output" | awk '{print $1}')
-
-            for lib in $missing_libs; do
-              base_lib=$(echo "$lib" | sed -E 's/\.so.*/\.so/')
-
-              echo "🔍 修复基础库：$base_lib ..."
-              sudo ln -s /usr/lib/x86_64-linux-gnu/$base_lib  /usr/lib/x86_64-linux-gnu/$lib
-            done
-            echo "✅ 所有缺失库已处理。"
-
-            $QEMU_BIN -cpu c906fd -M $TEST_QEMU_MACHINE -kernel $TEST_BSP_ROOT/rtthread.bin -nographic \
+            "$XUANTIE_QEMU_BIN" -cpu c906fd -M $TEST_QEMU_MACHINE -kernel $TEST_BSP_ROOT/rtthread.bin -nographic \
             -drive if=none,file=$TEST_BSP_ROOT/sd.bin,format=raw,id=blk0 -device virtio-blk-device,drive=blk0,bus=virtio-mmio-bus.0 \
             > qemu_output_$TEST_QEMU_ARCH.log  2>&1 &
-          elif [[ "${{ matrix.platform.QEMU_ARCH }}"  == "arm" ]]; then 
+          elif [[ "${{ matrix.platform.QEMU_ARCH }}"  == "arm" ]]; then
             qemu-system-$TEST_QEMU_ARCH \
                 -nographic \
                 -M $TEST_QEMU_MACHINE \
                 -kernel $TEST_BSP_ROOT/rtthread.bin  \
                 -sd $TEST_BSP_ROOT/sd.bin  \
                 > qemu_output_$TEST_QEMU_ARCH.log  2>&1 &
-          else 
+          else
             qemu-system-$TEST_QEMU_ARCH \
                 -nographic \
                 -M $TEST_QEMU_MACHINE \
                 -kernel $TEST_BSP_ROOT/rtthread.bin  \
                 > qemu_output_$TEST_QEMU_ARCH.log  2>&1 &
-          fi 
+          fi
 
           QEMU_PID=$!
           disown $QEMU_PID
-      
+
       - name: Monitor qemu log
         if: ${{ env.TOOLCHAIN_INSTALLED != '' && success() }}
         timeout-minutes: 20
@@ -367,7 +456,7 @@ jobs:
             echo "Error: QEMU log file $LOG_FILE was not created."
             exit 1
           fi
-          
+
           echo "=========================================================================================="
           echo " ||                                                                                    || "
           echo " ||                          Start automatic running of Utest                          || "
