@@ -191,7 +191,7 @@ typedef int (*init_fn_t)(void);
 /*
  * Early init, called by rt_components_early_init() before the console device
  * is bound. Section names sort lexicographically, so:
- *   "0.end" < "1" < "1.0" < "1.1" < "1.2" < "1.end" < "2"
+ *   "0.end" < "1" < "1.0" < "1.1" < "1.2" < "1.3" < "1.end" < "2"
  * Sub-levels keep pin, uart and the null sink in a fixed order. Do not put
  * unrelated functions in the same sub-level: link order inside one section
  * is not a dependency order.
@@ -200,6 +200,7 @@ typedef int (*init_fn_t)(void);
 #define INIT_EARLY_EXPORT_0(fn)         INIT_EXPORT(fn, "1.0")
 #define INIT_EARLY_EXPORT_1(fn)         INIT_EXPORT(fn, "1.1")
 #define INIT_EARLY_EXPORT_2(fn)         INIT_EXPORT(fn, "1.2")
+#define INIT_EARLY_EXPORT_3(fn)         INIT_EXPORT(fn, "1.3")
 
 /* board init routines will be called in board_init() function */
 #define INIT_BOARD_EXPORT(fn)           INIT_EXPORT(fn, "2")

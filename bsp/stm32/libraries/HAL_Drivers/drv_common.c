@@ -185,8 +185,58 @@ void rt_hw_us_delay(rt_uint32_t us)
 
 void MPU_Config(void);
 
+#ifdef RT_USING_BUILTIN_FDT
+static int rt_stm32_fdt_init(void)
+{
+    if (rt_fdt_prefetch((void *)rt_hw_builtin_fdt) != RT_EOK ||
+        rt_fdt_unflatten() != RT_EOK)
+    {
+        LOG_E("Builtin FDT initialization failed");
+        RT_ASSERT(0);
+    }
+
+#ifdef RT_USING_PIC
+    if (rt_pic_init() != RT_EOK || rt_pic_irq_init() != RT_EOK)
+    {
+        LOG_E("PIC initialization failed");
+        RT_ASSERT(0);
+    }
+#endif
+
+    return 0;
+}
+#if defined(RT_USING_COMPONENTS_INIT)
+/* "1" runs before pin ("1.0"). Heap is already ready. */
+INIT_EARLY_EXPORT(rt_stm32_fdt_init);
+#endif
+#endif
+
+#if !defined(RT_USING_COMPONENTS_INIT) || defined(RT_USING_CONSOLE)
+static int rt_stm32_console_init(void)
+{
+#if defined(RT_USING_CONSOLE) && defined(RT_USING_DEVICE)
+    rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
+#endif
+
+#if defined(RT_USING_CONSOLE) && defined(RT_USING_NANO)
+    extern void rt_hw_console_init(void);
+    rt_hw_console_init();
+#endif
+
+    return 0;
+}
+#if defined(RT_USING_COMPONENTS_INIT)
+/* After pin ("1.0"), uart ("1.1") and null ("1.2"). */
+INIT_EARLY_EXPORT_3(rt_stm32_console_init);
+#endif
+#endif
+
 /**
  * This function will initial STM32 board.
+ *
+ * Cache, HAL, clock and heap stay here. Their order is fixed and they must
+ * finish before any INIT_EARLY function. FDT, pin, uart, null and the console
+ * are registered in the early stage, then board drivers run.
  */
 rt_weak void rt_hw_board_init(void)
 {
@@ -211,47 +261,18 @@ rt_weak void rt_hw_board_init(void)
     rt_system_heap_init((void *)HEAP_BEGIN, (void *)HEAP_END);
 #endif
 
-#ifdef RT_USING_BUILTIN_FDT
-    if (rt_fdt_prefetch((void *)rt_hw_builtin_fdt) != RT_EOK ||
-        rt_fdt_unflatten() != RT_EOK)
-    {
-        LOG_E("Builtin FDT initialization failed");
-        RT_ASSERT(0);
-    }
-
-#ifdef RT_USING_PIC
-    if (rt_pic_init() != RT_EOK || rt_pic_irq_init() != RT_EOK)
-    {
-        LOG_E("PIC initialization failed");
-        RT_ASSERT(0);
-    }
-#endif
-#endif
-
 #ifdef RT_USING_COMPONENTS_INIT
-    /* pin, uart and the null device, before the console is bound */
-    rt_components_early_init();
+    rt_components_board_init();
 #else
+#if defined(RT_USING_BUILTIN_FDT)
+    rt_stm32_fdt_init();
+#endif
 #if defined(RT_USING_PIN) && !defined(RT_USING_DM)
     rt_hw_pin_init();
 #endif
 #ifdef RT_USING_SERIAL
     rt_hw_usart_init();
 #endif
-#endif
-
-#if defined(RT_USING_CONSOLE) && defined(RT_USING_DEVICE)
-    /* Set the shell console output device */
-    rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
-#endif
-
-#if defined(RT_USING_CONSOLE) && defined(RT_USING_NANO)
-    extern void rt_hw_console_init(void);
-    rt_hw_console_init();
-#endif
-
-#ifdef RT_USING_COMPONENTS_INIT
-    /* Board underlying hardware initialization */
-    rt_components_board_init();
+    rt_stm32_console_init();
 #endif
 }

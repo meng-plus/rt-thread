@@ -45,6 +45,7 @@
  * INIT_EARLY_EXPORT_0    --> 1.0     pin
  * INIT_EARLY_EXPORT_1    --> 1.1     uart
  * INIT_EARLY_EXPORT_2    --> 1.2     null
+ * INIT_EARLY_EXPORT_3    --> 1.3     console
  * rti_early_end          --> 1.end
  * INIT_BOARD_EXPORT      --> 2
  * rti_board_end          --> 2.end
