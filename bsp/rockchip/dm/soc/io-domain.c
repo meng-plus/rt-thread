@@ -708,4 +708,4 @@ static int rockchip_iodomain_register(void)
     return 0;
 }
 /* PMIC-backed regulators are registered at INIT_DEVICE (level 3). */
-INIT_EXPORT(rockchip_iodomain_register, "3.9");
+INIT_EXPORT(rockchip_iodomain_register, "4.9");

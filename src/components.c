@@ -39,25 +39,28 @@
 /*
  * Components Initialization will initialize some driver and components as following
  * order:
- * rti_start         --> 0
- * BOARD_EXPORT      --> 1
- * rti_board_end     --> 1.end
+ * rti_start              --> 0
+ * rti_board_start        --> 0.end
+ * INIT_EARLY_EXPORT      --> 1
+ * INIT_EARLY_EXPORT_0    --> 1.0     pin
+ * INIT_EARLY_EXPORT_1    --> 1.1     uart
+ * INIT_EARLY_EXPORT_2    --> 1.2     null
+ * rti_early_end          --> 1.end
+ * INIT_BOARD_EXPORT      --> 2
+ * rti_board_end          --> 2.end
  *
- * DEVICE_EXPORT     --> 2
- * COMPONENT_EXPORT  --> 3
- * FS_EXPORT         --> 4
- * ENV_EXPORT        --> 5
- * APP_EXPORT        --> 6
+ * INIT_PREV_EXPORT       --> 3
+ * INIT_DEVICE_EXPORT     --> 4
+ * INIT_COMPONENT_EXPORT  --> 5
+ * INIT_ENV_EXPORT        --> 6
+ * INIT_APP_EXPORT        --> 7
+ * INIT_FS_EXPORT         --> 7.0
+ * rti_end                --> 7.end
  *
- * rti_end           --> 6.end
- *
- * These automatically initialization, the driver or component initial function must
- * be defined with:
- * INIT_BOARD_EXPORT(fn);
- * INIT_DEVICE_EXPORT(fn);
- * ...
- * INIT_APP_EXPORT(fn);
- * etc.
+ * rt_components_early_init() walks [0.end, 1.end).
+ * rt_components_board_init() walks [1.end, 2.end).
+ * Boards that bind the console between the two calls must invoke early init
+ * first. board_init itself runs early init once if the board did not.
  */
 static int rti_start(void)
 {
@@ -71,17 +74,70 @@ static int rti_board_start(void)
 }
 INIT_EXPORT(rti_board_start, "0.end");
 
+static int rti_early_end(void)
+{
+    return 0;
+}
+INIT_EXPORT(rti_early_end, "1.end");
+
 static int rti_board_end(void)
 {
     return 0;
 }
-INIT_EXPORT(rti_board_end, "1.end");
+INIT_EXPORT(rti_board_end, "2.end");
 
 static int rti_end(void)
 {
     return 0;
 }
-INIT_EXPORT(rti_end, "6.end");
+INIT_EXPORT(rti_end, "7.end");
+
+static rt_bool_t _components_early_inited = RT_FALSE;
+
+#ifdef RT_DEBUGING_AUTO_INIT
+static void _rt_components_run(const struct rt_init_desc *begin, const struct rt_init_desc *end)
+{
+    int result;
+    const struct rt_init_desc *desc;
+
+    for (desc = begin; desc < end; desc++)
+    {
+        rt_kprintf("initialize %s\n", desc->fn_name);
+        result = desc->fn();
+        rt_kprintf(":%d done\n", result);
+    }
+}
+#else
+static void _rt_components_run(volatile const init_fn_t *begin, volatile const init_fn_t *end)
+{
+    volatile const init_fn_t *fn_ptr;
+
+    for (fn_ptr = begin; fn_ptr < end; fn_ptr++)
+    {
+        (*fn_ptr)();
+    }
+}
+#endif /* RT_DEBUGING_AUTO_INIT */
+
+/**
+ * @brief  Early hardware and software-sink initialization.
+ *         pin, uart and the null device are registered here, before
+ *         rt_console_set_device().
+ */
+void rt_components_early_init(void)
+{
+    if (_components_early_inited)
+    {
+        return;
+    }
+    _components_early_inited = RT_TRUE;
+
+#ifdef RT_DEBUGING_AUTO_INIT
+    _rt_components_run(&__rt_init_desc_rti_board_start, &__rt_init_desc_rti_early_end);
+#else
+    _rt_components_run(&__rt_init_rti_board_start, &__rt_init_rti_early_end);
+#endif /* RT_DEBUGING_AUTO_INIT */
+}
 
 /**
  * @brief  Onboard components initialization. In this function, the board-level
@@ -90,22 +146,12 @@ INIT_EXPORT(rti_end, "6.end");
  */
 void rt_components_board_init(void)
 {
-#ifdef RT_DEBUGING_AUTO_INIT
-    int result;
-    const struct rt_init_desc *desc;
-    for (desc = &__rt_init_desc_rti_board_start; desc < &__rt_init_desc_rti_board_end; desc++)
-    {
-        rt_kprintf("initialize %s\n", desc->fn_name);
-        result = desc->fn();
-        rt_kprintf(":%d done\n", result);
-    }
-#else
-    volatile const init_fn_t *fn_ptr;
+    rt_components_early_init();
 
-    for (fn_ptr = &__rt_init_rti_board_start; fn_ptr < &__rt_init_rti_board_end; fn_ptr++)
-    {
-        (*fn_ptr)();
-    }
+#ifdef RT_DEBUGING_AUTO_INIT
+    _rt_components_run(&__rt_init_desc_rti_early_end, &__rt_init_desc_rti_board_end);
+#else
+    _rt_components_run(&__rt_init_rti_early_end, &__rt_init_rti_board_end);
 #endif /* RT_DEBUGING_AUTO_INIT */
 }
 

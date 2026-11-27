@@ -280,16 +280,17 @@ INIT_BOARD_EXPORT(rt_hw_usart_init);    /* Use component auto-initialization mec
 
 The last part of the sample code `INIT_BOARD_EXPORT(rt_hw_usart_init)` indicates that the automatic initialization function is used. In this way, `rt_hw_usart_init()` function is automatically called by the system, so where is it called?
 
-In the system startup flowchart, there are two functions: `rt_components_board_init()` and `rt_components_init()`, subsequent functions inside the box with the underlying color represent functions that are automatically initialized, where:
+In the system startup flowchart, `rt_components_early_init()`, `rt_components_board_init()` and `rt_components_init()` run the automatically initialized functions, where:
 
-1.  “board init functions” are all initialization functions declared by `INIT_BOARD_EXPORT(fn)`.
-2.  “pre-initialization functions” are all initialization functions declared by `INIT_PREV_EXPORT(fn)`.
-3.  “device init functions” are all initialization functions declared by `INIT_DEVICE_EXPORT(fn)`.
-4.  “components init functions” are all initialization functions declared by `INIT_COMPONENT_EXPORT(fn)`.
-5.  “enviroment init functions” are all initialization functions declared by `INIT_ENV_EXPORT(fn)`.
-6.  “application init functions” are all initialization functions declared by `INIT_APP_EXPORT(fn)`.
+1.  “early init functions” are all initialization functions declared by `INIT_EARLY_EXPORT(fn)`.
+2.  “board init functions” are all initialization functions declared by `INIT_BOARD_EXPORT(fn)`.
+3.  “pre-initialization functions” are all initialization functions declared by `INIT_PREV_EXPORT(fn)`.
+4.  “device init functions” are all initialization functions declared by `INIT_DEVICE_EXPORT(fn)`.
+5.  “components init functions” are all initialization functions declared by `INIT_COMPONENT_EXPORT(fn)`.
+6.  “enviroment init functions” are all initialization functions declared by `INIT_ENV_EXPORT(fn)`.
+7.  “application init functions” are all initialization functions declared by `INIT_APP_EXPORT(fn)`.
 
-The `rt_components_board_init()` function executes earlier, mainly to initialize the relevant hardware environment. When this function is executed, it will traverse the initialization function table declared by `INIT_BOARD_EXPORT(fn)` and call each function.
+`rt_components_early_init()` runs first and traverses `INIT_EARLY_EXPORT(fn)`. Pin, uart and the null device belong here, so the console can be bound afterwards. `rt_components_board_init()` then traverses `INIT_BOARD_EXPORT(fn)` and initializes the remaining on-board peripherals. A board that only calls `rt_components_board_init()` still runs the early stage once.
 
 The `rt_components_init()` function is called and executed in the main thread created after the operating system is running. At this time, the hardware environment and the operating system have been initialized and the application-related code can be executed. The `rt_components_init()` function will transverse through the remaining few initialization function tables declared by macros.
 
@@ -299,12 +300,13 @@ The macro interface definitions used to implement the automatic initialization f
 
 |Initialization sequence|Macro Interface            |Description                                   |
 |-----------------------|---------------------------|----------------------------------------------|
-| 1                     | INIT_BOARD_EXPORT(fn)     | Very early initialization, the scheduler has not started yet. |
-| 2                     | INIT_PREV_EXPORT(fn)      | Mainly used for pure software initialization, functions without too many dependencies |
-| 3                     | INIT_DEVICE_EXPORT(fn)    | Peripheral driver initialization related, such as network card devices |
-| 4                     | INIT_COMPONENT_EXPORT(fn) | Component initialization, such as file system or LWIP |
-| 5                     | INIT_ENV_EXPORT(fn)       | System environment initialization, such as mounting file systems |
-| 6                     | INIT_APP_EXPORT(fn)       | Application initialization, such as application GUI |
+| 1                     | INIT_EARLY_EXPORT(fn)     | Earliest initialization, before the console device is bound. Scheduler has not started. |
+| 2                     | INIT_BOARD_EXPORT(fn)     | Board peripherals after the console is bound. Scheduler has not started. |
+| 3                     | INIT_PREV_EXPORT(fn)      | Mainly used for pure software initialization, functions without too many dependencies |
+| 4                     | INIT_DEVICE_EXPORT(fn)    | Peripheral driver initialization related, such as network card devices |
+| 5                     | INIT_COMPONENT_EXPORT(fn) | Component initialization, such as file system or LWIP |
+| 6                     | INIT_ENV_EXPORT(fn)       | System environment initialization, such as mounting file systems |
+| 7                     | INIT_APP_EXPORT(fn)       | Application initialization, such as application GUI |
 
 Initialization function actively declares through these macro interfaces, such as `INIT_BOARD_EXPORT(rt_hw_usart_init)`, the linker will automatically collect all the declared initialization functions, placed in the RTI symbol segment, the symbol segment is located in the RO segment of the memory distribution. All functions in this RTI symbol segment are automatically called when the system is initialized.
 

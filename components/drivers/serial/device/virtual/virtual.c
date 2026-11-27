@@ -724,7 +724,7 @@ _fail:
 
     return (int)err;
 }
-INIT_EXPORT(virtual_serial_setup, "3.end");
+INIT_EXPORT(virtual_serial_setup, "4.end");
 
 #if defined(RT_USING_CONSOLE) && defined(RT_USING_MSH)
 static int virtual_serial_cmd_color(int argc, char**argv)

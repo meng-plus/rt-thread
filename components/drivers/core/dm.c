@@ -25,13 +25,13 @@ static int rti_secondary_cpu_start(void)
 {
     return 0;
 }
-INIT_EXPORT(rti_secondary_cpu_start, "6.end");
+INIT_EXPORT(rti_secondary_cpu_start, "7.end");
 
 static int rti_secondary_cpu_end(void)
 {
     return 0;
 }
-INIT_EXPORT(rti_secondary_cpu_end, "7.end");
+INIT_EXPORT(rti_secondary_cpu_end, "8.end");
 
 void rt_dm_secondary_cpu_init(void)
 {

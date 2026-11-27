@@ -1428,5 +1428,6 @@ int rt_hw_usart_init(void)
 
     return result;
 }
+INIT_EARLY_EXPORT_1(rt_hw_usart_init);
 
 #endif /* RT_USING_SERIAL_V2 */

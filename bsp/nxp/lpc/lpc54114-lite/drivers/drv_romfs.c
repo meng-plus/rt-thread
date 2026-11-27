@@ -62,4 +62,4 @@ int rt_hw_romfs_init(void)
 
     return 0;
 }
-INIT_EXPORT(rt_hw_romfs_init, "4.end");
+INIT_EXPORT(rt_hw_romfs_init, "5.end");

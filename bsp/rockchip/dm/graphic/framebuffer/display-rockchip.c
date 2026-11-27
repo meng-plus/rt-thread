@@ -724,7 +724,7 @@ static int rockchip_display_routes_init(void)
 
     return 0;
 }
-INIT_EXPORT(rockchip_display_routes_init, "4.1");
+INIT_EXPORT(rockchip_display_routes_init, "5.1");
 
 static const struct rt_ofw_node_id display_subsys_ids[] =
 {

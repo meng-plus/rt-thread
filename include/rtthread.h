@@ -768,6 +768,7 @@ void rt_interrupt_leave_sethook(void (*hook)(void));
 
 #ifdef RT_USING_COMPONENTS_INIT
 void rt_components_init(void);
+void rt_components_early_init(void);
 void rt_components_board_init(void);
 #endif /* RT_USING_COMPONENTS_INIT */
 

@@ -73,4 +73,4 @@ static int ttyAMA0_init(void)
 
     return 0;
 }
-INIT_EXPORT(ttyAMA0_init, "1.3");
+INIT_EXPORT(ttyAMA0_init, "2.3");

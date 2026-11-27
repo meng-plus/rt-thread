@@ -228,12 +228,16 @@ rt_weak void rt_hw_board_init(void)
 #endif
 #endif
 
+#ifdef RT_USING_COMPONENTS_INIT
+    /* pin, uart and the null device, before the console is bound */
+    rt_components_early_init();
+#else
 #if defined(RT_USING_PIN) && !defined(RT_USING_DM)
     rt_hw_pin_init();
 #endif
-
 #ifdef RT_USING_SERIAL
     rt_hw_usart_init();
+#endif
 #endif
 
 #if defined(RT_USING_CONSOLE) && defined(RT_USING_DEVICE)

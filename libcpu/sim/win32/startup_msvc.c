@@ -23,16 +23,18 @@
  * Components Initialization will initialize some driver and components as following
  * order:
  * rti_start         --> 0
- * BOARD_EXPORT      --> 1
- * rti_board_end     --> 1.end
+ * EARLY_EXPORT      --> 1
+ * rti_early_end     --> 1.end
+ * BOARD_EXPORT      --> 2
+ * rti_board_end     --> 2.end
  *
- * DEVICE_EXPORT     --> 2
- * COMPONENT_EXPORT  --> 3
- * FS_EXPORT         --> 4
- * ENV_EXPORT        --> 5
- * APP_EXPORT        --> 6
+ * PREV_EXPORT       --> 3
+ * DEVICE_EXPORT     --> 4
+ * COMPONENT_EXPORT  --> 5
+ * ENV_EXPORT        --> 6
+ * APP_EXPORT        --> 7
  *
- * rti_end           --> 6.end
+ * rti_end           --> 7.end
  *
  * These automatically initialization, the driver or component initial function must
  * be defined with:
@@ -65,17 +67,23 @@ static int rti_start(void)
 }
 INIT_EXPORT(rti_start, "0");
 
+static int rti_early_end(void)
+{
+    return 0;
+}
+INIT_EXPORT(rti_early_end, "1.end");
+
 static int rti_board_end(void)
 {
     return 0;
 }
-INIT_EXPORT(rti_board_end, "1.end");
+INIT_EXPORT(rti_board_end, "2.end");
 
 static int rti_end(void)
 {
     return 0;
 }
-INIT_EXPORT(rti_end, "6.end");
+INIT_EXPORT(rti_end, "7.end");
 
 struct rt_init_tag
 {
@@ -89,6 +97,7 @@ struct rt_init_tag
 static rt_size_t rt_init_num = 0;
 static struct rt_init_tag rt_init_table[2048] = { 0 };
 static rt_bool_t rt_init_flag = RT_FALSE;
+static rt_bool_t rt_early_inited = RT_FALSE;
 
 static int rt_init_objects_sort(void)
 {
@@ -148,13 +157,8 @@ static int rt_init_objects_sort(void)
     return rt_init_num;
 }
 
-/**
- * RT-Thread Components Initialization for board
- */
-void rt_components_board_init(void)
+static void _rt_components_run_range(const char *lv_start, const char *lv_end, rt_bool_t skip_before_start)
 {
-    const char* lv_start = ".rti_fn.0";
-    const char* lv_end = ".rti_fn.1.end";
     rt_size_t index_i;
     int result;
 
@@ -164,6 +168,11 @@ void rt_components_board_init(void)
     {
         if (rt_init_table[index_i].fn)
         {
+            if (skip_before_start &&
+                rt_strcmp(rt_init_table[index_i].level, lv_start) <= 0)
+            {
+                continue;
+            }
             if (rt_strcmp(rt_init_table[index_i].level, lv_end) >= 0)
             {
                 break;
@@ -180,38 +189,33 @@ void rt_components_board_init(void)
 }
 
 /**
+ * Early init: pin, uart and the null device, before the console is bound.
+ */
+void rt_components_early_init(void)
+{
+    if (rt_early_inited)
+    {
+        return;
+    }
+    rt_early_inited = RT_TRUE;
+    _rt_components_run_range(".rti_fn.0", ".rti_fn.1.end", RT_FALSE);
+}
+
+/**
+ * RT-Thread Components Initialization for board
+ */
+void rt_components_board_init(void)
+{
+    rt_components_early_init();
+    _rt_components_run_range(".rti_fn.1.end", ".rti_fn.2.end", RT_TRUE);
+}
+
+/**
  * RT-Thread Components Initialization
  */
 void rt_components_init(void)
 {
-    const char* lv_start = ".rti_fn.1.end";
-    const char* lv_end = ".rti_fn.6.end";
-    int result;
-    rt_size_t index_i;
-
-    rt_init_objects_sort();
-
-    for (index_i = 0; index_i < rt_init_num; index_i++)
-    {
-        if (rt_init_table[index_i].fn)
-        {
-            if (rt_strcmp(rt_init_table[index_i].level, lv_start) <= 0)
-            {
-                continue;
-            }
-            if (rt_strcmp(rt_init_table[index_i].level, lv_end) >= 0)
-            {
-                break;
-            }
-#ifdef RT_DEBUGING_AUTO_INIT
-            rt_kprintf("initialize %s", rt_init_table[index_i].fn_name);
-            result = rt_init_table[index_i].fn();
-            rt_kprintf(":%d done\n", result);
-#else
-            result = rt_init_table[index_i].fn();
-#endif
-        }
-    }
+    _rt_components_run_range(".rti_fn.2.end", ".rti_fn.7.end", RT_TRUE);
 }
 #endif   /* RT_USING_COMPONENTS_INIT */
 
