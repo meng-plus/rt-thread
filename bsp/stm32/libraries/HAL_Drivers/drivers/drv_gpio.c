@@ -824,4 +824,8 @@ int rt_hw_pin_init(void)
     return rt_device_pin_register("pin", &_stm32_pin_ops, RT_NULL);
 }
 
+#if defined(RT_USING_PIN) && !defined(RT_USING_DM)
+INIT_EARLY_EXPORT_0(rt_hw_pin_init);
+#endif
+
 #endif /* BSP_USING_GPIO */

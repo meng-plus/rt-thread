@@ -167,14 +167,16 @@ void rt_hw_board_init()
     rt_system_heap_init((void *)HEAP_BEGIN, (void *)HEAP_END);
 #endif
 
-    /* Pin driver initialization is open by default */
+#ifdef RT_USING_COMPONENTS_INIT
+    /* pin, uart and the null device, before the console is bound */
+    rt_components_early_init();
+#else
 #ifdef RT_USING_PIN
     rt_hw_pin_init();
 #endif
-
-    /* USART driver initialization is open by default */
 #ifdef RT_USING_SERIAL
     rt_hw_usart_init();
+#endif
 #endif
 
     /* Set the shell console output device */

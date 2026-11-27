@@ -71,7 +71,7 @@ int null_device_init(void)
 
     return 0;
 }
-/* Register at BOARD level so rt_console_set_device("null") in board init can find it.
- * null is a pure software sink; no hardware dependency. See #11472. */
-INIT_BOARD_EXPORT(null_device_init);
+/* Pure software sink. Registered before the console is bound so
+ * RT_CONSOLE_DEVICE_NAME "null" can be selected at boot. See #11472. */
+INIT_EARLY_EXPORT_2(null_device_init);
 

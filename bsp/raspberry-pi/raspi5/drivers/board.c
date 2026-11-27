@@ -113,4 +113,4 @@ static int leds_init(void)
 
     return RT_EOK;
 }
-INIT_EXPORT(leds_init, "3.1");
+INIT_EXPORT(leds_init, "4.1");
